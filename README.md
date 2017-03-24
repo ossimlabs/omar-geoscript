@@ -1,1 +1,1 @@
-# omar-geoscript-app
+# omar-geoscript
