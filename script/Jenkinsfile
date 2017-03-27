@@ -13,7 +13,7 @@
 // TODO: get to run on any node
 node("master"){
     def workspaceDir = pwd()
-    println ("DEBUG -- ${workspaceDir}")
+    println ("DEBUG -- ${workspaceDir}") // /var/lib/jenkins/workspace/omar-geoscript
  
     def appName = "omar-geoscript"
     def omarCommonProjName = "omar-common"
@@ -31,15 +31,15 @@ node("master"){
         }
 
         // Set the environment variable for the gradle build
-        println ("DEBUG -- ${workspaceDir}/${env.JOB_NAME}/${omarCommonProjName}/omar-common-properties.gradle")
-        env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${env.JOB_NAME}/${omarCommonProjName}/omar-common-properties.gradle"
+        println ("DEBUG -- ${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle")
+        env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
 
         notifyObj = load "${workspaceDir}/ossim-ci/jenkins/pipeline/notify.groovy"
     }
 
     try {
       stage("Build"){
-        sh  "${workspaceDir}/${env.JOB_NAME}/plugins/omar-geoscript/gradlew install"
+        sh  "${workspaceDir}/${appName}/plugins/omar-geoscript/gradlew install"
         // sh  "${workspaceDir}/omar-geoscript/apps/geoscript-app/gradlew doAll"
       }
     }
