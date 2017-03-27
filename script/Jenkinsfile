@@ -38,14 +38,20 @@ node("master"){
       stage("Build"){
         env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
 
-          sh """
-            pushd ${workspaceDir}/${appName}/plugins/omar-geoscript
-            ./gradlew tasks
-            popd
-            """
-
-        // sh  "${workspaceDir}/${appName}/plugins/omar-geoscript/gradlew tasks"
-        // sh  "${workspaceDir}/omar-geoscript/apps/geoscript-app/gradlew doAll"
+        // cd into the code directory to pick up the local build.gradle when building
+        // build the plugin
+        sh """
+        pushd ${workspaceDir}/${appName}/plugins/omar-geoscript
+        ./gradlew install
+        popd
+        """
+        
+        // Run all tasks on the app. This includes pushing to OpenShift and S3.
+        sh """
+        pushd ${workspaceDir}/omar-geoscript/apps/geoscript-app
+        ./gradlew ${GRADLE_TASK}
+        popd
+        """
       }
     }
     catch(e){
