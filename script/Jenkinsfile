@@ -13,7 +13,7 @@
 // TODO: get to run on any node
 node("master"){
     def workspaceDir = pwd()
-    def ossimMavenProxy = "https://artifacts.radiantbluecloud.com/artifactory/ossim-deps"
+    // def ossimMavenProxy = "https://artifacts.radiantbluecloud.com/artifactory/ossim-deps"
     def appName = "omar-geoscript"
     def omarCommonProjName = "omar-common"
     
@@ -30,6 +30,7 @@ node("master"){
         }
 
         // Set the environment variable for the gradle build
+        println ("DEBUG -- ${workspaceDir}/${env.JOB_NAME}/${omarCommonProjName}/omar-common-properties.gradle")
         env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${env.JOB_NAME}/${omarCommonProjName}/omar-common-properties.gradle"
 
         notifyObj = load "${workspaceDir}/ossim-ci/jenkins/pipeline/notify.groovy"
