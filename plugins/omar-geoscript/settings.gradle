@@ -1,0 +1,8 @@
+include 'geoscript-app',
+		    'omar-geoscript'
+
+// Plugins
+project(':omar-geoscript').projectDir = 'plugin/omar-geoscript' as File
+
+// App
+project(':geoscript-app').projectDir = 'app/geoscript-app' as File
