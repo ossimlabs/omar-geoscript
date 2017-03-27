@@ -37,8 +37,8 @@ node("master"){
 
     try {
       stage("Build"){
-        sh  "${workspaceDir}/plugins/omar-geoscript/gradlew install"
-        // sh  "${workspaceDir}/apps/geoscript-app/gradlew doAll"
+        sh  "${workspaceDir}/${env.JOB_NAME}/plugins/omar-geoscript/gradlew install"
+        // sh  "${workspaceDir}/omar-geoscript/apps/geoscript-app/gradlew doAll"
       }
     }
     catch(e){
