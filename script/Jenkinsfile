@@ -37,7 +37,7 @@ node("master"){
     try {
       stage("Build"){
         env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
-        println( sh "printenv" )
+        sh "printenv"
         sh  "${workspaceDir}/${appName}/plugins/omar-geoscript/gradlew tasks"
         // sh  "${workspaceDir}/omar-geoscript/apps/geoscript-app/gradlew doAll"
       }
