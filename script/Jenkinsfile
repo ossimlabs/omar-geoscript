@@ -29,13 +29,14 @@ node("master"){
         }
 
         // Set the environment variable for the gradle build
-        env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
+        // env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
 
         notifyObj = load "${workspaceDir}/ossim-ci/jenkins/pipeline/notify.groovy"
     }
 
     try {
       stage("Build"){
+        env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
         sh  "${workspaceDir}/${appName}/plugins/omar-geoscript/gradlew tasks"
         // sh  "${workspaceDir}/omar-geoscript/apps/geoscript-app/gradlew doAll"
       }
