@@ -30,7 +30,7 @@ node("master"){
         }
 
         // Set the environment variable for the gradle build
-        env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
+        env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${env.JOB_NAME}/${omarCommonProjName}/omar-common-properties.gradle"
 
         notifyObj = load "${workspaceDir}/ossim-ci/jenkins/pipeline/notify.groovy"
     }
