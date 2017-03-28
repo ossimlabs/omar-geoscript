@@ -35,20 +35,51 @@ node("master"){
     }
 
     try {
-      stage("Build"){
+      stage("Build Plugin"){
         env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
 
         // cd into the code directory to pick up the local build.gradle when building
         // build the plugin
         sh """
-        pushd ${workspaceDir}/${appName}/plugins/omar-geoscript-plugin
+        pushd ${workspaceDir}/${appName}/plugins/${appName}-plugin
         ./gradlew install
         popd
         """
-        
+       }
+      stage ("Publish Artifactory")
+      {
+
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+                            credentialsId: 'artifactoryCredentials',
+                            usernameVariable: 'ARTIFACTORY_USERNAME', 
+                            passwordVariable: 'ARTIFACTORY_PASSWORD']])
+            {
+                sh """
+                pushd ${workspaceDir}/${appName}/plugins/${appName}-plugin
+                ./gradlew artifactoryPublish
+                popd
+                """
+            } 
+      }
+      stage ("Publish App Artifactory")
+      {
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+                            credentialsId: 'artifactoryCredentials',
+                            usernameVariable: 'ARTIFACTORY_USERNAME', 
+                            passwordVariable: 'ARTIFACTORY_PASSWORD']])
+            {
+                sh """
+                pushd ${workspaceDir}/${appName}/apps/${appName}-app
+                ./gradlew artifactoryPublish
+                popd
+                """
+            } 
+      }
+
+      stage ("Build App")       
         // Run all tasks on the app. This includes pushing to OpenShift and S3.
         sh """
-        pushd ${workspaceDir}/omar-geoscript/apps/omar-geoscript-app
+        pushd ${workspaceDir}/${appName}/apps/${appName}-app
         ./gradlew ${GRADLE_TASK}
         popd
         """
