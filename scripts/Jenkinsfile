@@ -28,10 +28,7 @@ node("master"){
         dir(omarCommonProjName) {
             git branch: "${OSSIM_GIT_BRANCH}", url: "https://github.com/ossimlabs/${omarCommonProjName}.git"
         }
-
-        // Set the environment variable for the gradle build
-        // env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
-
+        
         notifyObj = load "${workspaceDir}/ossim-ci/jenkins/pipeline/notify.groovy"
     }
 
@@ -39,31 +36,25 @@ node("master"){
       stage ("Publish Plugin Artifactory")
       {
 
-          withCredentials([[$class: 'UsernamePasswordMultiBinding', 
-                            credentialsId: 'artifactoryCredentials',
-                            usernameVariable: 'ARTIFACTORY_USERNAME', 
-                            passwordVariable: 'ARTIFACTORY_PASSWORD']])
-            {
+//          withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+//                            credentialsId: 'artifactoryCredentials',
+//                            usernameVariable: 'ARTIFACTORY_USERNAME', 
+//                            passwordVariable: 'ARTIFACTORY_PASSWORD']])
+//            {
                 sh """
                 pushd ${workspaceDir}/${appName}/plugins/${appName}-plugin
                 ./gradlew artifactoryPublish
                 popd
                 """
-            } 
+//            } 
       }
       stage ("Publish App Artifactory")
       {
-          withCredentials([[$class: 'UsernamePasswordMultiBinding', 
-                            credentialsId: 'artifactoryCredentials',
-                            usernameVariable: 'ARTIFACTORY_USERNAME', 
-                            passwordVariable: 'ARTIFACTORY_PASSWORD']])
-            {
-                sh """
-                pushd ${workspaceDir}/${appName}/apps/${appName}-app
-                ./gradlew artifactoryPublish
-                popd
-                """
-            } 
+        sh """
+        pushd ${workspaceDir}/${appName}/apps/${appName}-app
+        ./gradlew artifactoryPublish
+        popd
+        """
       }
 
       stage ("Publish Docker App") 
