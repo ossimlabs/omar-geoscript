@@ -15,6 +15,7 @@ node("master"){
     def workspaceDir = pwd() 
     def appName = "omar-geoscript"
     def omarCommonProjName = "omar-common"
+    env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
     
     stage("Checkout"){
         dir("ossim-ci") {
@@ -35,18 +36,7 @@ node("master"){
     }
 
     try {
-      stage("Build Plugin"){
-        env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
-
-        // cd into the code directory to pick up the local build.gradle when building
-        // build the plugin
-        sh """
-        pushd ${workspaceDir}/${appName}/plugins/${appName}-plugin
-        ./gradlew install
-        popd
-        """
-       }
-      stage ("Publish Artifactory")
+      stage ("Publish Plugin Artifactory")
       {
 
           withCredentials([[$class: 'UsernamePasswordMultiBinding', 
@@ -76,7 +66,7 @@ node("master"){
             } 
       }
 
-      stage ("Build App")       
+      stage ("Publish Docker App")       
         // Run all tasks on the app. This includes pushing to OpenShift and S3.
         sh """
         pushd ${workspaceDir}/${appName}/apps/${appName}-app
