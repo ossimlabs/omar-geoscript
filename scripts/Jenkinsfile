@@ -41,14 +41,14 @@ node("master"){
         // cd into the code directory to pick up the local build.gradle when building
         // build the plugin
         sh """
-        pushd ${workspaceDir}/${appName}/plugins/omar-geoscript
+        pushd ${workspaceDir}/${appName}/plugins/omar-geoscript-plugin
         ./gradlew install
         popd
         """
         
         // Run all tasks on the app. This includes pushing to OpenShift and S3.
         sh """
-        pushd ${workspaceDir}/omar-geoscript/apps/geoscript-app
+        pushd ${workspaceDir}/omar-geoscript/apps/omar-geoscript-app
         ./gradlew ${GRADLE_TASK}
         popd
         """
