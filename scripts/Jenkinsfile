@@ -33,28 +33,32 @@ node("master"){
     }
 
     try {
-      withCredentials([[$class: 'UsernamePasswordMultiBinding', 
-                        credentialsId: 'artifactoryCredentials',
-                        usernameVariable: 'ARTIFACTORY_USERNAME', 
-                        passwordVariable: 'ARTIFACTORY_PASSWORD']])
-        {
-          stage ("Publish Plugin Artifactory")
-          {
-
+      stage ("Publish Plugin Artifactory")
+      {
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+                            credentialsId: 'artifactoryCredentials',
+                            usernameVariable: 'ARTIFACTORY_USERNAME', 
+                            passwordVariable: 'ARTIFACTORY_PASSWORD']])
+            {
                     sh """
                     pushd ${workspaceDir}/${appName}/plugins/${appName}-plugin
                     ./gradlew artifactoryPublish
                     popd
                     """
-          }
-          stage ("Publish App Artifactory")
-          {
-            sh """
-            pushd ${workspaceDir}/${appName}/apps/${appName}-app
-            ./gradlew artifactoryPublish
-            popd
-            """
-          }
+              }
+      stage ("Publish App Artifactory")
+      {
+           withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+                            credentialsId: 'artifactoryCredentials',
+                            usernameVariable: 'ARTIFACTORY_USERNAME', 
+                            passwordVariable: 'ARTIFACTORY_PASSWORD']])
+            {
+               sh """
+                pushd ${workspaceDir}/${appName}/apps/${appName}-app
+                ./gradlew artifactoryPublish
+                popd
+                """
+            }
        } 
 
       stage ("Publish Docker App") 
