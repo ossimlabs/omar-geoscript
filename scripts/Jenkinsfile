@@ -46,6 +46,7 @@ node("master"){
                     popd
                     """
               }
+      }
       stage ("Publish App Artifactory")
       {
            withCredentials([[$class: 'UsernamePasswordMultiBinding', 
