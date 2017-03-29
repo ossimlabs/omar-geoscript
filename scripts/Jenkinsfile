@@ -37,7 +37,7 @@ node("master"){
       {
           withCredentials([[$class: 'UsernamePasswordMultiBinding', 
                             credentialsId: 'artifactoryCredentials',
-                            usernameVariable: 'ARTIFACTORY_USERNAME', 
+                            usernameVariable: 'ARTIFACTORY_USER', 
                             passwordVariable: 'ARTIFACTORY_PASSWORD']])
             {
                     sh """
@@ -51,7 +51,7 @@ node("master"){
       {
            withCredentials([[$class: 'UsernamePasswordMultiBinding', 
                             credentialsId: 'artifactoryCredentials',
-                            usernameVariable: 'ARTIFACTORY_USERNAME', 
+                            usernameVariable: 'ARTIFACTORY_USER', 
                             passwordVariable: 'ARTIFACTORY_PASSWORD']])
             {
                sh """
