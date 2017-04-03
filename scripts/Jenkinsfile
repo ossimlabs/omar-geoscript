@@ -41,7 +41,7 @@ node(""){
             {
                     sh """
                     pushd ${workspaceDir}/${appName}/plugins/${appName}-plugin
-                    ./gradlew assemble artifactoryPublish
+                    ./gradlew artifactoryPublish
                     popd
                     """
               }
@@ -55,7 +55,7 @@ node(""){
             {
                sh """
                 pushd ${workspaceDir}/${appName}/apps/${appName}-app
-                ./gradlew assemble artifactoryPublish
+                ./gradlew artifactoryPublish
                 popd
                 """
             }
