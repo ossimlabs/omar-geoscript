@@ -1,6 +1,6 @@
 spring:
   application:
-    name: geoscript-app
+    name: omar-geoscript
   cloud:
     config:
       enabled: false
