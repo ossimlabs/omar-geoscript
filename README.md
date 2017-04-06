@@ -13,7 +13,7 @@ Only required for Jenkins pipelines or if you are running Artifactory and/or Ope
 - ARTIFACTORY_USER
 - ARTIFACTORY_PASSWORD
 
-## How to Build/Install omar-geoscript-app locally
+## How to build/install omar-geoscript-app locally
 
 1. Git clone the following repos or git pull the latest versions if you already have them.
 ```
