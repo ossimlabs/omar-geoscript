@@ -9,7 +9,9 @@ buildscript {
   }
   repositories {
     mavenLocal()
-    maven { url "${ossimMavenProxy}" }
+    if ( ! System.getenv('O2_DEV_HOME') ) {
+      maven { url "${ossimMavenProxy}" }
+    }
     maven { url "https://repo.grails.org/grails/core" }
   }
   dependencies {
@@ -39,7 +41,9 @@ ext {
 
 repositories {
   mavenLocal()
-  maven { url "${ossimMavenProxy}" }
+  if ( ! System.getenv('O2_DEV_HOME') ) {
+    maven { url "${ossimMavenProxy}" }
+  }
   maven { url "https://repo.boundlessgeo.com/main" }
   maven { url "http://download.osgeo.org/webdav/geotools" }
   mavenCentral()
@@ -60,17 +64,22 @@ dependencyManagement {
 dependencies {
   runtime "org.grails.plugins:grails-console:2.0.8"
 
-//  compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: jarArtifactsChanging)
-  compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: true)
-
-  compile ( "org.geoscript:geoscript-groovy:1.8.0" ) {
-    exclude module: "commons-beanutils"
-    exclude module: "ehcache"
-    exclude module: "groovy-all"
-    exclude module: "slf4j-log4j12"
-    exclude module: "xml-apis"
+  if ( System.getenv('O2_DEV_HOME') ) {
+    compile project(':omar-openlayers-plugin')
+    compile project(':omar-geoscript-plugin')
+  } else {
+      compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: jarArtifactsChanging)
+      compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: true)
   }
-  compile "commons-beanutils:commons-beanutils:1.9.2"
+
+  // compile ( "org.geoscript:geoscript-groovy:1.8.0" ) {
+  //   exclude module: "commons-beanutils"
+  //   exclude module: "ehcache"
+  //   exclude module: "groovy-all"
+  //   exclude module: "slf4j-log4j12"
+  //   exclude module: "xml-apis"
+  // }
+  // compile "commons-beanutils:commons-beanutils:1.9.2"
 
   compile "org.springframework.boot:spring-boot-starter-logging"
   compile "org.springframework.boot:spring-boot-autoconfigure"
