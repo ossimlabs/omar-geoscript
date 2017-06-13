@@ -1,5 +1,6 @@
 package omar.geoscript
 
+import geoscript.GeoScript
 import geoscript.filter.Function
 import geoscript.geom.GeometryCollection
 import geoscript.layer.io.CsvWriter
@@ -18,6 +19,7 @@ import grails.transaction.Transactional
 class GeoscriptService implements InitializingBean
 {
   def grailsLinkGenerator
+  def jsonSlurper = new JsonSlurper()
 
   def parseOptions(def wfsParams)
   {
@@ -173,7 +175,7 @@ class GeoscriptService implements InitializingBean
   {
     def dataStore = DataStoreFinder.getDataStore( params )
 
-    ( dataStore ) ? new Workspace( dataStore ) : null
+    ( dataStore ) ? GeoScript.wrap( dataStore ) : null
   }
 
   def getSchemaInfoByTypeName(String typeName)
@@ -398,5 +400,83 @@ class GeoscriptService implements InitializingBean
 
 
     result
+  }
+
+  def queryLayer(String typeName, Map<String,Object> options, String resultType='results', String featureFormat=null)
+  {
+      def (prefix, layerName) = typeName?.split(':')
+      def layer = findLayer(prefix, layerName)
+      def results
+
+      Workspace.withWorkspace(layer?.workspace) {
+        def matched = layer?.count( options?.filter )
+        def count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
+        def features = []
+
+        if ( resultType == 'results' )
+        {
+            //features = layer?.getFeatures(options)?.each { feature ->
+              features = layer?.collectFromFeature(options) { feature ->
+              formatFeature(feature, featureFormat, [prefix: prefix])
+            }
+        }
+
+        results = [
+          namespace: [prefix: prefix, uri: layer?.schema?.uri],
+          numberOfFeatures: count,
+          numberMatched: matched,
+          timeStamp: new Date().format( "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", TimeZone.getTimeZone( 'GMT' ) ),
+          features: features
+        ]
+      }
+
+      results
+  }
+
+  def findLayer(String prefix, String layerName)
+  {
+      def layerInfo = LayerInfo.where {
+          name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
+      }.get()
+
+      def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
+      def workspace = getWorkspace(workspaceParams)
+
+      workspace[layerName]
+  }
+
+
+  private def formatFeature(def feature, def featureFormat, def formatParams)
+  {
+    def version
+
+    if ( featureFormat && featureFormat?.startsWith('GML'))
+    {
+        switch ( featureFormat )
+        {
+        case 'GML2':
+          version = 2
+          break
+        case 'GML3':
+          version = 3
+          break
+        case 'GML3_2':
+          version = 3.2
+          break
+        default:
+          version = 3
+        }
+
+        feature.getGml( version: version, format: false, bounds: false, xmldecl: false, nsprefix: formatParams.prefix )
+    }
+    else if (featureFormat == 'JSON')
+    {
+      jsonSlurper.parseText(feature.geoJSON)
+      //feature
+    }
+    else
+    {
+      feature
+    }
   }
 }

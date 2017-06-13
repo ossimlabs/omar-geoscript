@@ -84,11 +84,7 @@ grails:
         disable:
             accept:
                 header:
-                    userAgents:
-                        - Gecko
-                        - WebKit
-                        - Presto
-                        - Trident
+                    userAgents: []
         types:
             all: '*/*'
             atom: application/atom+xml
@@ -391,5 +387,3 @@ wfs:
           - video_data_set
           - features
         datastoreId: omardb-1.9.0-prod
-
-

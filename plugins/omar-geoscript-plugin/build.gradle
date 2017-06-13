@@ -70,7 +70,7 @@ dependencies {
 
   compile "commons-beanutils:commons-beanutils:1.9.2"
 
-  compile( "org.geoscript:geoscript-groovy:1.9.0" ) {
+  compile( "org.geoscript:geoscript-groovy:1.8.0" ) {
     exclude module: "ehcache"
     exclude module: "groovy-all"
     exclude module: "slf4j-log4j12"
