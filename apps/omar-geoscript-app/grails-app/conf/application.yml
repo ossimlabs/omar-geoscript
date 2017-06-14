@@ -129,7 +129,6 @@ grails:
 endpoints:
     jmx:
         unique-names: true
-
 ---
 omar:
   openlayers:
