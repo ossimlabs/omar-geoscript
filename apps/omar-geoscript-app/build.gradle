@@ -9,9 +9,7 @@ buildscript {
   }
   repositories {
     mavenLocal()
-    if ( ! System.getenv('O2_DEV_HOME') ) {
-      maven { url "${ossimMavenProxy}" }
-    }
+    maven { url "${ossimMavenProxy}" }
     maven { url "https://repo.grails.org/grails/core" }
   }
   dependencies {
@@ -41,9 +39,7 @@ ext {
 
 repositories {
   mavenLocal()
-  if ( ! System.getenv('O2_DEV_HOME') ) {
-    maven { url "${ossimMavenProxy}" }
-  }
+  maven { url "${ossimMavenProxy}" }
   maven { url "https://repo.boundlessgeo.com/main" }
   maven { url "http://download.osgeo.org/webdav/geotools" }
   mavenCentral()
