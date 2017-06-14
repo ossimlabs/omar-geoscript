@@ -1,5 +1,6 @@
 ---
 server:
+  contextPath: /omar-geoscript
   port: 7777
 ---
 geoscript:

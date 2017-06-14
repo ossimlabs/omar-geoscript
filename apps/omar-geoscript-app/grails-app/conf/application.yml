@@ -129,9 +129,6 @@ grails:
 endpoints:
     jmx:
         unique-names: true
----
-server:
-  contextPath: /omar-geoscript
 
 ---
 omar:
