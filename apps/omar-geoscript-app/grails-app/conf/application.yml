@@ -131,7 +131,7 @@ endpoints:
         unique-names: true
 ---
 server:
-  contextPath: /omar-geoscript
+#  contextPath: /omar-geoscript
 
 ---
 omar:
