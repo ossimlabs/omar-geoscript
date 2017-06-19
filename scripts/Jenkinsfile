@@ -45,11 +45,7 @@ node(""){
                             usernameVariable: 'ARTIFACTORY_USER', 
                             passwordVariable: 'ARTIFACTORY_PASSWORD']])
             {
-            sh """
-            pushd ${workspaceDir}/${appName}/scripts
-            ./buildJars.sh
-            """
-/*
+
                     sh """
                     source ${env.HOME}/.bash_profile
                     pushd ${workspaceDir}/${appName}
@@ -57,8 +53,7 @@ node(""){
                     gradle :${appName}-plugin:artifactoryPublish
                     popd
                     """
-                    */
-              }
+            }
       }
       stage ("Publish Docker App") 
       {      
