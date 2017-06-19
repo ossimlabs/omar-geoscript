@@ -2,15 +2,15 @@ def final O2_DEV_HOME = System.getenv('O2_DEV_HOME')
 
 if ( O2_DEV_HOME ) {
 
-include 'omar-geoscript-app',
-        'omar-core-plugin',
-        'omar-geoscript-plugin',
-        'omar-openlayers-plugin'
+   include 'omar-geoscript-app',
+           'omar-geoscript-plugin',
+           'omar-core-plugin',
+           'omar-openlayers-plugin'
 
 
-project(':omar-geoscript-app').projectDir = "${O2_DEV_HOME}/omar-geoscript/apps/omar-geoscript-app" as File
-project(':omar-core-plugin').projectDir = "${O2_DEV_HOME}/omar-core/plugins/omar-core-plugin" as File
-project(':omar-geoscript-plugin').projectDir = "${O2_DEV_HOME}/omar-geoscript/plugins/omar-geoscript-plugin" as File
-project(':omar-openlayers-plugin').projectDir = "${O2_DEV_HOME}/omar-openlayers/plugins/omar-openlayers-plugin" as File
+   project(':omar-geoscript-app').projectDir = "${O2_DEV_HOME}/omar-geoscript/apps/omar-geoscript-app" as File
+   project(':omar-geoscript-plugin').projectDir = "${O2_DEV_HOME}/omar-geoscript/plugins/omar-geoscript-plugin" as File
+   project(':omar-core-plugin').projectDir = "${O2_DEV_HOME}/omar-core/plugins/omar-core-plugin" as File
+   project(':omar-openlayers-plugin').projectDir = "${O2_DEV_HOME}/omar-openlayers/plugins/omar-openlayers-plugin" as File
 
 }
