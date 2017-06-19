@@ -45,7 +45,10 @@ node(""){
                             usernameVariable: 'ARTIFACTORY_USER', 
                             passwordVariable: 'ARTIFACTORY_PASSWORD']])
             {
-            sh "${workspaceDir}/${appName}/scripts/buildJars.sh"
+            sh """
+            pushd pushd ${workspaceDir}/${appName}/scripts
+            ./buildJars.sh
+            """
 /*
                     sh """
                     source ${env.HOME}/.bash_profile
