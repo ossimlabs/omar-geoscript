@@ -46,7 +46,7 @@ node(""){
                             passwordVariable: 'ARTIFACTORY_PASSWORD']])
             {
             sh """
-            pushd pushd ${workspaceDir}/${appName}/scripts
+            pushd ${workspaceDir}/${appName}/scripts
             ./buildJars.sh
             """
 /*
