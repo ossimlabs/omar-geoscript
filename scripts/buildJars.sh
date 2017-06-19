@@ -1,4 +1,4 @@
-#!/bin/bash login
+#!/bin/bash -l
 pushd `dirname $0` >/dev/null
 SCRIPT_DIR=`pwd -P`
 pushd $SCRIPT_DIR/.. >/dev/null
