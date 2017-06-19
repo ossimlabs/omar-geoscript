@@ -15,7 +15,7 @@ node(""){
     def appName = "omar-geoscript"
     def omarCommonProjName = "omar-common"
     env.OMAR_COMMON_PROPERTIES="${workspaceDir}/${omarCommonProjName}/omar-common-properties.gradle"
-    env.O2_DEV_HOME=pwd()
+    env.O2_DEV_HOME=pwd()g
     stage("Checkout"){
         dir("ossim-ci") {
             git branch: "${OSSIM_GIT_BRANCH}", url: "https://github.com/ossimlabs/ossim-ci.git"
@@ -48,11 +48,10 @@ node(""){
 
                     sh """
                     source ${env.HOME}/.bash_profile
-                    pushd ${workspaceDir}/${appName}/plugins/${appName}-plugin
-                    ./gradlew artifactoryPublish
-                    pushd ${workspaceDir}/${appName}/apps/${appName}-app
-                    ./gradlew artifactoryPublish
-                   popd
+                    pushd ${workspaceDir}/${appName}
+                    gradle ${appName}-plugin:artifactoryPublish
+                    gradle ${appName}-app:artifactoryPublish
+                    popd
                     """
             }
       }
