@@ -48,10 +48,11 @@ node(""){
 
                     sh """
                     source ${env.HOME}/.bash_profile
-                    pushd ${workspaceDir}/${appName}
-                    gradle :${appName}-app:artifactoryPublish
-                    gradle :${appName}-plugin:artifactoryPublish
-                    popd
+                    pushd ${workspaceDir}/${appName}/plugins/${appName}-plugin
+                    ./gradlew artifactoryPublish
+                    pushd ${workspaceDir}/${appName}/apps/${appName}-app
+                    ./gradlew artifactoryPublish
+                   popd
                     """
             }
       }
