@@ -169,10 +169,6 @@ endpoints:
     jmx:
         unique-names: true
 ---
-server:
-#  contextPath: /omar-geoscript
-
----
 omar:
   openlayers:
     baseMaps:

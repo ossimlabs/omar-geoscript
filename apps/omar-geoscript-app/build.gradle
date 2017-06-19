@@ -64,7 +64,7 @@ dependencies {
     compile project(':omar-openlayers-plugin')
     compile project(':omar-geoscript-plugin')
   } else {
-      compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: jarArtifactsChanging)
+      compile(group: "io.ossim.omar.plugins", name: "omar-geoscript-plugin", version: "1.0.0-${buildVersionTag}", changing: jarArtifactsChanging)
       compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: true)
   }
 
