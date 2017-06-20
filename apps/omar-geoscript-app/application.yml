@@ -1,7 +1,7 @@
 ---
 server:
   contextPath: /omar-geoscript
-  port: 7777
+  port: 8083
 ---
 geoscript:
   evwhs:
