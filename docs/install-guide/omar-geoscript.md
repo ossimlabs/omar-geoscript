@@ -18,3 +18,46 @@ Ref: [omar-ossim-base](../../../omar-ossim-base/docs/install-guide/omar-ossim-ba
 
 ## JAR
 `http://artifacts.radiantbluecloud.com/artifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app`
+
+## Configuration
+You will need to insert the [Common Config Settings](../../../omar-common/docs/install-guide/omar-common#common-config-settings).
+
+```
+wfs:
+  featureTypeNamespaces:
+      - prefix: omar
+        uri: http://omar.ossim.org
+
+  datastores:
+      - namespaceId: omar
+        datastoreId: omar_prod
+        datastoreParams:
+          dbtype: postgis
+          host: ${omarDb.host}
+          port: ${omarDb.port}
+          database: ${omarDb.name}
+          user: ${omarDb.username}
+          passwd: ${omarDb.password}
+          'Expose primary keys': 'true'
+          namespace: http://omar.ossim.org
+
+  featureTypes:
+      - name: raster_entry
+        title: raster_entry
+        description: ''
+        keywords:
+          - omar
+          - raster_entry
+          - features
+        datastoreId: omar_prod
+
+      - name: video_data_set
+        title: video_data_set
+        description: ''
+        keywords:
+          - omar
+          - video_data_set
+          - features
+        datastoreId: omar_prod
+
+```
