@@ -20,7 +20,7 @@ Ref: [omar-ossim-base](../../../omar-ossim-base/docs/install-guide/omar-ossim-ba
 `http://artifacts.radiantbluecloud.com/artifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app`
 
 ## Configuration
-You will need to insert the [omar-common](../../../omar-common/docs/install-guide/omar-common#common-config-settings)
+You will need to insert the [Common Config Settings](../../../omar-common/docs/install-guide/omar-common#common-config-settings).
 
 ```
 wfs:
