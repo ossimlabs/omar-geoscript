@@ -39,14 +39,18 @@ class DataSourceService
 
 	def readFromConfig()
 	{
+
 		if ( NamespaceInfo.count() == 0 )
 		{
 			wfsConfig.featureTypeNamespaces.each {
+				println it
 				NamespaceInfo.findOrSaveByPrefixAndUri( it.prefix, it.uri )
 			}
 
 			def env = System.env;
 			wfsConfig.datastores.each { datastore ->
+				println datastore
+
 				def workspaceInfo = WorkspaceInfo.findOrCreateByName( datastore.datastoreId )
 
 				workspaceInfo.with {
@@ -65,23 +69,28 @@ class DataSourceService
 			}
 
 			wfsConfig.featureTypes.each { featureType ->
+				println featureType
+
 				WorkspaceInfo.withTransaction {
 					def workspaceInfo = WorkspaceInfo.findByName( featureType.datastoreId )
-					def layerInfo = LayerInfo.findOrCreateByNameAndWorkspaceInfo( featureType.name, workspaceInfo )
 
-					layerInfo.with {
-						title = featureType.title
-						description = featureType.description
-						keywords = featureType.keywords
-					}
+					if ( workspaceInfo ) {
+						def layerInfo = LayerInfo.findOrCreateByNameAndWorkspaceInfo( featureType.name, workspaceInfo )
 
-					workspaceInfo.addToLayerInfoList( layerInfo )
-					workspaceInfo.save()
+						layerInfo.with {
+							title = featureType.title
+							description = featureType.description
+							keywords = featureType.keywords
+						}
 
-					if ( workspaceInfo.hasErrors() )
-					{
-						workspaceInfo.errors.allErrors.each { println messageSource.getMessage( it, null ) }
-					}
+						workspaceInfo.addToLayerInfoList( layerInfo )
+						workspaceInfo.save()
+
+						if ( workspaceInfo.hasErrors() )
+						{
+							workspaceInfo.errors.allErrors.each { println messageSource.getMessage( it, null ) }
+						}
+					}	
 				}
 			}
 		}
