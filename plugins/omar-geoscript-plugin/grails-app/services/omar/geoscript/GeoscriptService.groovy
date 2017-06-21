@@ -4,13 +4,19 @@ import geoscript.GeoScript
 import geoscript.filter.Function
 import geoscript.geom.GeometryCollection
 import geoscript.layer.io.CsvWriter
+import geoscript.proj.Projection
 import geoscript.workspace.Workspace
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import groovy.transform.Memoized
 import groovy.xml.StreamingMarkupBuilder
+
 import org.geotools.data.DataStoreFinder
 import org.geotools.factory.CommonFactoryFinder
+import org.geotools.referencing.CRS
 import org.opengis.filter.capability.FunctionName
+
 import org.springframework.beans.factory.InitializingBean
 
 import grails.transaction.Transactional
@@ -478,5 +484,18 @@ class GeoscriptService implements InitializingBean
     {
       feature
     }
+  }
+
+  @Memoized
+  def listProjections()
+  {
+    // ['AUTO', 'EPSG', 'CRS'].inject( [] ) { a, b ->
+    //   def c = CRS.getSupportedCodes( b )?.grep( ~/\d+/ )?.collect { it?.toInteger() }?.sort()
+    //   def d = c?.collect { "${b}:${it}" }
+    //
+    //   a.addAll( d )
+    //   a
+    // }
+    Projection.projections()?.collect { [id: it?.id, units:  it?.crs?.unit?.toString()]}
   }
 }

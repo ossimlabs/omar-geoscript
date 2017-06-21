@@ -30,6 +30,9 @@ node(""){
             git branch: "${OSSIM_GIT_BRANCH}", url: "https://github.com/ossimlabs/omar-openlayers.git"
         }
 
+        dir("omar-hibernate-spatial") {
+            git branch: "${OSSIM_GIT_BRANCH}", url: "https://github.com/ossimlabs/omar-hibernate-spatial.git"
+        }
         dir(omarCommonProjName) {
             git branch: "${OSSIM_GIT_BRANCH}", url: "https://github.com/ossimlabs/${omarCommonProjName}.git"
         }
