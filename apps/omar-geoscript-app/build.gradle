@@ -63,9 +63,11 @@ dependencies {
   if ( System.getenv('O2_DEV_HOME') ) {
     compile project(':omar-openlayers-plugin')
     compile project(':omar-geoscript-plugin')
+    compile project(':omar-hibernate-spatial-plugin')
   } else {
       compile(group: "io.ossim.omar.plugins", name: "omar-geoscript-plugin", version: "1.0.0-${buildVersionTag}", changing: jarArtifactsChanging)
       compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: true)
+      compile(group: "io.ossim.omar.plugins", name: "omar-hibernate-spatial-plugin", version: "1.0.0-${buildVersionTag}", changing: true)
   }
 
   // compile ( "org.geoscript:geoscript-groovy:1.8.0" ) {
