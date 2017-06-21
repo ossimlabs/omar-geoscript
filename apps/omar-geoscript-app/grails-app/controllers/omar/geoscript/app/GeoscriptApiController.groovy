@@ -18,6 +18,13 @@ class GeoscriptApiController
     render geoscriptService.capabilitiesData as JSON
   }
 
+  @ApiOperation(value = "List available projections", produces='application/json')
+  def listProjections()
+  {
+    println params
+    render geoscriptService.listProjections() as JSON
+  }
+
   @ApiOperation(value = "Get the schema of a given type", produces='application/json')
   @ApiImplicitParams([
     @ApiImplicitParam(name = 'typeName', value = 'Type Name', defaultValue="omar:raster_entry", paramType = 'query', dataType = 'string', required=true)
