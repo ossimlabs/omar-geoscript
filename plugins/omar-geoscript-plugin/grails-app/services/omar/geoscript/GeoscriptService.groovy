@@ -146,8 +146,11 @@ class GeoscriptService implements InitializingBean
     [workspace, layer]
   }
 
+  @Memoized
   def listFunctions2()
   {
+    def start = System.currentTimeMillis()
+
     List names = []
     CommonFactoryFinder.getFunctionFactories().each { f ->
       f.functionNames.each { fn ->
@@ -157,7 +160,10 @@ class GeoscriptService implements InitializingBean
         }
       }
     }
-    names.sort { a, b -> a.name.compareToIgnoreCase b.name }
+    names = names.sort { a, b -> a.name.compareToIgnoreCase b.name }
+    def stop = System.currentTimeMillis()
+    println "${stop - start}"
+    names
   }
 
   @Override
@@ -489,13 +495,24 @@ class GeoscriptService implements InitializingBean
   @Memoized
   def listProjections()
   {
-    // ['AUTO', 'EPSG', 'CRS'].inject( [] ) { a, b ->
-    //   def c = CRS.getSupportedCodes( b )?.grep( ~/\d+/ )?.collect { it?.toInteger() }?.sort()
-    //   def d = c?.collect { "${b}:${it}" }
-    //
-    //   a.addAll( d )
-    //   a
-    // }
-    Projection.projections()?.collect { [id: it?.id, units:  it?.crs?.unit?.toString()]}
+    def start = System.currentTimeMillis()
+    def projs = CRS.getSupportedAuthorities(true).collect { auth ->
+        CRS.getSupportedCodes(auth)?.inject([]) { list, code ->
+            def id = "${auth}:${code}"
+            try
+            {
+                list <<   [id: id, units: CRS.decode(id)?.unit?.toString()]
+            }
+            catch ( e )
+            {
+                // println e.message
+                //unsupported << id
+            }
+            list
+        }
+    }?.flatten()
+    def stop = System.currentTimeMillis()
+    println "${stop - start}"
+    projs
   }
 }
