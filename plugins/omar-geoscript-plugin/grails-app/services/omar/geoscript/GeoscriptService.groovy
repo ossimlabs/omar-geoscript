@@ -5,6 +5,7 @@ import geoscript.filter.Function
 import geoscript.geom.GeometryCollection
 import geoscript.layer.io.CsvWriter
 import geoscript.proj.Projection
+import geoscript.workspace.Memory
 import geoscript.workspace.Workspace
 
 import groovy.json.JsonOutput
@@ -427,9 +428,12 @@ class GeoscriptService implements InitializingBean
 
         if ( resultType == 'results' )
         {
-            //features = layer?.getFeatures(options)?.each { feature ->
+            if ( featureFormat == 'CSV' ) {
+              features = exportCSV(layer, options)
+            } else {
               features = layer?.collectFromFeature(options) { feature ->
-              formatFeature(feature, featureFormat, [prefix: prefix])
+                formatFeature(feature, featureFormat, [prefix: prefix])
+              }
             }
         }
 
@@ -443,6 +447,20 @@ class GeoscriptService implements InitializingBean
       }
 
       results
+  }
+
+  def exportCSV(def inputLayer, def options)
+  {
+    def memory = new Memory()
+    def outputLayer = memory.create(inputLayer.schema)
+
+    inputLayer.collectFromFeature(max: 10) { f ->
+      outputLayer.add(f)
+    }
+
+    def writer = new CsvWriter()
+
+    writer.write(outputLayer)//?.readLines()
   }
 
   def findLayer(String prefix, String layerName)
