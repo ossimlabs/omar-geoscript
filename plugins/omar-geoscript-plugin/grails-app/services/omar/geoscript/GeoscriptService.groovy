@@ -454,7 +454,7 @@ class GeoscriptService implements InitializingBean
     def memory = new Memory()
     def outputLayer = memory.create(inputLayer.schema)
 
-    inputLayer.collectFromFeature(max: 10) { f ->
+    inputLayer.collectFromFeature(options) { f ->
       outputLayer.add(f)
     }
 
