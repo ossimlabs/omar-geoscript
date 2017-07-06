@@ -4,13 +4,20 @@ import geoscript.GeoScript
 import geoscript.filter.Function
 import geoscript.geom.GeometryCollection
 import geoscript.layer.io.CsvWriter
+import geoscript.proj.Projection
+import geoscript.workspace.Memory
 import geoscript.workspace.Workspace
+
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import groovy.transform.Memoized
 import groovy.xml.StreamingMarkupBuilder
+
 import org.geotools.data.DataStoreFinder
 import org.geotools.factory.CommonFactoryFinder
+import org.geotools.referencing.CRS
 import org.opengis.filter.capability.FunctionName
+
 import org.springframework.beans.factory.InitializingBean
 
 import grails.transaction.Transactional
@@ -140,8 +147,11 @@ class GeoscriptService implements InitializingBean
     [workspace, layer]
   }
 
+  @Memoized
   def listFunctions2()
   {
+    def start = System.currentTimeMillis()
+
     List names = []
     CommonFactoryFinder.getFunctionFactories().each { f ->
       f.functionNames.each { fn ->
@@ -151,7 +161,10 @@ class GeoscriptService implements InitializingBean
         }
       }
     }
-    names.sort { a, b -> a.name.compareToIgnoreCase b.name }
+    names = names.sort { a, b -> a.name.compareToIgnoreCase b.name }
+    def stop = System.currentTimeMillis()
+    println "${stop - start}"
+    names
   }
 
   @Override
@@ -415,9 +428,12 @@ class GeoscriptService implements InitializingBean
 
         if ( resultType == 'results' )
         {
-            //features = layer?.getFeatures(options)?.each { feature ->
+            if ( featureFormat == 'CSV' ) {
+              features = exportCSV(layer, options)
+            } else {
               features = layer?.collectFromFeature(options) { feature ->
-              formatFeature(feature, featureFormat, [prefix: prefix])
+                formatFeature(feature, featureFormat, [prefix: prefix])
+              }
             }
         }
 
@@ -431,6 +447,20 @@ class GeoscriptService implements InitializingBean
       }
 
       results
+  }
+
+  def exportCSV(def inputLayer, def options)
+  {
+    def memory = new Memory()
+    def outputLayer = memory.create(inputLayer.schema)
+
+    inputLayer.collectFromFeature(options) { f ->
+      outputLayer.add(f)
+    }
+
+    def writer = new CsvWriter()
+
+    writer.write(outputLayer)//?.readLines()
   }
 
   def findLayer(String prefix, String layerName)
@@ -478,5 +508,29 @@ class GeoscriptService implements InitializingBean
     {
       feature
     }
+  }
+
+  @Memoized
+  def listProjections()
+  {
+    def start = System.currentTimeMillis()
+    def projs = CRS.getSupportedAuthorities(true).collect { auth ->
+        CRS.getSupportedCodes(auth)?.inject([]) { list, code ->
+            def id = "${auth}:${code}"
+            try
+            {
+                list <<   [id: id, units: CRS.decode(id)?.unit?.toString()]
+            }
+            catch ( e )
+            {
+                // println e.message
+                //unsupported << id
+            }
+            list
+        }
+    }?.flatten()
+    def stop = System.currentTimeMillis()
+    println "${stop - start}"
+    projs
   }
 }

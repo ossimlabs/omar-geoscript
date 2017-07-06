@@ -2,7 +2,7 @@
 
 ## Dockerfile
 ```
-FROM omar-ossim-base
+FROM omar-base
 EXPOSE 8080
 RUN mkdir /usr/share/omar
 COPY omar-geoscript-app-1.0.0-SNAPSHOT.jar /usr/share/omar
@@ -14,13 +14,13 @@ USER 1001
 WORKDIR /usr/share/omar
 CMD java -server -Xms256m -Xmx1024m -Djava.awt.headless=true -XX:+CMSClassUnloadingEnabled -XX:+UseGCOverheadLimit -Djava.security.egd=file:/dev/./urandom -jar omar-geoscript-app-1.0.0-SNAPSHOT.jar
 ```
-Ref: [omar-ossim-base](../../../omar-ossim-base/docs/install-guide/omar-ossim-base/)
+Ref: [omar-base](../../../omar-base/docs/install-guide/omar-base/)
 
 ## JAR
-`http://artifacts.radiantbluecloud.com/artifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app`
+[http://artifacts.radiantbluecloud.com/artifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app](http://artifacts.radiantbluecloud.com/artifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app)
 
 ## Configuration
-You will need to insert the [Common Config Settings](../../../omar-common/docs/install-guide/omar-common#common-config-settings).
+You will need to insert the [Common Config Settings](../../../omar-common/docs/install-guide/omar-common/#common-config-settings).
 
 ```
 wfs:
@@ -59,5 +59,106 @@ wfs:
           - video_data_set
           - features
         datastoreId: omar_prod
+        
+wms:
+  styles:
+    byFileType:
+      adrg:
+        filter: file_type='adrg'
+        color:
+          r: 50
+          g: 111
+          b: 111
+          a: 255
+      aaigrid:
+        filter: file_type='aaigrid'
+        color: pink
+      cadrg:
+        filter: file_type='cadrg'
+        color:
+          r: 0
+          g: 255
+          b: 255
+          a: 255
+      ccf:
+        filter: file_type='ccf'
+        color:
+          r: 128
+          g: 100
+          b: 255
+          a: 255
+      cib:
+        filter: file_type='cib'
+        color:
+          r: 0
+          g: 128
+          b: 128
+          a: 255
+      doqq:
+        filter: file_type='doqq'
+        color: purple
+      dted:
+        filter: file_type='dted'
+        color:
+          r: 0
+          g: 255
+          b: 0
+          a: 255
+      imagine_hfa:
+        filter: file_type='imagine_hfa'
+        color: lightGray
+      jpeg:
+        filter: file_type='jpeg'
+        color:
+          r: 255
+          g: 255
+          b: 0
+          a: 255
+      jpeg2000:
+        filter: file_type='jpeg2000'
+        color:
+          r: 255
+          g: 200
+          b: 0
+          a: 255
+      landsat7:
+        filter: file_type='landsat7'
+        color:
+          r: 255
+          g: 0
+          b: 255
+          a: 255
+      mrsid:
+        filter: file_type='mrsid'
+        color:
+          r: 0
+          g: 188
+          b: 0
+          a: 255
+      nitf:
+        filter: file_type='nitf'
+        color:
+          r: 0
+          g: 0
+          b: 255
+          a: 255
+      tiff:
+        filter: file_type='tiff'
+        color:
+          r: 255
+          g: 0
+          b: 0
+          a: 255
+      mpeg:
+        filter: file_type='mpeg'
+        color:
+          r: 164
+          g: 254
+          b: 255
+          a: 255
+      unspecified:
+        filter: file_type='unspecified'
+        color: white
+                
 
 ```

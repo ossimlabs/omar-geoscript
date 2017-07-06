@@ -30,6 +30,9 @@ node(""){
             git branch: "${OSSIM_GIT_BRANCH}", url: "https://github.com/ossimlabs/omar-openlayers.git"
         }
 
+        dir("omar-hibernate-spatial") {
+            git branch: "${OSSIM_GIT_BRANCH}", url: "https://github.com/ossimlabs/omar-hibernate-spatial.git"
+        }
         dir(omarCommonProjName) {
             git branch: "${OSSIM_GIT_BRANCH}", url: "https://github.com/ossimlabs/${omarCommonProjName}.git"
         }
@@ -47,10 +50,9 @@ node(""){
             {
 
                     sh """
-                    source ${env.HOME}/.sdkman/bin/sdkman-init.sh
                     pushd ${workspaceDir}/${appName}
-                    gradle ${appName}-plugin:artifactoryPublish
-                    gradle ${appName}-app:artifactoryPublish
+                    ./gradlew ${appName}-plugin:artifactoryPublish
+                    ./gradlew ${appName}-app:artifactoryPublish
                     """
             }
       }
@@ -63,9 +65,8 @@ node(""){
         {
             // Run all tasks on the app. This includes pushing to OpenShift and S3.
             sh """
-            source ${env.HOME}/.sdkman/bin/sdkman-init.sh
             pushd ${workspaceDir}/${appName}
-            gradle :${appName}-app:${GRADLE_TASK}
+            ./gradlew :${appName}-app:${GRADLE_TASK}
             popd
             """
         }

@@ -18,6 +18,13 @@ class GeoscriptApiController
     render geoscriptService.capabilitiesData as JSON
   }
 
+  @ApiOperation(value = "List available projections", produces='application/json')
+  def listProjections()
+  {
+    println params
+    render geoscriptService.listProjections() as JSON
+  }
+
   @ApiOperation(value = "Get the schema of a given type", produces='application/json')
   @ApiImplicitParams([
     @ApiImplicitParam(name = 'typeName', value = 'Type Name', defaultValue="omar:raster_entry", paramType = 'query', dataType = 'string', required=true)
@@ -28,7 +35,24 @@ class GeoscriptApiController
     render geoscriptService.getSchemaInfoByTypeName(params?.typeName) as JSON
   }
 
-  @ApiOperation(value = "Query a layer", produces='application/json')
+  @ApiOperation(value = "Query a layer", 
+    produces='application/json',
+        notes = """
+<style>
+    tab { padding-left: 2em; }
+</style>
+    <ul>
+        <li>
+            <b>sort</b> Is a comma separated field list of the form <br/>
+            <tab>&ltfield&gt &ltsort&gt</tab><br/></br>
+            <tab><b>Examples:</b></tab><br/>
+            <tab><tab><b>acquisition_date DESC<b></tab></tab><br/>
+            <tab><tab><b>acquisition_date ASC<b></tab></tab><br/>
+            <tab><tab><b>acquisition_date DESC,width ASC<b></tab></tab><br/>
+        </li>
+        <br/>
+    </ul>
+""")
   @ApiImplicitParams([
     @ApiImplicitParam(name = 'typeName', value = 'Type name', defaultValue="omar:raster_entry", paramType = 'query', dataType = 'string', required=true),
     @ApiImplicitParam(name = 'filter', value = 'Filter', paramType = 'query', dataType = 'string', required=false),
