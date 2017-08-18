@@ -427,7 +427,7 @@ wfs:
 ---
 server:
   contextPath: /omar-geoscript
-  port: 8083
+  port: 8080
 ---
 geoscript:
   evwhs:
