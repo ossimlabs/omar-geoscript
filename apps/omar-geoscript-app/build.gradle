@@ -135,7 +135,7 @@ assets {
   minifyJs = true
   minifyCss = true
   excludes = [
-  "**/application.js",
+  // "**/application.js",
   "**/i18n/**",
   "**/jquery*",
   "**/omar/**",
