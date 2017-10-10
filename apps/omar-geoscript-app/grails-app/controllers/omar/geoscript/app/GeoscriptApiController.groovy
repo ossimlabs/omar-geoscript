@@ -1,8 +1,8 @@
 package omar.geoscript.app
 
 import grails.converters.JSON
-import com.github.rahulsom.swaggydoc.*
-import com.wordnik.swagger.annotations.*
+
+import io.swagger.annotations.*
 
 @Api(value = "geoscript",
      description = "GeoScript Support"
@@ -35,7 +35,7 @@ class GeoscriptApiController
     render geoscriptService.getSchemaInfoByTypeName(params?.typeName) as JSON
   }
 
-  @ApiOperation(value = "Query a layer", 
+  @ApiOperation(value = "Query a layer",
     produces='application/json',
         notes = """
 <style>
