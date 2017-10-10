@@ -50,12 +50,12 @@ repositories {
   mavenCentral()
 }
 
-dependencyManagement {
-  imports {
-    mavenBom "org.grails:grails-bom:$grailsVersion"
-  }
-  applyMavenExclusions false
-}
+// dependencyManagement {
+//   imports {
+//     mavenBom "org.grails:grails-bom:$grailsVersion"
+//   }
+//   applyMavenExclusions false
+// }
 
 grails {
   plugins {
@@ -71,9 +71,9 @@ dependencies {
     compile(group: "io.ossim.omar.plugins", name: "omar-core-plugin", version: "1.1.0-${buildVersionTag}", changing: jarArtifactsChanging)
   }
 */
-  compile "commons-beanutils:commons-beanutils:1.9.2"
+  compile "commons-beanutils:commons-beanutils:1.9.3"
 
-  compile( "org.geoscript:geoscript-groovy:1.8.0" ) {
+  compile( "org.geoscript:geoscript-groovy:1.9.0" ) {
     exclude module: "ehcache"
     exclude module: "groovy-all"
     exclude module: "slf4j-log4j12"
