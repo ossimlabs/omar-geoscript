@@ -438,9 +438,8 @@ geoscript:
   elasticsearch:
     host: 'localhost'
     port: '8080'
-    index:
-
-
+    index: 'indexName'
+    search: 'searchIndices'
 
 ---
 wms:
