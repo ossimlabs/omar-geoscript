@@ -64,7 +64,7 @@ dependencies {
     compile project(':omar-openlayers-plugin')
     compile project(':omar-geoscript-plugin')
     compile project(':omar-hibernate-spatial-plugin')
-    compile files('gt-elasticsearch-2.11-SNAPSHOT.jar')
+    compile files(' gt-elasticsearch-2.11-20171013.185453-1.jar')
   } else {
       compile(group: "io.ossim.omar.plugins", name: "omar-geoscript-plugin", version: "1.1.1-${buildVersionTag}", changing: jarArtifactsChanging)
       compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: true)
