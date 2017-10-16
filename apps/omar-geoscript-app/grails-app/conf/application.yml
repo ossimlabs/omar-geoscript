@@ -400,6 +400,11 @@ geoscript:
     url: 'https://evwhs.digitalglobe.com/mapservice/wmsaccess?connectid=a59618a4-3656-4b09-ba85-934f162bd9d6&version=1.3.0&request=GetCapabilities'
     username: ''
     password: ''
+  elasticsearch:
+    host: 'localhost'
+    port: '8080'
+    index: 'indexName'
+    search: 'searchIndices'
 
 ---
 wms:
