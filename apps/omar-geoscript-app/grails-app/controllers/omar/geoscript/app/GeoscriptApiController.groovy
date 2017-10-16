@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 import io.swagger.annotations.*
 
-@Api(value = "geoscript",
+@Api(value = "/geoscriptApi",
      description = "GeoScript Support"
 )
 class GeoscriptApiController
