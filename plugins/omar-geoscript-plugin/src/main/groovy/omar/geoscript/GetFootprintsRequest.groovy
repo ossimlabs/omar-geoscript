@@ -23,4 +23,6 @@ class GetFootprintsRequest implements Validateable
   String filter
 
   String time
+
+  Integer maxFeatures
 }

@@ -17,8 +17,13 @@ class QueryLayer extends FeatureLayer
     super( layer.fs, style.gtStyle, title )
   }
 
-  public void setFilter(Filter filter)
+  public void setFilter(Filter filter, def options=[:])
   {
     this.query = new Query( this.featureSource.name.localPart, filter.filter )
+
+    if ( options.maxFeatures ) {
+      println options.maxFeatures
+      this.query.maxFeatures = options.maxFeatures
+    }
   }
 }
