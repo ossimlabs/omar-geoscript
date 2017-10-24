@@ -402,10 +402,10 @@ wfs:
         datastoreId: omardb-1.9.0-prod
 
 
----
-server:
-  contextPath: /omar-geoscript
-  port: 8080
+#---
+#server:
+#  contextPath: /omar-geoscript
+#  port: 8080
 ---
 geoscript:
   evwhs:

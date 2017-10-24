@@ -79,8 +79,13 @@ class FootprintService
       }
 
       // println filter
+      def defaultMaxFeatures = grailsApplication.config.wms.footprints.defaultMaxFeatures
 
-      footprints.filter = filter
+      def options = [
+        maxFeatures: params.maxFeatures ?: defaultMaxFeatures ?: Integer.MAX_VALUE
+      ]
+
+      footprints.setFilter( filter, options )
 
       def map = new GeoScriptMap(
           width: params.width,
