@@ -98,6 +98,8 @@ dependencies {
   // }
   // compile "commons-beanutils:commons-beanutils:1.9.2"
 
+  compile(group: 'mil.nga.giat', name: 'gt-elasticsearch', version: '2.11-20171013.185453-1')
+
   compile "org.springframework.boot:spring-boot-starter-logging"
   compile "org.springframework.boot:spring-boot-autoconfigure"
   compile "org.grails:grails-core"
