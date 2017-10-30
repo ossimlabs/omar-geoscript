@@ -414,8 +414,8 @@ geoscript:
     username: ''
     password: ''
   elasticsearch:
-    host: 'localhost'
-    port: '8080'
+    host: 'logging-es'
+    port: '9200'
     index: 'indexName'
     search: 'searchIndices'
 
