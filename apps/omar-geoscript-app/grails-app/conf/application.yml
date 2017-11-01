@@ -414,9 +414,9 @@ geoscript:
     username: ''
     password: ''
   elasticsearch:
-    host: 'logging-es'
+    host: 'logging-es.logging.svc.cluster.local'
     port: '9200'
-    index: 'indexName'
+    index: 'wms'
     search: 'searchIndices'
 
 ---

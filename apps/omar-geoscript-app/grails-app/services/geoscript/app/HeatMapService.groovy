@@ -4,7 +4,7 @@ import mil.nga.giat.data.elasticsearch.*
 
 import org.springframework.beans.factory.annotation.Value
 
-class ElasticSearchService {
+class HeatMapService {
 
     @Value('${geoscript.elasticsearch.host}')
     String searchHost
@@ -18,6 +18,19 @@ class ElasticSearchService {
     @Value('${geoscript.elasticsearch.search}')
     String searchIndices
 
-    ElasticDataStore  ES = new ElasticDataStore(searchHost, hostPort, indexName, searchIndices)
+    def processHeatmap() {
+
+        def firsttime = 1
+
+        // call to our elastic search
+
+        if (firsttime == 1) {
+            ElasticDataStore ES = new ElasticDataStore(searchHost, hostPort, indexName, searchIndices)
+            firsttime = 0
+        }
+
+         
+
+    }
 
 }
