@@ -19,18 +19,7 @@ class HeatMapService {
     String searchIndices
 
     def processHeatmap() {
-
-        def firsttime = 1
-
-        // call to our elastic search
-
-        if (firsttime == 1) {
             ElasticDataStore ES = new ElasticDataStore(searchHost, hostPort, indexName, searchIndices)
-            firsttime = 0
-        }
-
-         
-
     }
 
 }
