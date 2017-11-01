@@ -4,6 +4,9 @@ grails:
       enabled: true
     resources:
         pattern: '/**'
+    plugin:
+      console:
+        enabled: true
     profile: web
     codegen:
         defaultPackage: omar.geoscript
@@ -15,6 +18,8 @@ grails:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+
+
 info:
     app:
         name: '@info.app.name@'
@@ -114,6 +119,7 @@ dataSource:
     driverClassName: org.h2.Driver
     username: sa
     password: ''
+    dialect: org.hibernate.spatial.dialect.h2geodb.GeoDBDialect
 
 environments:
     development:
@@ -125,9 +131,13 @@ environments:
             dbCreate: update
             url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     production:
+        grails:
+          dbconsole:
+            enabled: true      
         dataSource:
-            dbCreate: none
-            url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            dbCreate: update
+            # url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
             properties:
                 jmxEnabled: true
                 initialSize: 5
@@ -591,6 +601,6 @@ wms:
               g: 0
               b: 0
               a: 255
-                
+
 logging:
   config: classpath:logback.groovy

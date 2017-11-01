@@ -69,7 +69,7 @@ grails {
   }
 }
 dependencies {
-  runtime "org.grails.plugins:grails-console:2.0.8"
+  runtime 'org.grails.plugins:grails-console:2.1.1'
   compile "org.springframework.cloud:spring-cloud-starter-config"
   compile "org.springframework.cloud:spring-cloud-starter-eureka"
   compile "org.springframework.cloud:spring-cloud-starter-zipkin"
@@ -100,6 +100,8 @@ dependencies {
 
   compile(group: 'mil.nga.giat', name: 'gt-elasticsearch', version: '2.11-20171013.185453-1')
 
+  compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
+  
   compile "org.springframework.boot:spring-boot-starter-logging"
   compile "org.springframework.boot:spring-boot-autoconfigure"
   compile "org.grails:grails-core"
