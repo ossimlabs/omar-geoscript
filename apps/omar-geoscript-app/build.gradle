@@ -75,7 +75,7 @@ dependencies {
   compile "org.springframework.cloud:spring-cloud-starter-zipkin"
   compile "net.errbuddy.plugins:babel-asset-pipeline:2.1.0"
   compile "org.webjars:bootstrap:3.3.5"
-
+ 
 /*
   if ( System.getenv('O2_DEV_HOME') ) {
     compile project(':omar-openlayers-plugin')
