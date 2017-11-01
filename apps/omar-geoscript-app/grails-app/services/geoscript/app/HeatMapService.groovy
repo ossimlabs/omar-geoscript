@@ -19,11 +19,11 @@ class HeatMapService {
     String searchIndices
 
     def processHeatmap() {
-        println searchHost
-        println hostPort
-        println indexName
-        println searchIndices
-        
+        println "searchhsort" + searchHost
+        println "hostport" + hostPort
+        println "indexname" + indexName
+        println "searchindicies" + searchIndices
+
             ElasticDataStore ES = new ElasticDataStore(searchHost, hostPort, indexName, searchIndices)
     }
 
