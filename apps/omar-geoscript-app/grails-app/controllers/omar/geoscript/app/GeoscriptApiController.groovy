@@ -1,10 +1,10 @@
 package omar.geoscript.app
 
 import grails.converters.JSON
-import com.github.rahulsom.swaggydoc.*
-import com.wordnik.swagger.annotations.*
 
-@Api(value = "geoscript",
+import io.swagger.annotations.*
+
+@Api(value = "/geoscriptApi",
      description = "GeoScript Support"
 )
 class GeoscriptApiController
@@ -35,23 +35,16 @@ class GeoscriptApiController
     render geoscriptService.getSchemaInfoByTypeName(params?.typeName) as JSON
   }
 
-  @ApiOperation(value = "Query a layer", 
+  @ApiOperation(value = "Query a layer",
     produces='application/json',
         notes = """
-<style>
-    tab { padding-left: 2em; }
-</style>
-    <ul>
-        <li>
-            <b>sort</b> Is a comma separated field list of the form <br/>
-            <tab>&ltfield&gt &ltsort&gt</tab><br/></br>
-            <tab><b>Examples:</b></tab><br/>
-            <tab><tab><b>acquisition_date DESC<b></tab></tab><br/>
-            <tab><tab><b>acquisition_date ASC<b></tab></tab><br/>
-            <tab><tab><b>acquisition_date DESC,width ASC<b></tab></tab><br/>
-        </li>
-        <br/>
-    </ul>
+*   **sort** Is a comma separated field list of the form  
+    <tab><field> <sort></tab>  
+
+    <tab>**Examples:**</tab>  
+    <tab><tab>**acquisition_date DESC**</tab></tab>****  
+    <tab><tab>**acquisition_date ASC**</tab></tab>****  
+    <tab><tab>**acquisition_date DESC,width ASC**</tab></tab>********
 """)
   @ApiImplicitParams([
     @ApiImplicitParam(name = 'typeName', value = 'Type name', defaultValue="omar:raster_entry", paramType = 'query', dataType = 'string', required=true),

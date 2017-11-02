@@ -76,3 +76,7 @@ grails:
 endpoints:
     jmx:
         unique-names: true
+geoscript:
+    elasticsearch:
+        host: localhost
+        port: 8080

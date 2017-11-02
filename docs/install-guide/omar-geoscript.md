@@ -1,5 +1,11 @@
 # OMAR Geoscript
 
+## Source Location
+https://github.com/ossimlabs/omar-geoscript
+
+## Purpose
+The OMAR Geoscript application encapsulates all the geotools dependencies which provide libraries do things like draw footprints and query the OMAR database.
+
 ## Dockerfile
 ```
 FROM omar-base
@@ -17,148 +23,115 @@ CMD java -server -Xms256m -Xmx1024m -Djava.awt.headless=true -XX:+CMSClassUnload
 Ref: [omar-base](../../../omar-base/docs/install-guide/omar-base/)
 
 ## JAR
-[http://artifacts.radiantbluecloud.com/artifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app](http://artifacts.radiantbluecloud.com/artifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app)
+[https://artifactory.ossim.ioartifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app](https://artifactory.ossim.io/artifactory/webapp/#/artifacts/browse/tree/General/omar-local/io/ossim/omar/apps/omar-geoscript-app)
 
 ## Configuration
 You will need to insert the [Common Config Settings](../../../omar-common/docs/install-guide/omar-common/#common-config-settings).
 
+## Installation in Openshift
+
+**Assumption:** The omar-geoscript-app docker image is pushed into the OpenShift server's internal docker registry and available to the project.
+
+### Persistent Volumes
+
+OMAR Geoscript does not require any persistent volumes.
+
+### Environment variables
+
+|Variable|Value|
+|------|------|
+|SPRING_PROFILES_ACTIVE|Comma separated profile tags (*e.g. production, dev*)|
+|SPRING_CLOUD_CONFIG_LABEL|The Git branch from which to pull config files (*e.g. master*)|
+
+### An Example DeploymentConfig
+```yaml
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: omar-openshift
+  name: omar-geoscript-app
+spec:
+  replicas: 1
+  selector:
+    app: omar-openshift
+    deploymentconfig: omar-geoscript-app
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+      creationTimestamp: null
+      labels:
+        app: omar-openshift
+        deploymentconfig: omar-geoscript-app
+    spec:
+      containers:
+      - env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: dev
+        - name: SPRING_CLOUD_CONFIG_LABEL
+          value: master
+        image: 172.30.181.173:5000/o2/omar-geoscript-app@sha256:b972d0890e3de500efac96a980d26e336b059bfde49e2332e7bafe651dfb7fed
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        name: omar-geoscript-app
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 8080
+          timeoutSeconds: 5
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - omar-geoscript-app
+      from:
+        kind: ImageStreamTag
+        name: omar-geoscript-app:latest
+        namespace: o2
+    type: ImageChange
+status:
+  availableReplicas: 0
+  latestVersion: 0
+  observedGeneration: 0
+  replicas: 0
+  unavailableReplicas: 0
+  updatedReplicas: 0
 ```
-wfs:
-  featureTypeNamespaces:
-      - prefix: omar
-        uri: http://omar.ossim.org
 
-  datastores:
-      - namespaceId: omar
-        datastoreId: omar_prod
-        datastoreParams:
-          dbtype: postgis
-          host: ${omarDb.host}
-          port: ${omarDb.port}
-          database: ${omarDb.name}
-          user: ${omarDb.username}
-          passwd: ${omarDb.password}
-          'Expose primary keys': 'true'
-          namespace: http://omar.ossim.org
-
-  featureTypes:
-      - name: raster_entry
-        title: raster_entry
-        description: ''
-        keywords:
-          - omar
-          - raster_entry
-          - features
-        datastoreId: omar_prod
-
-      - name: video_data_set
-        title: video_data_set
-        description: ''
-        keywords:
-          - omar
-          - video_data_set
-          - features
-        datastoreId: omar_prod
-        
-wms:
-  styles:
-    byFileType:
-      adrg:
-        filter: file_type='adrg'
-        color:
-          r: 50
-          g: 111
-          b: 111
-          a: 255
-      aaigrid:
-        filter: file_type='aaigrid'
-        color: pink
-      cadrg:
-        filter: file_type='cadrg'
-        color:
-          r: 0
-          g: 255
-          b: 255
-          a: 255
-      ccf:
-        filter: file_type='ccf'
-        color:
-          r: 128
-          g: 100
-          b: 255
-          a: 255
-      cib:
-        filter: file_type='cib'
-        color:
-          r: 0
-          g: 128
-          b: 128
-          a: 255
-      doqq:
-        filter: file_type='doqq'
-        color: purple
-      dted:
-        filter: file_type='dted'
-        color:
-          r: 0
-          g: 255
-          b: 0
-          a: 255
-      imagine_hfa:
-        filter: file_type='imagine_hfa'
-        color: lightGray
-      jpeg:
-        filter: file_type='jpeg'
-        color:
-          r: 255
-          g: 255
-          b: 0
-          a: 255
-      jpeg2000:
-        filter: file_type='jpeg2000'
-        color:
-          r: 255
-          g: 200
-          b: 0
-          a: 255
-      landsat7:
-        filter: file_type='landsat7'
-        color:
-          r: 255
-          g: 0
-          b: 255
-          a: 255
-      mrsid:
-        filter: file_type='mrsid'
-        color:
-          r: 0
-          g: 188
-          b: 0
-          a: 255
-      nitf:
-        filter: file_type='nitf'
-        color:
-          r: 0
-          g: 0
-          b: 255
-          a: 255
-      tiff:
-        filter: file_type='tiff'
-        color:
-          r: 255
-          g: 0
-          b: 0
-          a: 255
-      mpeg:
-        filter: file_type='mpeg'
-        color:
-          r: 164
-          g: 254
-          b: 255
-          a: 255
-      unspecified:
-        filter: file_type='unspecified'
-        color: white
-                
-
-```
+## Application Configuration YAML
