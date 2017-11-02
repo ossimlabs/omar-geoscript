@@ -20,6 +20,7 @@ class HeatMapService {
 
     def processHeatmap(String searchHost, Integer hostPort,
                        String indexName, String searchIndices ) {
+
         println "searchhsort" + searchHost
         println "hostport" + hostPort
         println "indexname" + indexName
