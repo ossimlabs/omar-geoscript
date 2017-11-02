@@ -428,7 +428,6 @@ geoscript:
     port: '9200'
     index: 'wms'
     search: 'searchIndices'
-
 ---
 wms:
   styles:
