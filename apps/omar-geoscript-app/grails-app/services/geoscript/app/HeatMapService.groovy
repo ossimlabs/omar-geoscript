@@ -59,7 +59,7 @@ class HeatMapService {
         try {
             final RestClient restClient = RestClient.builder(new HttpHost(searchHost, hostPort, "http")).build();
             final Response response = restClient.performRequest("GET", "/", Collections.<String, String>emptyMap());
-            println "restClient" + restClient
+            println "restClient" + restClient.toString()
             println "code" + response.getStatusLine().getStatusCode()
             if (response.getStatusLine().getStatusCode() >= 400) {
                 throw new IOException();
@@ -69,5 +69,4 @@ class HeatMapService {
             throw new IOException("Unable to create REST client", e);
         }
     }
-
 }
