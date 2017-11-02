@@ -59,7 +59,7 @@ class HeatMapService {
         try {
             println "got before rest client"
             final RestClient restClient = RestClient.builder(new HttpHost(searchHost, hostPort, "http")).build();
-            println "got after rest client" + restClient.toString()
+            println "got after rest client" + restClient
             final Response response = restClient.performRequest("GET", "/", Collections.<String, String>emptyMap());
             println "restClient" + restClient.toString()
             println "code" + response.getStatusLine().getStatusCode()
