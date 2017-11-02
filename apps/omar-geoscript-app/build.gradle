@@ -100,7 +100,7 @@ dependencies {
 
   compile(group: 'mil.nga.giat', name: 'gt-elasticsearch', version: '2.11-20171013.185453-1')
   compile(group: 'elasticgeo', name: 'elasticgeo', version: '2.11-20171101.191256-1')
-  
+
   compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
   
   compile "org.springframework.boot:spring-boot-starter-logging"
