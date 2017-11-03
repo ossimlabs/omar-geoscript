@@ -31,6 +31,7 @@ class HeatMapService {
         println "hostport" + hostPort
         println "indexname" + indexName
         println "searchindicies" + searchIndices
+        
         /*try {
             println "got before rest client"
             final RestClient restClient = RestClient.builder(new HttpHost(searchHost, hostPort, "http")).build();
