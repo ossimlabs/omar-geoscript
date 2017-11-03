@@ -58,9 +58,8 @@ class HeatMapService {
 
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File("/home/omar/es/admin.jks"));
-        println "before keystore load"
 
-        keyStore.load(instream, null);
+        keyStore.load(instream,  "password".toCharArray());
 
         println "keystore" + keyStore
 
