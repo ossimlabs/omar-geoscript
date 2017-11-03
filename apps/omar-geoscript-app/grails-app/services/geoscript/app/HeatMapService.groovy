@@ -54,12 +54,14 @@ class HeatMapService {
 
     def processHeatmap() {
 
-        def String KEYSTOREPATH = "/home/omar/es/admin.jks"; // or .p12
         def String KEYSTOREPASS = "keystorepass";
 
-                InputStream keyStoreStream = this.getClass().getResourceAsStream(KEYSTOREPATH)
-                KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
-                keyStore.load(keyStoreStream, null);
+         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
+        FileInputStream instream = new FileInputStream(new File("/home/omar/es/admin.jks"));
+
+        keyStore.load(instream, null);
+
+        println "keystore" + keyStore
 
         SSLContext sslContext = SSLContexts.custom()
                     .loadKeyMaterial(keyStore, null) // use null as second param if you don't have a separate key password
@@ -67,7 +69,6 @@ class HeatMapService {
 
             HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
             HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"));
-            println
              HttpEntity entity = response.getEntity();
 
             System.out.println("----------------------------------------");
