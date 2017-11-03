@@ -85,7 +85,7 @@ class HeatMapService {
         println "keystore" + keyStore
 
         SSLContext sslContext = SSLContexts.custom()
-                    .loadKeyMaterial(keyStore, null) // use null as second param if you don't have a separate key password
+                    .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
             HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
