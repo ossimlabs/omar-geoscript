@@ -489,7 +489,7 @@ class GeoscriptService implements InitializingBean
       status = (results.features != null) ? 200 : 400
 
       requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
-              requestMethod: requestMethod, numberOfFeatures: count, status: status, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"),
+              requestMethod: requestMethod, numberOfFeatures: results?.numberOfFeatures, status: status, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"),
               responseTime: responseTime, responseSize: results.toString().bytes.length, typeName: typeName, options: options?.toString())
 
       log.info requestInfoLog.toString()
