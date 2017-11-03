@@ -1,4 +1,4 @@
-package geoscript.app
+package omar.geoscript
 
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration

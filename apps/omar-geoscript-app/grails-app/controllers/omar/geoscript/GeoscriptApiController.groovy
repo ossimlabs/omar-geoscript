@@ -1,4 +1,4 @@
-package omar.geoscript.app
+package omar.geoscript
 
 import grails.converters.JSON
 
