@@ -54,6 +54,7 @@ class HeatMapService {
 
     def processHeatmap() {
 
+      /*
         System.setProperty("javax.net.ssl.trustStore", "/home/omar/es/truststore");
         System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
         System.setProperty("javax.net.ssl.trustStoreType", "JKS");
@@ -75,15 +76,11 @@ class HeatMapService {
 
         method.releaseConnection();
 
-
-        /*
-
-        def String KEYSTOREPASS = "keystorepass";
-
+*/
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File("/home/omar/es/admin.jks"));
 
-        keyStore.load(instream,  "password".toCharArray());
+        keyStore.load(instream,  "".toCharArray());
 
         println "keystore" + keyStore
 
@@ -97,6 +94,6 @@ class HeatMapService {
 
             System.out.println("----------------------------------------");
             System.out.println(response.getStatusLine());
-            EntityUtils.consume(entity);*/
+            EntityUtils.consume(entity);
         }
        }
