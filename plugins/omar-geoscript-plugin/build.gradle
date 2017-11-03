@@ -100,7 +100,7 @@ dependencies {
   compile "org.grails.plugins:scaffolding"
   compile "org.grails.plugins:gsp"
 
-  compile(group: 'mil.nga.giat', name: 'gt-elasticsearch', version: '2.11-20171013.185453-1')
+//  compile(group: 'mil.nga.giat', name: 'gt-elasticsearch', version: '2.11-20171013.185453-1')
 
   console "org.grails:grails-console"
   profile "org.grails.profiles:web-plugin"
