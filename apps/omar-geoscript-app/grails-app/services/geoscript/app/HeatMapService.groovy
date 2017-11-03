@@ -54,6 +54,30 @@ class HeatMapService {
 
     def processHeatmap() {
 
+        System.setProperty("javax.net.ssl.trustStore", "/home/omar/es/truststore");
+        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+        System.setProperty("javax.net.ssl.trustStoreType", "JKS");
+
+        //my certificate and password
+        System.setProperty("javax.net.ssl.keyStore", "/home/omar/es/admin.jks");
+        System.setProperty("javax.net.ssl.keyStorePassword", "mypass");
+        System.setProperty("javax.net.ssl.keyStoreType", "JKS");
+
+        String url = "https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"
+
+        HttpClient httpclient = new HttpClient();
+
+        GetMethod method = new GetMethod();
+        method.setPath(url);
+
+        int statusCode = httpclient.executeMethod(method);
+        System.out.println("Status: " + statusCode);
+
+        method.releaseConnection();
+
+
+        /*
+
         def String KEYSTOREPASS = "keystorepass";
 
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
@@ -73,21 +97,6 @@ class HeatMapService {
 
             System.out.println("----------------------------------------");
             System.out.println(response.getStatusLine());
-            EntityUtils.consume(entity);
+            EntityUtils.consume(entity);*/
         }
        }
-
-        /*try {
-            println "got before rest client"
-            final RestClient restClient = RestClient.builder(new HttpHost(searchHost, hostPort, "http")).build();
-            println "got after rest client"
-            final Response response = restClient.performRequest("GET", "/", Collections.<String, String>emptyMap());
-            println "restClient" + restClient.toString()
-            println "code" + response.getStatusLine().getStatusCode()
-            if (response.getStatusLine().getStatusCode() >= 400) {
-                throw new IOException();
-            }
-            client = new RestElasticClient(restClient);
-        } catch (Exception e) {
-            throw new IOException("Unable to create REST client", e);
-        } */
