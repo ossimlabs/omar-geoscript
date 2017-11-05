@@ -36,6 +36,14 @@ import javax.net.ssl.SSLContext
 import java.io.InputStream
 import java.security.KeyStore
 
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
 
 
 import org.springframework.beans.factory.annotation.Value
@@ -77,7 +85,29 @@ class HeatMapService {
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
-            HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
+        // Allow TLSv1 protocol only
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                "TLSv1",
+                null,
+                SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .build();
+
+        HttpGet httpget = new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty\"");
+
+        System.out.println("Executing request " + httpget.getRequestLine());
+
+        CloseableHttpResponse response = httpclient.execute(httpget);
+            HttpEntity entity = response.getEntity();
+
+            System.out.println("----------------------------------------");
+            System.out.println(response.getStatusLine());
+            EntityUtils.consume(entity);
+
+
+/*            HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
  //           HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"));
         println "req" + req
         HttpResponse response = httpClient.execute(new HttpGet(req));
@@ -85,6 +115,6 @@ class HeatMapService {
 
             System.out.println("----------------------------------------");
             System.out.println(response.getStatusLine());
-            EntityUtils.consume(entity);
+            EntityUtils.consume(entity); */
         }
        }
