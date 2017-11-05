@@ -65,12 +65,13 @@ class HeatMapService {
         //  String req = "https://" + host + ":" + port + "/" + index + "/" + searchIndices
         keyStore.load(instream,  "kspass".toCharArray());
 
-//        KeyStore trustStore = KeyStore.getInstance("JKS")
-//        FileInputStream instreamtks = new FileInputStream(new File("/home/omar/es/searchguard.truststore"));
-//        trustStore.load(instreamtks, "tspass".toCharArray())
+        KeyStore trustStore = KeyStore.getInstance("JKS")
+        FileInputStream instreamtks = new FileInputStream(new File("/home/omar/es/searchguard.truststore"));
+        trustStore.load(instreamtks, "tspass".toCharArray())
 
 
         SSLContext sslContext = SSLContexts.custom()
+                    .loadKeyMaterial(trustStore,"tspass".toCharArray())
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
