@@ -40,57 +40,40 @@ import org.springframework.beans.factory.annotation.Value
 
 class HeatMapService {
 
-    /*@Value('${geoscript.elasticsearch.host}')
-    String searchHost
+/*    @Value('${geoscript.elasticsearch.host}')
+    String host
+
+    @Value('${geoscript.elasticsearch.keystorefile}')
+    String keystorepass
+
+    @Value('${geoscript.elasticsearch.keystorepass}')
+    String keystoreloc
 
     @Value('${geoscript.elasticsearch.port}')
-    Integer hostPort
+    Integer port
 
     @Value('${geoscript.elasticsearch.index}')
-    String indexName
+    String index
 
     @Value('${geoscript.elasticsearch.search}')
-    String searchIndices*/
+    String searchIndices */
 
     def processHeatmap() {
 
-      /*
-        System.setProperty("javax.net.ssl.trustStore", "/home/omar/es/truststore");
-        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-        System.setProperty("javax.net.ssl.trustStoreType", "JKS");
-
-        //my certificate and password
-        System.setProperty("javax.net.ssl.keyStore", "/home/omar/es/admin.jks");
-        System.setProperty("javax.net.ssl.keyStorePassword", "mypass");
-        System.setProperty("javax.net.ssl.keyStoreType", "JKS");
-
-        String url = "https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"
-
-        HttpClient httpclient = new HttpClient();
-
-        GetMethod method = new GetMethod();
-        method.setPath(url);
-
-        int statusCode = httpclient.executeMethod(method);
-        System.out.println("Status: " + statusCode);
-
-        method.releaseConnection();
-
-*/
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File("/home/omar/es/admin.jks"));
+        //  String req = "https://" + host + ":" + port + "/" + index + "/" + searchIndices
 
         keyStore.load(instream,  "kspass".toCharArray());
-
-        println "keystore" + keyStore
 
         SSLContext sslContext = SSLContexts.custom()
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
             HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
-            HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"));
-             HttpEntity entity = response.getEntity();
+ //           HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"));
+        HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/"));
+        HttpEntity entity = response.getEntity();
 
             System.out.println("----------------------------------------");
             System.out.println(response.getStatusLine());
