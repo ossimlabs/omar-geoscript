@@ -1,4 +1,4 @@
-package geoscript.app
+package omar.geoscript
 
 //import mil.nga.giat.data.elasticsearch.*
 
