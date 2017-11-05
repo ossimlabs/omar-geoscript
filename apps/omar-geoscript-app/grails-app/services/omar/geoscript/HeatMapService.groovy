@@ -64,9 +64,6 @@ class HeatMapService {
 
         // Allow TLSv1 protocol only
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                sslContext,
-                "TLSv1",
-                null,
                 SSLConnectionSocketFactory.getDefaultHostnameVerifier());
         CloseableHttpClient httpclient = HttpClients.custom()
                 .setSSLSocketFactory(sslsf)
