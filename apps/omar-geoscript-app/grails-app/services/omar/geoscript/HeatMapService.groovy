@@ -58,7 +58,7 @@ class HeatMapService {
     @Value('${geoscript.elasticsearch.search}')
     String searchIndices */
 
-    def processHeatmap() {
+    def processHeatmap(String req) {
 
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File("/home/omar/es/admin.jks"));
@@ -72,7 +72,7 @@ class HeatMapService {
 
             HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
  //           HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"));
-        HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/"));
+        HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity();
 
             System.out.println("----------------------------------------");
