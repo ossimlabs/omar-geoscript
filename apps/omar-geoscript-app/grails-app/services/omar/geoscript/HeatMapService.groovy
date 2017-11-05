@@ -1,25 +1,5 @@
 package omar.geoscript
 
-//import mil.nga.giat.data.elasticsearch.*
-
-
-//import org.apache.http.HttpHost;
-//import org.elasticsearch.client.Response;
-//import org.elasticsearch.client.RestClient;
-import static org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
-import java.security.GeneralSecurityException;
-import java.security.cert.X509Certificate;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestTemplate;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -30,16 +10,13 @@ import org.apache.http.ssl.SSLContexts;
 //import org.apache.http.ssl.TrustStrategy
 //import org.apache.http.ssl.TrustSelfSignedStrategy
 import org.apache.http.util.EntityUtils;
-import org.junit.Test;
 
 import javax.net.ssl.SSLContext
-import java.io.InputStream
 import java.security.KeyStore
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
