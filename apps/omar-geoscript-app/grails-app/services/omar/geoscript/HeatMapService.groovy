@@ -72,6 +72,7 @@ class HeatMapService {
 
             HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
  //           HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"));
+        println "req" + req
         HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity();
 
