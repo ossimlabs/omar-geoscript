@@ -87,7 +87,7 @@ class HeatMapService {
 
         // Allow TLSv1 protocol only
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                sslcontext,
+                sslContext,
                 "TLSv1",
                 null,
                 SSLConnectionSocketFactory.getDefaultHostnameVerifier());
@@ -95,7 +95,7 @@ class HeatMapService {
                 .setSSLSocketFactory(sslsf)
                 .build();
 
-        HttpGet httpget = new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty\"");
+        HttpGet httpget = new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty");
 
         System.out.println("Executing request " + httpget.getRequestLine());
 
