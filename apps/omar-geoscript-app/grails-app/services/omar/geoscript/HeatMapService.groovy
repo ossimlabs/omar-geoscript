@@ -28,7 +28,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.http.ssl.TrustStrategy
-import org.apache.http.ssl.TrustSelfSignedStrategy
+//import org.apache.http.ssl.TrustSelfSignedStrategy
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
@@ -73,7 +73,7 @@ class HeatMapService {
 
 
         SSLContext sslContext = SSLContexts.custom()
-                    .loadTrustMaterial(trustStore, new TrustSelfSignedStrategy())
+//                    .loadTrustMaterial(trustStore, new TrustSelfSignedStrategy())
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
