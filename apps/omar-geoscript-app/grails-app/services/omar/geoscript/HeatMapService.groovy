@@ -61,10 +61,14 @@ class HeatMapService {
     def processHeatmap(String req) {
 
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
-        FileInputStream instream = new FileInputStream(new File("/home/omar/es/admin.jks"));
+        FileInputStream instream = new FileInputStream(new File("/home/omar/es/searchguard.key"));
         //  String req = "https://" + host + ":" + port + "/" + index + "/" + searchIndices
-
         keyStore.load(instream,  "kspass".toCharArray());
+
+//        KeyStore trustStore = KeyStore.getInstance("JKS")
+//        FileInputStream instreamtks = new FileInputStream(new File("/home/omar/es/searchguard.truststore"));
+//        trustStore.load(instreamtks, "tspass".toCharArray())
+
 
         SSLContext sslContext = SSLContexts.custom()
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
