@@ -73,7 +73,7 @@ class HeatMapService {
 
 
         SSLContext sslContext = SSLContexts.custom()
-//                    .loadTrustMaterial(trustStore, new TrustSelfSignedStrategy())
+                    .loadTrustMaterial(trustStore)
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
