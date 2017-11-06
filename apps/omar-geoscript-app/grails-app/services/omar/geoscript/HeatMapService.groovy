@@ -57,11 +57,11 @@ class HeatMapService {
         trustStore.load(instreamtks, "tspass".toCharArray())
 
         SSLContext sslContext = SSLContexts.custom()
-                    .loadTrustMaterial(trustStore)
+                    .loadTrustMaterial(trustStore, null)
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
-        
+
         // Allow TLSv1 protocol only
 /*        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                 sslContext);
