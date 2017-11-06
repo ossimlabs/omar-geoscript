@@ -55,8 +55,7 @@ class HeatMapService {
         KeyStore trustStore = KeyStore.getInstance("JKS")
         FileInputStream instreamtks = new FileInputStream(new File("/home/omar/es/truststore"));
         trustStore.load(instreamtks, "tspass".toCharArray())
-
-
+        
         SSLContext sslContext = SSLContexts.custom()
 //                    .loadTrustMaterial(trustStore)
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
