@@ -55,20 +55,20 @@ class HeatMapService {
         KeyStore trustStore = KeyStore.getInstance("JKS")
         FileInputStream instreamtks = new FileInputStream(new File("/home/omar/es/truststore"));
         trustStore.load(instreamtks, "tspass".toCharArray())
-        
+
         SSLContext sslContext = SSLContexts.custom()
 //                    .loadTrustMaterial(trustStore)
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
         // Allow TLSv1 protocol only
-        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+/*        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                 sslContext);
         CloseableHttpClient httpclient = HttpClients.custom()
                 .setSSLSocketFactory(sslsf)
                 .build();
 
-        HttpGet httpget = new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty");
+        HttpGet httpget = new HttpGet(req);
 
         System.out.println("Executing request " + httpget.getRequestLine());
 
@@ -77,17 +77,16 @@ class HeatMapService {
 
             System.out.println("----------------------------------------");
             System.out.println(response.getStatusLine());
-            EntityUtils.consume(entity);
+            EntityUtils.consume(entity); */
 
 
-/*            HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
- //           HttpResponse response = httpClient.execute(new HttpGet("https://logging-es.logging.svc.cluster.local:9200/.all/_search?pretty"));
+            HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
         println "req" + req
         HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity();
 
             System.out.println("----------------------------------------");
             System.out.println(response.getStatusLine());
-            EntityUtils.consume(entity); */
+            EntityUtils.consume(entity);
         }
        }
