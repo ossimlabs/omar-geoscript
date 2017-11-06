@@ -79,13 +79,13 @@ class HeatMapService {
             HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
         println "req" + req
         HttpResponse response = httpClient.execute(new HttpGet(req));
-        HttpEntity entity = response.getEntity();
+        HttpEntity entity = response.getEntity()
         EntityUtils.consume(entity);
 
 
         System.out.println("response Status ");
             System.out.println(response.getStatusLine());
            System.out.println("entity" + entity);
-
-        }
-       }
+        System.out.println("done")
+    }
+}
