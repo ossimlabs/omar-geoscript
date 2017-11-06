@@ -61,6 +61,7 @@ class HeatMapService {
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
+        
         // Allow TLSv1 protocol only
 /*        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                 sslContext);
