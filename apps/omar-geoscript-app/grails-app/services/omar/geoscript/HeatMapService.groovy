@@ -48,12 +48,12 @@ class HeatMapService {
     def processHeatmap(String req) {
 
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
-        FileInputStream instream = new FileInputStream(new File("/home/omar/es/searchguard.key"));
+        FileInputStream instream = new FileInputStream(new File("/home/omar/es/key"));
         //  String req = "https://" + host + ":" + port + "/" + index + "/" + searchIndices
         keyStore.load(instream,  "kspass".toCharArray());
 
         KeyStore trustStore = KeyStore.getInstance("JKS")
-        FileInputStream instreamtks = new FileInputStream(new File("/home/omar/es/searchguard.truststore"));
+        FileInputStream instreamtks = new FileInputStream(new File("/home/omar/es/truststore"));
         trustStore.load(instreamtks, "tspass".toCharArray())
 
 
