@@ -43,14 +43,11 @@ class DataSourceService
 		if ( NamespaceInfo.count() == 0 )
 		{
 			wfsConfig.featureTypeNamespaces.each {
-				println it
 				NamespaceInfo.findOrSaveByPrefixAndUri( it.prefix, it.uri )
 			}
 
 			def env = System.env;
 			wfsConfig.datastores.each { datastore ->
-				println datastore
-
 				def workspaceInfo = WorkspaceInfo.findOrCreateByName( datastore.datastoreId )
 
 				workspaceInfo.with {
@@ -69,8 +66,6 @@ class DataSourceService
 			}
 
 			wfsConfig.featureTypes.each { featureType ->
-				println featureType
-
 				WorkspaceInfo.withTransaction {
 					def workspaceInfo = WorkspaceInfo.findByName( featureType.datastoreId )
 
@@ -90,7 +85,7 @@ class DataSourceService
 						{
 							workspaceInfo.errors.allErrors.each { println messageSource.getMessage( it, null ) }
 						}
-					}	
+					}
 				}
 			}
 		}

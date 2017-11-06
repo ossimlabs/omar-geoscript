@@ -51,7 +51,6 @@ class GeoscriptService implements InitializingBean
           } as List<String>
           if ( fields && !fields?.isEmpty() && fields?.every { it } )
           {
-            // println "FIELDS: ${fields.size()}"
             options['fields'] = fields
           }
           break
@@ -121,7 +120,7 @@ class GeoscriptService implements InitializingBean
       }
       else
       {
-        println "${'*' * 20} No Match ${'*' * 20}"
+        log.info "${'*' * 20} No Match ${'*' * 20}"
       }
 
       layerName = wfsParams?.typeName?.split( ':' )?.last()
@@ -130,8 +129,6 @@ class GeoscriptService implements InitializingBean
     {
       namespaceInfo = NamespaceInfo.findByPrefix( namespacePrefix )
     }
-
-    //println "${namespaceInfo} ${layerName}"
 
     LayerInfo.where {
       name == layerName && workspaceInfo.namespaceInfo == namespaceInfo
@@ -150,8 +147,6 @@ class GeoscriptService implements InitializingBean
   @Memoized
   def listFunctions2()
   {
-    def start = System.currentTimeMillis()
-
     List names = []
     CommonFactoryFinder.getFunctionFactories().each { f ->
       f.functionNames.each { fn ->
@@ -161,10 +156,7 @@ class GeoscriptService implements InitializingBean
         }
       }
     }
-    names = names.sort { a, b -> a.name.compareToIgnoreCase b.name }
-    def stop = System.currentTimeMillis()
-    println "${stop - start}"
-    names
+    names.sort { a, b -> a.name.compareToIgnoreCase b.name }
   }
 
   @Override
@@ -334,8 +326,6 @@ class GeoscriptService implements InitializingBean
 
     def options = parseOptions( wfsParams )
     def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
-
-    //println "workspaceParams: ${workspaceParams}"
 
     def x = {
 
@@ -577,8 +567,6 @@ class GeoscriptService implements InitializingBean
             }
             catch ( e )
             {
-                // println e.message
-                //unsupported << id
             }
             list
         }

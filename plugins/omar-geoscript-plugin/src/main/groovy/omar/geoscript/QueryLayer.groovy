@@ -22,7 +22,6 @@ class QueryLayer extends FeatureLayer
     this.query = new Query( this.featureSource.name.localPart, filter.filter )
 
     if ( options.maxFeatures ) {
-      println options.maxFeatures
       this.query.maxFeatures = options.maxFeatures
     }
   }

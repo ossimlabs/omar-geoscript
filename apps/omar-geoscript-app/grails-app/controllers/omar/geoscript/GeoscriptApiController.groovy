@@ -14,14 +14,12 @@ class GeoscriptApiController
   @ApiOperation(value = "Get the capabilities of the server", produces='application/json')
   def getCapabilitiesData()
   {
-    println params
     render geoscriptService.capabilitiesData as JSON
   }
 
   @ApiOperation(value = "List available projections", produces='application/json')
   def listProjections()
   {
-    println params
     render geoscriptService.listProjections() as JSON
   }
 
@@ -31,7 +29,6 @@ class GeoscriptApiController
   ])
   def getSchemaInfoByTypeName()
   {
-    println params
     render geoscriptService.getSchemaInfoByTypeName(params?.typeName) as JSON
   }
 
