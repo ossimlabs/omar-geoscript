@@ -76,9 +76,7 @@ class HeatMapService {
 
         CloseableHttpResponse response = httpclient.execute(httpget); */
 
-
-            HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
-        println "req" + req
+        HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
         HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity()
 
