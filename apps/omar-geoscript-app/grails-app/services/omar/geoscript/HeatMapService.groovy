@@ -81,17 +81,18 @@ class HeatMapService {
         println "req" + req
         HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity()
-        EntityUtils.consume(entity);
 
 
         System.out.println("response Status ");
             System.out.println(response.getStatusLine());
            System.out.println("entity" + entity);
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(http.Entity.getContent()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
         String line;
         while ((line = br.readLine())!= null) {
             System.out.println(line);
         }
+        EntityUtils.consume(entity);
+
     }
 }
