@@ -20,7 +20,8 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 
 import org.springframework.beans.factory.annotation.Value
@@ -86,6 +87,11 @@ class HeatMapService {
         System.out.println("response Status ");
             System.out.println(response.getStatusLine());
            System.out.println("entity" + entity);
-        System.out.println("done")
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(http.Entity.getContent()));
+        String line;
+        while ((line = br.readLine())!= null) {
+            System.out.println(line);
+        }
     }
 }
