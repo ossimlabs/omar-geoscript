@@ -45,15 +45,15 @@ class HeatMapService {
     @Value('${geoscript.elasticsearch.search}')
     String searchIndices */
 
-    def processHeatmap(String req) {
+    def processHeatmap(String key, String trust, String req) {
 
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
-        FileInputStream instream = new FileInputStream(new File("/home/omar/es/key"));
+        FileInputStream instream = new FileInputStream(new File(key));
         //  String req = "https://" + host + ":" + port + "/" + index + "/" + searchIndices
         keyStore.load(instream,  "kspass".toCharArray());
 
         KeyStore trustStore = KeyStore.getInstance("JKS")
-        FileInputStream instreamtks = new FileInputStream(new File("/home/omar/es/truststore"));
+        FileInputStream instreamtks = new FileInputStream(new File(trust));
         trustStore.load(instreamtks, "tspass".toCharArray())
 
         SSLContext sslContext = SSLContexts.custom()
@@ -73,21 +73,19 @@ class HeatMapService {
 
         System.out.println("Executing request " + httpget.getRequestLine());
 
-        CloseableHttpResponse response = httpclient.execute(httpget);
-            HttpEntity entity = response.getEntity();
-
-            System.out.println("----------------------------------------");
-            System.out.println(response.getStatusLine());
-            EntityUtils.consume(entity); */
+        CloseableHttpResponse response = httpclient.execute(httpget); */
 
 
             HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
         println "req" + req
         HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity();
+        EntityUtils.consume(entity);
 
-            System.out.println("----------------------------------------");
+
+        System.out.println("response Status ");
             System.out.println(response.getStatusLine());
-            EntityUtils.consume(entity);
+           System.out.println("entity" + entity);
+
         }
        }
