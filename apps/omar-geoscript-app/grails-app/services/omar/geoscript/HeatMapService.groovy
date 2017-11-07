@@ -49,6 +49,7 @@ class HeatMapService {
 
     def processHeatmap(String key, String trust, String req) {
 
+        int i
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File(key));
 
@@ -84,6 +85,17 @@ class HeatMapService {
         println "result source size" + result.hits.hits._source.size()
         println "result source message size" + result.hits.hits._source.message.size()
         println "result hits hits (1)" + result.hits.hits.getAt(1)
+        println "result hits hits source(1)" + result.hits.hits._source.getAt(1)
+        println "result hits hits source message (1)" + result.hits.hits._source.message.getAt(1)
+
+
+
+        for(i = 0;i<result.hits.hits.size();i++)
+        {
+
+            println "i" + i
+
+        }
 
 
 
