@@ -90,10 +90,10 @@ class HeatMapService {
 
 
 
-        for(i = 0;i<result.hits.hits.size();i++)
+        for(i = 0;i<result.hits.hits._source.message.size();i++)
         {
 
-            println "i" + i
+            println "i" + result.hits.hits._source.message.getAt(i)
 
         }
 
