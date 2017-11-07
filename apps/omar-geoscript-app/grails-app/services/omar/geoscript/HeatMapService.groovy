@@ -20,6 +20,7 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import groovy.json.JsonSlurper;
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -50,7 +51,7 @@ class HeatMapService {
 
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File(key));
-        //  String req = "https://" + host + ":" + port + "/" + index + "/" + searchIndices
+
         keyStore.load(instream,  "kspass".toCharArray());
 
         KeyStore trustStore = KeyStore.getInstance("JKS")
@@ -62,20 +63,6 @@ class HeatMapService {
                     .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
                     .build();
 
-
-        // Allow TLSv1 protocol only
-/*        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-                sslContext);
-        CloseableHttpClient httpclient = HttpClients.custom()
-                .setSSLSocketFactory(sslsf)
-                .build();
-
-        HttpGet httpget = new HttpGet(req);
-
-        System.out.println("Executing request " + httpget.getRequestLine());
-
-        CloseableHttpResponse response = httpclient.execute(httpget); */
-
         HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
         HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity()
@@ -86,10 +73,17 @@ class HeatMapService {
            System.out.println("entity" + entity);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-        String line;
+        JsonSlurper result = new JsonSlurper().parse(br)
+        def hitsarray = result.get("hits")
+        println "hitsarray" + hitsarray
+
+
+        /* String line;
         while ((line = br.readLine())!= null) {
             System.out.println(line);
-        }
+        } */
+
+
         EntityUtils.consume(entity);
 
     }
