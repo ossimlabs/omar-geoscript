@@ -75,6 +75,7 @@ class HeatMapService {
         BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
         def result = new JsonSlurper().parse(br)
         println "result" + result
+        println "result hits" + result.hits
         //def hitsarray = result.get("hits")
         //println "hitsarray" + hitsarray
 
