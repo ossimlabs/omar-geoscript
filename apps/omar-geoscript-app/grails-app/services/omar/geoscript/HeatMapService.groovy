@@ -75,12 +75,7 @@ class HeatMapService {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
         def result = new JsonSlurper().parse(br)
-        println "result hits hits" + result.hits.hits
-        println "result source" + result.hits.hits._source
         println "result source" + result.hits.hits._source.message
-        println "result hits hits size" + result.hits.hits.size()
-        println "result source size" + result.hits.hits._source.size()
-        println "result source message size" + result.hits.hits._source.message.size()
         println "result hits hits (1)" + result.hits.hits.getAt(1)
         println "result hits hits source(1)" + result.hits.hits.getAt(1)._source
         println "result hits hits source message(1)" + result.hits.hits.getAt(1)._source.message
@@ -90,25 +85,11 @@ class HeatMapService {
         for(i = 0;i<result.hits.hits.size();i++)
         {
 
-            println "i" + result.hits.hits.getAt(i)._source.message
+            println result.hits.hits.getAt(i)._source.message + "\n"
 
             // parse message, pass 1, geometry (or location?),
 
         }
-
-
-
-
-
-
-        //def hitsarray = result.get("hits")
-        //println "hitsarray" + hitsarray
-
-
-        /* String line;
-        while ((line = br.readLine())!= null) {
-            System.out.println(line);
-        } */
 
 
         EntityUtils.consume(entity);
