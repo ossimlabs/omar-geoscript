@@ -76,8 +76,8 @@ class HeatMapService {
         def result = new JsonSlurper().parse(br)
         println "result" + result
         println "result hits" + result.hits
-        println "result hits length" + results.hits.length
         println "result hits hits" + result.hits.hits
+        println "result hits length" + result.hits.length
         println "result hits hits" + result.hits.hits.length
         //def hitsarray = result.get("hits")
         //println "hitsarray" + hitsarray
