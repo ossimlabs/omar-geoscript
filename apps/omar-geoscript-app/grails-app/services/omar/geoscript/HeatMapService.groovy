@@ -66,8 +66,6 @@ class HeatMapService {
         ObjectMapper mapper = new ObjectMapper();
 //        Memory mem = new Memory()
 
-        Map<String, Object> map = new HashMap<String, Object>();
-
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File(key));
 
@@ -104,7 +102,8 @@ class HeatMapService {
                 // parse message....pass count, bbox, filename to datastore
 
                 // convert JSON string to Map
-                map = mapper.readValue(result.hits.hits.getAt(i)._source.message, new TypeReference<Map<String, String>>(){});
+
+                Map<String, Object> map = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
                 System.out.println(map.get("bbox"));
                 System.out.println(map.get("filename"));
