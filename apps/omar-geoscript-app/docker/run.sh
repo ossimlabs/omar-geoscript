@@ -47,5 +47,5 @@ if [ "${TRUST_STORE_PASSWORD}" != "" ] ; then
       export JAVA_ARGS="-Djavax.net.ssl.trustStorePassword${TRUST_STORE_PASSWORD} ${JAVA_ARGS}"
    fi
 fi 
-
+echo "Running command: java ${JAVA_ARGS} -jar *.jar"
 java ${JAVA_ARGS} -jar *.jar
