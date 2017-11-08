@@ -66,21 +66,22 @@ class HeatMapService {
         ObjectMapper mapper = new ObjectMapper();
 //        Memory mem = new Memory()
 
-        KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
-        FileInputStream instream = new FileInputStream(new File(key));
+//        KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
+//        FileInputStream instream = new FileInputStream(new File(key));
 
-        keyStore.load(instream,  "kspass".toCharArray());
+//        keyStore.load(instream,  "kspass".toCharArray());
 
-        KeyStore trustStore = KeyStore.getInstance("JKS")
-        FileInputStream instreamtks = new FileInputStream(new File(trust));
-        trustStore.load(instreamtks, "tspass".toCharArray())
+//        KeyStore trustStore = KeyStore.getInstance("JKS")
+//        FileInputStream instreamtks = new FileInputStream(new File(trust));
+//        trustStore.load(instreamtks, "tspass".toCharArray())
 
-        SSLContext sslContext = SSLContexts.custom()
-                    .loadTrustMaterial(trustStore, null)
-                    .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
-                    .build();
+//        SSLContext sslContext = SSLContexts.custom()
+//                    .loadTrustMaterial(trustStore, null)
+//                    .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
+//                    .build();
 
-        HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
+//        HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
+        HttpClient httpClient = HttpClients.createDefault()
         HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity()
 
