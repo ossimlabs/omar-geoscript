@@ -84,11 +84,6 @@ class HeatMapService {
         HttpResponse response = httpClient.execute(new HttpGet(req));
         HttpEntity entity = response.getEntity()
 
-
-        System.out.println("response Status ");
-            System.out.println(response.getStatusLine());
-           System.out.println("entity" + entity);
-
         BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
         def result = new JsonSlurper().parse(br)
 
@@ -99,10 +94,6 @@ class HeatMapService {
                 println result.hits.hits.getAt(i)._source.message
                 count++
                 println "\ncount" + count
-                // parse message....pass count, bbox, filename to datastore
-
-                // convert JSON string to Map
-
                 Map<String, Object> map = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
                 System.out.println(map.get("bbox"));

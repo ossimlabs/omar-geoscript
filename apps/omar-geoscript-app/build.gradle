@@ -89,13 +89,13 @@ dependencies {
   }
 */
 
-  // compile ( "org.geoscript:geoscript-groovy:1.8.0" ) {
-  //   exclude module: "commons-beanutils"
-  //   exclude module: "ehcache"
-  //   exclude module: "groovy-all"
-  //   exclude module: "slf4j-log4j12"
-  //   exclude module: "xml-apis"
-  // }
+   compile ( "org.geoscript:geoscript-groovy:1.8.0" ) {
+     exclude module: "commons-beanutils"
+     exclude module: "ehcache"
+     exclude module: "groovy-all"
+     exclude module: "slf4j-log4j12"
+     exclude module: "xml-apis"
+   }
   // compile "commons-beanutils:commons-beanutils:1.9.2"
 
 //  compile(group: 'mil.nga.giat', name: 'gt-elasticsearch', version: '2.11-20171013.185453-1')
