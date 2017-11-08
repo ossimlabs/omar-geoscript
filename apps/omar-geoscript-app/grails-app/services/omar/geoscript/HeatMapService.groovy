@@ -71,10 +71,7 @@ class HeatMapService {
     {
         Workspace workspace = new Memory()
         Schema schema = new Schema("heatmap", [
-            new Field("geom","Point","EPSG:4326"),
-            new Field("value","String"),
-            new Field("class","String"),
-            new Field("type","String")
+            new Field("geom","Point","EPSG:4326")
         ])
         Layer layer = workspace.create(schema)
 
