@@ -11,8 +11,8 @@ buildscript {
                HOME=/home/omar \\
                SPRING_CLOUD_DISCOVERY_ENABLED=true """,
         "expose 8080",
-        "COPY run.sh /home/omar",
-        "COPY ${jarName} /home/omar",
+        "COPY run.sh \$HOME/",
+        "COPY ${project.name}-${buildVersion}-${buildVersionTag}.jar \$HOME/",
         "WORKDIR /home/omar",
         "CMD ./run.sh"
       ]
