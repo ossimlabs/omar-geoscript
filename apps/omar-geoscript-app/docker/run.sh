@@ -12,7 +12,7 @@
 #   export TRUST_STORE=${HOME}/es/truststore
 #fi
 
-if [ -z $JAVA_PROPERTIES ] ; then
+if [ "${JAVA_PROPERTIES}" == "" ] ; then
    export JAVA_PROPERTIES="-server -Xms256m -Xmx1024m -XX:+CMSClassUnloadingEnabled -XX:+UseGCOverheadLimit -XX:+UnlockExperimentalVMOptions  -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Djava.security.egd=file:/dev/./urandom"
 fi
 
