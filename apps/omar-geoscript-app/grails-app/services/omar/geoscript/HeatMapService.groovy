@@ -29,6 +29,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 
 import org.springframework.beans.factory.annotation.Value
+import geoscript.geom.*
+import geoscript.feature.*
+import geoscript.layer.Layer
+import geoscript.layer.io.GeoJSONReader
+import geoscript.workspace.*
+
 
 class HeatMapService {
 
@@ -61,8 +67,17 @@ class HeatMapService {
     }
 
 
-    def processHeatmap(String req) 
+    Layer getLayer(String req) 
     {
+        Workspace workspace = new Memory()
+        Schema schema = new Schema("heatmap", [
+            new Field("geom","Point","EPSG:4326"),
+            new Field("value","String"),
+            new Field("class","String"),
+            new Field("type","String")
+        ])
+        Layer layer = workspace.create(schema)
+
         Integer count = 0;
         URL url = new URL(req);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -72,22 +87,35 @@ class HeatMapService {
         def result = new JsonSlurper().parse(br)
 
         br.close();
-        for(Integer i = 0;i<result.hits.hits.size();i++)
-        {
-            if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
-                println result.hits.hits.getAt(i)._source.message
-                count++
-                println "\ncount" + count
-                Map<String, Object> map = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                System.out.println(map.get("bbox"));
-                System.out.println(map.get("filename"));
-                System.out.println(map.get("timestamp"));
+        layer.withWriter{ writer ->
+            for(Integer i = 0;i<result.hits.hits.size();i++)
+            {
+                if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
+                    Feature feature = writer.newFeature
+                    //println result.hits.hits.getAt(i)._source.message
+                    count++
+                    //println "\ncount" + count
+                    Map<String, Object> map = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
+
+                    def minx = map.get("bbox").minX
+                    def miny = map.get("bbox").minY
+                    feature.set([
+                        
+                        geom: new Point(minx, miny)
+                        
+                        ])
+                    writer.add(feature)
+
+//                    println(map.get("bbox").minX);
+//                    println(map.get("filename"));
+//                    println(map.get("timestamp"));
+                }
             }
         }
-
-
+        layer
     }
+
 
 /*
     def processHeatmap(String key, String trust, String req) {
