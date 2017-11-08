@@ -84,7 +84,6 @@ class HeatMapService {
 
         for(i = 0;i<result.hits.hits.size();i++)
         {
-
             println result.hits.hits.getAt(i)._source.message + "\n"
 
             // parse message, pass 1, geometry (or location?),
