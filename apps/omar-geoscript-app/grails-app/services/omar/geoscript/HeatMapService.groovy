@@ -93,9 +93,6 @@ class HeatMapService {
             {
                 if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
                     Feature feature = writer.newFeature
-                    //println result.hits.hits.getAt(i)._source.message
-                    count++
-                    //println "\ncount" + count
                     Map<String, Object> map = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
                     def minx = map.get("bbox").minX
@@ -107,9 +104,6 @@ class HeatMapService {
                         ])
                     writer.add(feature)
 
-//                    println(map.get("bbox").minX);
-//                    println(map.get("filename"));
-//                    println(map.get("timestamp"));
                 }
             }
         }
