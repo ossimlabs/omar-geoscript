@@ -96,10 +96,8 @@ class HeatMapService {
         count = 0
         for(i = 0;i<result.hits.hits.size();i++)
         {
-            println result.hits.hits.getAt(i)._source.message + "\n"
-
             if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
-                println "message" + result.hits.hits.getAt(i)._source.message
+                println result.hits.hits.getAt(i)._source.message
                 count++
                 println "\ncount" + count
                 // parse message....pass count, bbox, filename to datastore
@@ -107,7 +105,10 @@ class HeatMapService {
                 // convert JSON string to Map
                 map = mapper.readValue(result.hits.hits.getAt(i)._source.message, new TypeReference<Map<String, String>>(){});
 
-                System.out.println(map);
+                System.out.println(map.get("bbox"));
+                System.out.println(map.get("filename"));
+                System.out.println(map.get("timestamp"));
+
 
             }
 
