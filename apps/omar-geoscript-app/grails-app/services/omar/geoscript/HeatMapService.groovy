@@ -64,7 +64,7 @@ class HeatMapService {
 
         int i, count
         ObjectMapper mapper = new ObjectMapper();
-        Memory mem = new Memory()
+//        Memory mem = new Memory()
 
         Map<String, Object> map = new HashMap<String, Object>();
 
