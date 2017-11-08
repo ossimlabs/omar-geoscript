@@ -5,7 +5,7 @@ buildscript {
     dockerFile="docker/Dockerfile"
     dockerStatementsOverride = {
       [
-        "FROM ${lazyProperty('dockerNamespaceUrl')}${lazyProperty('baseImage')}:${lazyProperty('dockerAppTag')}",
+        "FROM ${project.dockerNamespaceUrl}${project.ext.baseImage}:${project.dockerAppTag}",
         "MAINTAINER DigitalGlobe-RadiantBlue",
         """ENV SPRING_CLOUD_CONFIG_ENABLED=true \\
                HOME=/home/omar \\
