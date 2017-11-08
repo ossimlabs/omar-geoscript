@@ -102,6 +102,7 @@ dependencies {
 //  compile(group: 'elasticgeo', name: 'elasticgeo', version: '2.11-20171101.191256-1')
 
   compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
+  compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.2'
   compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
   compile "org.springframework.boot:spring-boot-starter-logging"
   compile "org.springframework.boot:spring-boot-autoconfigure"

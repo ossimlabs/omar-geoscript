@@ -23,6 +23,8 @@ import org.apache.http.util.EntityUtils;
 import groovy.json.JsonSlurper;
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 
 
 import org.springframework.beans.factory.annotation.Value
@@ -47,9 +49,19 @@ class HeatMapService {
     @Value('${geoscript.elasticsearch.search}')
     String searchIndices */
 
+    private Boolean isValidJson(String maybeJson){
+        try {
+            final ObjectMapper mapper = new ObjectMapper();
+            mapper.readTree(maybeJson);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     def processHeatmap(String key, String trust, String req) {
 
-        int i
+        int i, count
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File(key));
 
@@ -80,13 +92,20 @@ class HeatMapService {
         println "result hits hits source(1)" + result.hits.hits.getAt(1)._source
         println "result hits hits source message(1)" + result.hits.hits.getAt(1)._source.message
 
-
-
+        count = 0
         for(i = 0;i<result.hits.hits.size();i++)
         {
             println result.hits.hits.getAt(i)._source.message + "\n"
 
-            // parse message, pass 1, geometry (or location?),
+            if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
+                println "message" + result.hits.hits.getAt(i)._source.message
+                count++
+                println "\ncount" + count
+                // parse message....pass count, bbox, filename to datastore
+
+
+            }
+
 
         }
 
