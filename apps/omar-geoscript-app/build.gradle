@@ -16,6 +16,7 @@ buildscript {
         "WORKDIR /home/omar",
         "CMD ./run.sh"
       ]
+    }
   }
   if(System.env.OMAR_COMMON_PROPERTIES)
   {
