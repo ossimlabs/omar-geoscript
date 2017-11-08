@@ -49,4 +49,4 @@ if [ "${TRUST_STORE_PASSWORD}" != "" ] ; then
 fi 
 export JAR_FILE=`find ${HOME} -name "*.jar"`
 echo "Running command: java ${JAVA_ARGS} -jar ${JAR_FILE}"
-java ${JAVA_ARGS} -jar *.jar
+java ${JAVA_ARGS} -jar ${JAR_FILE}
