@@ -60,6 +60,36 @@ class HeatMapService {
         }
     }
 
+
+    def processHeatmap(String req) 
+    {
+        Integer count = 0;
+        URL url = new URL(req);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        InputStream is = conn.getInputStream();
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        def result = new JsonSlurper().parse(br)
+
+        br.close();
+        for(Integer i = 0;i<result.hits.hits.size();i++)
+        {
+            if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
+                println result.hits.hits.getAt(i)._source.message
+                count++
+                println "\ncount" + count
+                Map<String, Object> map = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
+
+                System.out.println(map.get("bbox"));
+                System.out.println(map.get("filename"));
+                System.out.println(map.get("timestamp"));
+            }
+        }
+
+
+    }
+
+/*
     def processHeatmap(String key, String trust, String req) {
 
         int i, count
@@ -111,4 +141,5 @@ class HeatMapService {
         EntityUtils.consume(entity);
 
     }
+*/
 }
