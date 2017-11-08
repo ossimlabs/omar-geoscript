@@ -7,7 +7,7 @@ import geoscript.layer.io.CsvWriter
 import geoscript.proj.Projection
 import geoscript.workspace.Memory
 import geoscript.workspace.Workspace
-
+import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.Memoized
@@ -51,7 +51,6 @@ class GeoscriptService implements InitializingBean
           } as List<String>
           if ( fields && !fields?.isEmpty() && fields?.every { it } )
           {
-            // println "FIELDS: ${fields.size()}"
             options['fields'] = fields
           }
           break
@@ -121,7 +120,7 @@ class GeoscriptService implements InitializingBean
       }
       else
       {
-        println "${'*' * 20} No Match ${'*' * 20}"
+        log.info "${'*' * 20} No Match ${'*' * 20}"
       }
 
       layerName = wfsParams?.typeName?.split( ':' )?.last()
@@ -130,8 +129,6 @@ class GeoscriptService implements InitializingBean
     {
       namespaceInfo = NamespaceInfo.findByPrefix( namespacePrefix )
     }
-
-    //println "${namespaceInfo} ${layerName}"
 
     LayerInfo.where {
       name == layerName && workspaceInfo.namespaceInfo == namespaceInfo
@@ -150,8 +147,6 @@ class GeoscriptService implements InitializingBean
   @Memoized
   def listFunctions2()
   {
-    def start = System.currentTimeMillis()
-
     List names = []
     CommonFactoryFinder.getFunctionFactories().each { f ->
       f.functionNames.each { fn ->
@@ -161,10 +156,7 @@ class GeoscriptService implements InitializingBean
         }
       }
     }
-    names = names.sort { a, b -> a.name.compareToIgnoreCase b.name }
-    def stop = System.currentTimeMillis()
-    println "${stop - start}"
-    names
+    names.sort { a, b -> a.name.compareToIgnoreCase b.name }
   }
 
   @Override
@@ -193,6 +185,12 @@ class GeoscriptService implements InitializingBean
 
   def getSchemaInfoByTypeName(String typeName)
   {
+    def requestType = "GET"
+    def requestMethod = "GetSchemaInfoByTypeName"
+    Date startTime = new Date()
+    def responseTime
+    def requestInfoLog
+
     def (prefix, layerName) = typeName?.split( ':' )
 
     def layerInfo = LayerInfo.where {
@@ -224,12 +222,27 @@ class GeoscriptService implements InitializingBean
       }
     }
 
+    Date endTime = new Date()
+    responseTime = Math.abs(startTime.getTime() - endTime.getTime())
+
+    requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
+            requestMethod: requestMethod, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"), responseTime: responseTime,
+            responseSize: schemaInfo.toString().getBytes().length, typeName: typeName)
+
+    log.info requestInfoLog.toString()
+
     schemaInfo
   }
 
   def getCapabilitiesData()
   {
-    [
+    def requestType = "GET"
+    def requestMethod = "GetCapabilitiesData"
+    Date startTime = new Date()
+    def responseTime
+    def requestInfoLog
+
+    def getCapabilities = [
         featureTypes: getLayerData(),
         functionNames: listFunctions2(),
         featureTypeNamespacesByPrefix: NamespaceInfo.list().inject( [:] ) { a, b ->
@@ -237,8 +250,18 @@ class GeoscriptService implements InitializingBean
         }
 
     ]
-  }
 
+    Date endTime = new Date()
+    responseTime = Math.abs(startTime.getTime() - endTime.getTime())
+
+    requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
+            requestMethod: requestMethod, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"), responseTime: responseTime,
+            responseSize: getCapabilities.toString().getBytes().length)
+
+    log.info requestInfoLog.toString()
+
+    getCapabilities
+  }
 
   def getLayerData()
   {
@@ -276,7 +299,6 @@ class GeoscriptService implements InitializingBean
     }
   }
 
-
   def getFeatureCsv(def wfsParams)
   {
     def layerInfo = findLayerInfo( wfsParams )
@@ -304,8 +326,6 @@ class GeoscriptService implements InitializingBean
 
     def options = parseOptions( wfsParams )
     def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
-
-    //println "workspaceParams: ${workspaceParams}"
 
     def x = {
 
@@ -417,34 +437,53 @@ class GeoscriptService implements InitializingBean
 
   def queryLayer(String typeName, Map<String,Object> options, String resultType='results', String featureFormat=null)
   {
+      def requestType = "GET"
+      def requestMethod = "QueryLayer"
+      Date startTime = new Date()
+      def responseTime
+      def status
+      def requestInfoLog
+
       def (prefix, layerName) = typeName?.split(':')
       def layer = findLayer(prefix, layerName)
       def results
 
       Workspace.withWorkspace(layer?.workspace) {
-        def matched = layer?.count( options?.filter )
-        def count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
-        def features = []
+          def matched = layer?.count( options?.filter )
+          def count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
+          def features = []
 
-        if ( resultType == 'results' )
-        {
-            if ( featureFormat == 'CSV' ) {
-              features = exportCSV(layer, options)
-            } else {
-              features = layer?.collectFromFeature(options) { feature ->
-                formatFeature(feature, featureFormat, [prefix: prefix])
+          if ( resultType == 'results' )
+          {
+              if ( featureFormat == 'CSV' ) {
+                features = exportCSV(layer, options)
+              } else {
+                features = layer?.collectFromFeature(options) { feature ->
+                  formatFeature(feature, featureFormat, [prefix: prefix])
+                }
               }
-            }
-        }
+          }
 
-        results = [
-          namespace: [prefix: prefix, uri: layer?.schema?.uri],
-          numberOfFeatures: count,
-          numberMatched: matched,
-          timeStamp: new Date().format( "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", TimeZone.getTimeZone( 'GMT' ) ),
-          features: features
-        ]
+          results = [
+            namespace: [prefix: prefix, uri: layer?.schema?.uri],
+            numberOfFeatures: count,
+            numberMatched: matched,
+            timeStamp: new Date().format( "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", TimeZone.getTimeZone( 'GMT' ) ),
+            features: features
+          ]
       }
+
+      Date endTime = new Date()
+      responseTime = Math.abs(startTime.getTime() - endTime.getTime())
+
+      status = (results.features != null) ? 200 : 400
+
+      requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
+              requestMethod: requestMethod, numberOfFeatures: results?.numberOfFeatures, numberMatched: results?.numberMatched,
+              status: status, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"), responseTime: responseTime,
+              responseSize: results.toString().bytes.length, typeName: typeName, options: options?.toString())
+
+      log.info requestInfoLog.toString()
 
       results
   }
@@ -513,7 +552,13 @@ class GeoscriptService implements InitializingBean
   @Memoized
   def listProjections()
   {
-    def start = System.currentTimeMillis()
+    def requestType = "GET"
+    def requestMethod = "ListProjections"
+    Date startTime = new Date()
+    def responseTime
+    def requestInfoLog
+    def status
+
     def projs = CRS.getSupportedAuthorities(true).collect { auth ->
         CRS.getSupportedCodes(auth)?.inject([]) { list, code ->
             def id = "${auth}:${code}"
@@ -523,14 +568,21 @@ class GeoscriptService implements InitializingBean
             }
             catch ( e )
             {
-                // println e.message
-                //unsupported << id
             }
             list
         }
     }?.flatten()
-    def stop = System.currentTimeMillis()
-    println "${stop - start}"
+
+    Date endTime = new Date()
+    responseTime = Math.abs(startTime.getTime() - endTime.getTime())
+
+    status = projs != null ? 200 : 400
+
+    requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
+            requestMethod: requestMethod, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"), responseTime: responseTime,
+            status: status, responseSize: projs.toString().getBytes().length)
+
+    log.info requestInfoLog.toString()
     projs
   }
 }

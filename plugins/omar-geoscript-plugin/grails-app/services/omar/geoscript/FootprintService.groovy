@@ -78,7 +78,6 @@ class FootprintService
         }
       }
 
-      // println filter
       def defaultMaxFeatures = grailsApplication.config.wms.footprints.defaultMaxFeatures
 
       def options = [

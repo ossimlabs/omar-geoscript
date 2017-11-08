@@ -1,4 +1,4 @@
-package geoscript.app
+package omar.geoscript
 
 import grails.transaction.Transactional
 import geoscript.geom.Bounds
@@ -26,8 +26,6 @@ class EvwhsService
 
     def wms(def params)
     {
-      println (params + [url: evwhsURL, username: evwhsUsername, password: evwhsPassword])
-
       def wmsServer = evwhsURL
       def options = [user: evwhsUsername, password: evwhsPassword]
       def wms = new WMS(options, wmsServer)
@@ -38,8 +36,6 @@ class EvwhsService
       def height = params?.find { it.key.equalsIgnoreCase('HEIGHT')}?.value?.toInteger()
       def srs = params.find { it.key.equalsIgnoreCase('CRS')}?.value ?: params.find { it.key.equalsIgnoreCase('SRS')}?.value
       def ostream = new ByteArrayOutputStream()
-
-      // println ([bbox, width, height, srs])
 
       def bounds
 
@@ -82,16 +78,12 @@ class EvwhsService
       {
         def bbox3857 = bounds.reproject('epsg:3857')
 
-        // println "foo: ${bbox3857} ${bbox3857.reproject(new Projection('epsg:4326'))}"
-
         def raster = wms.getRaster([
           width: width,
           height: height,
           bounds: bbox3857,
           srs: bbox3857.proj,
         ], ['DigitalGlobe:Imagery'])
-
-      // println "bar: ${raster.bounds} ${raster.bounds.reproject(new Projection('epsg:4326'))}"
 
         def map = new GeoScriptMap(
             fixAspectRatio: false,
