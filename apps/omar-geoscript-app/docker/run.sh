@@ -17,7 +17,7 @@ if [ -z $JAVA_PROPERTIES ] ; then
 fi
 
 if [ "${KEY_STORE}" != "" ] ; then
-   if [ -z ${JAVA_PROPERTIES} ] ; then
+   if [ "${JAVA_PROPERTIES}" == "" ] ; then
       export JAVA_PROPERTIES="-Djavax.net.ssl.keyStore=${KEY_STORE}"
    else
       export JAVA_PROPERTIES="-Djavax.net.ssl.keyStore=${KEY_STORE} ${JAVA_PROPERTIES}"
@@ -25,7 +25,7 @@ if [ "${KEY_STORE}" != "" ] ; then
 fi 
 
 if [ "${KEY_STORE_PASSWORD}" != "" ] ; then
-   if [ -z ${JAVA_PROPERTIES} ] ; then
+   if [ "${JAVA_PROPERTIES}" == "" ] ; then
       export JAVA_PROPERTIES="-Djavax.net.ssl.keyStorePassword=${KEY_STORE_PASSWORD}"
    else
       export JAVA_PROPERTIES="-Djavax.net.ssl.keyStorePassword=${KEY_STORE_PASSWORD} ${JAVA_PROPERTIES}"
@@ -33,7 +33,7 @@ if [ "${KEY_STORE_PASSWORD}" != "" ] ; then
 fi 
 
 if [ "${TRUST_STORE}" != "" ] ; then
-   if [ -z ${JAVA_PROPERTIES} ] ; then
+   if [ "${JAVA_PROPERTIES}" == "" ] ; then
       export JAVA_PROPERTIES="-Djavax.net.ssl.trustStore=${TRUST_STORE}"
    else
       export JAVA_PROPERTIES="-Djavax.net.ssl.trustStore=${TRUST_STORE} ${JAVA_PROPERTIES}"
@@ -41,7 +41,7 @@ if [ "${TRUST_STORE}" != "" ] ; then
 fi 
 
 if [ "${TRUST_STORE_PASSWORD}" != "" ] ; then
-   if [ -z ${JAVA_PROPERTIES} ] ; then
+   if [ "${JAVA_PROPERTIES}" == "" ] ; then
       export JAVA_PROPERTIES="-Djavax.net.ssl.trustStorePassword=${TRUST_STORE_PASSWORD}"
    else
       export JAVA_PROPERTIES="-Djavax.net.ssl.trustStorePassword${TRUST_STORE_PASSWORD} ${JAVA_PROPERTIES}"
