@@ -25,6 +25,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 
 import org.springframework.beans.factory.annotation.Value
@@ -62,6 +63,10 @@ class HeatMapService {
     def processHeatmap(String key, String trust, String req) {
 
         int i, count
+        ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
         KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
         FileInputStream instream = new FileInputStream(new File(key));
 
@@ -87,10 +92,6 @@ class HeatMapService {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
         def result = new JsonSlurper().parse(br)
-        println "result source" + result.hits.hits._source.message
-        println "result hits hits (1)" + result.hits.hits.getAt(1)
-        println "result hits hits source(1)" + result.hits.hits.getAt(1)._source
-        println "result hits hits source message(1)" + result.hits.hits.getAt(1)._source.message
 
         count = 0
         for(i = 0;i<result.hits.hits.size();i++)
@@ -103,6 +104,10 @@ class HeatMapService {
                 println "\ncount" + count
                 // parse message....pass count, bbox, filename to datastore
 
+                // convert JSON string to Map
+                map = mapper.readValue(result.hits.hits.getAt(i)._source.message, new TypeReference<Map<String, String>>(){});
+
+                System.out.println(map);
 
             }
 
