@@ -1,16 +1,16 @@
 #!/bin/bash
 
-if [ -z ${KEY_STORE} ] ; then
-  export KEY_STORE=${HOME}/es/admin.jks
-fi
+#if [ -z ${KEY_STORE} ] ; then
+#  export KEY_STORE=${HOME}/es/admin.jks
+#fi
 
-if [ -z ${KEY_STORE_PASSWORD} ] ; then
-  export KEY_STORE_PASSWORD=kspass
-fi
+#if [ -z ${KEY_STORE_PASSWORD} ] ; then
+#  export KEY_STORE_PASSWORD=kspass
+#fi
 
-if [ -z ${TRUST_STORE} ] ; then
-   export TRUST_STORE=${HOME}/es/truststore
-fi
+#if [ -z ${TRUST_STORE} ] ; then
+#   export TRUST_STORE=${HOME}/es/truststore
+#fi
 
 if [ -z $JAVA_PROPERTIES ] ; then
    export JAVA_PROPERTIES="-server -Xms256m -Xmx1024m -XX:+CMSClassUnloadingEnabled -XX:+UseGCOverheadLimit -XX:+UnlockExperimentalVMOptions  -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Djava.security.egd=file:/dev/./urandom"
