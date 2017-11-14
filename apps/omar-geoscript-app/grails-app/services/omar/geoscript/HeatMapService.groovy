@@ -104,13 +104,33 @@ class HeatMapService {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                    def minx = logmap.get("bbox").minX
+                    println "logmap" + logman
+
+/*                    def minx = logmap.get("bbox").minX
                     def miny = logmap.get("bbox").minY
                     def maxx = logmap.get("bbox").minX
                     def maxy = logmap.get("bbox").minY
-                    def srs = logmap.get("bbox").proj.id
-                    def width = logmap.get("params").width
-                    def height = logmap.get("params").height
+                    def srs = logmap.get("bbox").proj.id */
+
+                    def minx = logmap.bbox.minX
+                    def miny = logmap.bbox.minX
+                    def maxx = logmap.bbox.minX
+                    def maxy = logmap.bbox.minX
+                    def srs = logmap.bbox.proj.id
+
+                    // temporary print to make sure values are being read in fine
+                    println "\nminx" + minx
+                    println "\nminy" + miny
+                    println "\nmaxx" + maxx
+                    println "\nmaxy" + maxy
+                    println "\nsrs" + srs
+
+                    def width = logmap.params.width
+                    def height = logmap.params.height
+
+                    // temporary print to make sure values are being read in fine
+                    println "\nwidth" + width
+                    println "\nheight" + height
 
                     Bounds bounds = new Bounds(minx, miny, maxx, maxy)
                     bounds.proj = srs
