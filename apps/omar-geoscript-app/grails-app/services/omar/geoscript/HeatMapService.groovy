@@ -109,12 +109,6 @@ class HeatMapService {
 
                     println "logmap" + logmap
 
-/*                    def minx = logmap.get("bbox").minX
-                    def miny = logmap.get("bbox").minY
-                    def maxx = logmap.get("bbox").minX
-                    def maxy = logmap.get("bbox").minY
-                    def srs = logmap.get("bbox").proj.id */
-
                     def minx = logmap.bbox.minX
                     def miny = logmap.bbox.minY
                     def maxx = logmap.bbox.maxX
