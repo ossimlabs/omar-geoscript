@@ -131,8 +131,7 @@ class HeatMapService {
                     // causing crash...putting temp values for testing
                     // def width = logmap.params.width
                     // def height = logmap.params.height
-
-
+                    
                     // temporary print to make sure values are being read in fine
                     println "\nwidth" + width
                     println "\nheight" + height
