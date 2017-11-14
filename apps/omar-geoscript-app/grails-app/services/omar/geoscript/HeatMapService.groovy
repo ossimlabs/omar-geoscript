@@ -175,7 +175,6 @@ class HeatMapService {
                         
                         ])
                     writer.add(feature)
-
                 }
             }
         }
