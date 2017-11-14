@@ -71,12 +71,9 @@ class HeatMapService {
 
 
     def getTile(String request) {
-
         Layer layer
         layer = getLayer(request)
-
     }
-
 
     Layer getLayer(String req) 
     {
