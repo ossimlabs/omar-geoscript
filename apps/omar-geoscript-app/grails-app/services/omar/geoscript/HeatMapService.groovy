@@ -134,6 +134,7 @@ class HeatMapService {
                     bounds.proj = srs
 
                     def proc = new GeoScriptProcess( "vec:Heatmap" )
+                    
 
                     def raster = proc.execute(
                             data: logmap,
