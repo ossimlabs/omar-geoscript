@@ -94,6 +94,10 @@ class HeatMapService {
         BufferedReader br = new BufferedReader(isr);
         def result = new JsonSlurper().parse(br)
         def buffer = new ByteArrayOutputStream()
+        def color1 = "#FFFFFF"
+        def color2 = "#4444FF"
+        def color3 = "#FF0000"
+        def color4 = "#FFFF00"
 
         br.close();
 
@@ -147,11 +151,11 @@ class HeatMapService {
                     )?.result
 
                     raster.sytle = new ColorMap( [
-                            [color: "#FFFFFF", quantity: 0, label: "nodata", opacity: 0],
-                            [color: "#FFFFFF", quantity: 0.02, label: "nodata", opacity: 0],
-                            [color: "#4444FF", quantity: 0.1, label: "nodata"],
-                            [color: "#FF0000", quantity: 0.5, label: "values"],
-                            [color: "#FFFF00", quantity: 1.0, label: "values"]
+                            [color: color1, quantity: 0, label: "nodata", opacity: 0],
+                            [color: color1, quantity: 0.02, label: "nodata", opacity: 0],
+                            [color: color2, quantity: 0.1, label: "nodata"],
+                            [color: color3, quantity: 0.5, label: "values"],
+                            [color: color4, quantity: 1.0, label: "values"]
                     ] ).opacity( 0.25 )
 
                     def map = new GeoScriptMap(
