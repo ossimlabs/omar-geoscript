@@ -95,6 +95,8 @@ class HeatMapService {
         def color2 = "#4444FF"
         def color3 = "#FF0000"
         def color4 = "#FFFF00"
+        def height = "256"
+        def width = "256"
 
         br.close();
 
@@ -114,9 +116,9 @@ class HeatMapService {
                     def srs = logmap.get("bbox").proj.id */
 
                     def minx = logmap.bbox.minX
-                    def miny = logmap.bbox.minX
-                    def maxx = logmap.bbox.minX
-                    def maxy = logmap.bbox.minX
+                    def miny = logmap.bbox.minY
+                    def maxx = logmap.bbox.maxX
+                    def maxy = logmap.bbox.maxY
                     def srs = logmap.bbox.proj.id
 
                     // temporary print to make sure values are being read in fine
@@ -126,8 +128,10 @@ class HeatMapService {
                     println "\nmaxy" + maxy
                     println "\nsrs" + srs
 
-                    def width = logmap.params.width
-                    def height = logmap.params.height
+                    // causing crash...putting temp values for testing
+                    // def width = logmap.params.width
+                    // def height = logmap.params.height
+
 
                     // temporary print to make sure values are being read in fine
                     println "\nwidth" + width
@@ -177,59 +181,4 @@ class HeatMapService {
         }
         layer
     }
-
-
-/*
-    def processHeatmap(String key, String trust, String req) {
-
-        int i, count
-        ObjectMapper mapper = new ObjectMapper();
-//        Memory mem = new Memory()
-
-//        KeyStore keyStore = KeyStore.getInstance("JKS"); // or "PKCS12"
-//        FileInputStream instream = new FileInputStream(new File(key));
-
-//        keyStore.load(instream,  "kspass".toCharArray());
-
-//        KeyStore trustStore = KeyStore.getInstance("JKS")
-//        FileInputStream instreamtks = new FileInputStream(new File(trust));
-//        trustStore.load(instreamtks, "tspass".toCharArray())
-
-//        SSLContext sslContext = SSLContexts.custom()
-//                    .loadTrustMaterial(trustStore, null)
-//                    .loadKeyMaterial(keyStore, "kspass".toCharArray()) // use null as second param if you don't have a separate key password
-//                    .build();
-
-//        HttpClient httpClient = HttpClients.custom().setSSLContext(sslContext).build();
-        HttpClient httpClient = HttpClients.createDefault()
-        HttpResponse response = httpClient.execute(new HttpGet(req));
-        HttpEntity entity = response.getEntity()
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-        def result = new JsonSlurper().parse(br)
-
-        count = 0
-        for(i = 0;i<result.hits.hits.size();i++)
-        {
-            if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
-                println result.hits.hits.getAt(i)._source.message
-                count++
-                println "\ncount" + count
-                Map<String, Object> map = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
-
-                System.out.println(map.get("bbox"));
-                System.out.println(map.get("filename"));
-                System.out.println(map.get("timestamp"));
-
-
-            }
-
-
-        }
-
-
-        EntityUtils.consume(entity);
-
-    }
-*/
 }
