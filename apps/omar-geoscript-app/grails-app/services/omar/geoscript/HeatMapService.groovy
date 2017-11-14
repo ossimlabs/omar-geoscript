@@ -136,7 +136,7 @@ class HeatMapService {
                     def proc = new GeoScriptProcess( "vec:Heatmap" )
 
                     def raster = proc.execute(
- //                           data: writer,
+                            data: logmap,
                             radiusPixels: 20,
                             pixelsPerCell: 1,
                             outputBBOX: bounds.env,
