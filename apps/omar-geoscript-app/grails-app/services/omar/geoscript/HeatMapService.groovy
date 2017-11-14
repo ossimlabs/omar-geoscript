@@ -34,6 +34,9 @@ import geoscript.feature.*
 import geoscript.layer.Layer
 import geoscript.layer.io.GeoJSONReader
 import geoscript.workspace.*
+import geoscript.process.Process as GeoScriptProcess
+import geoscript.style.ColorMap
+import geoscript.render.Map as GeoScriptMap
 
 
 class HeatMapService {
@@ -67,6 +70,14 @@ class HeatMapService {
     }
 
 
+    def getTile(String request) {
+
+        Layer layer
+        layer = getLayer(request)
+
+    }
+
+
     Layer getLayer(String req) 
     {
         Workspace workspace = new Memory()
@@ -82,6 +93,8 @@ class HeatMapService {
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);
         def result = new JsonSlurper().parse(br)
+        def buffer = new ByteArrayOutputStream()
+        def renderType = RenderType.GEOSCRIPT
 
         br.close();
 
@@ -90,10 +103,53 @@ class HeatMapService {
             {
                 if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
                     Feature feature = writer.newFeature
-                    Map<String, Object> map = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
+                    Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                    def minx = map.get("bbox").minX
-                    def miny = map.get("bbox").minY
+                    def minx = logmap.get("bbox").minX
+                    def miny = logmap.get("bbox").minY
+                    def maxx = logmap.get("bbox").minX
+                    def maxy = logmap.get("bbox").minY
+                    def srs = logmap.get("bbox").proj.id
+
+
+                    def width = logmap.get("params").width
+                    def height = logmap.get("params").height
+
+
+                    Bounds bounds = new Bounds(minx, miny, maxx, maxy)
+                    bounds.proj = srs
+
+
+                    def proc = new GeoScriptProcess( "vec:Heatmap" )
+
+                    def raster = proc.execute(
+                            data: writer,
+                            radiusPixels: 20,
+                            pixelsPerCell: 1,
+                            outputBBOX: bounds.env,
+                            outputWidth: width,
+                            outputHeight: height
+                    )?.result
+
+                    raster.sytle = new ColorMap( [
+                            [color: "#FFFFFF", quantity: 0, label: "nodata", opacity: 0],
+                            [color: "#FFFFFF", quantity: 0.02, label: "nodata", opacity: 0],
+                            [color: "#4444FF", quantity: 0.1, label: "nodata"],
+                            [color: "#FF0000", quantity: 0.5, label: "values"],
+                            [color: "#FFFF00", quantity: 1.0, label: "values"]
+                    ] ).opacity( 0.25 )
+
+                    def map = new GeoScriptMap(
+                            width: width,
+                            height: height,
+                            type:logmap.format.split('/')[-1],
+                            proj: srs,
+                            bounds: bounds,
+                            layers: [raster] )
+
+                    map.render( buffer )
+                    map.close()
+
                     feature.set([
                         
                         geom: new Point(minx, miny)
