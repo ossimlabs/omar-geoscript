@@ -131,7 +131,7 @@ class HeatMapService {
                     // causing crash...putting temp values for testing
                     // def width = logmap.params.width
                     // def height = logmap.params.height
-                    
+
                     // temporary print to make sure values are being read in fine
                     println "\nwidth" + width
                     println "\nheight" + height
@@ -142,7 +142,7 @@ class HeatMapService {
                     def proc = new GeoScriptProcess( "vec:Heatmap" )
 
                     def raster = proc.execute(
-                            data: writer,
+ //                           data: writer,
                             radiusPixels: 20,
                             pixelsPerCell: 1,
                             outputBBOX: bounds.env,
