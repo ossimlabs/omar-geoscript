@@ -108,7 +108,7 @@ class HeatMapService {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                    println "logmap" + logman
+                    println "logmap" + logmap
 
 /*                    def minx = logmap.get("bbox").minX
                     def miny = logmap.get("bbox").minY
