@@ -94,7 +94,6 @@ class HeatMapService {
         BufferedReader br = new BufferedReader(isr);
         def result = new JsonSlurper().parse(br)
         def buffer = new ByteArrayOutputStream()
-        def renderType = RenderType.GEOSCRIPT
 
         br.close();
 
@@ -110,15 +109,11 @@ class HeatMapService {
                     def maxx = logmap.get("bbox").minX
                     def maxy = logmap.get("bbox").minY
                     def srs = logmap.get("bbox").proj.id
-
-
                     def width = logmap.get("params").width
                     def height = logmap.get("params").height
 
-
                     Bounds bounds = new Bounds(minx, miny, maxx, maxy)
                     bounds.proj = srs
-
 
                     def proc = new GeoScriptProcess( "vec:Heatmap" )
 
