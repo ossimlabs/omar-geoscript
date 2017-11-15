@@ -69,12 +69,6 @@ class HeatMapService {
         }
     }
 
-
-    def getTile(String request) {
-        Layer layer
-        layer = getLayer(request)
-    }
-
     Layer getLayer(String req) 
     {
         Workspace workspace = new Memory()
@@ -107,8 +101,6 @@ class HeatMapService {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                    println "logmap" + logmap
-
                     def minx = logmap.bbox.minX
                     def miny = logmap.bbox.minY
                     def maxx = logmap.bbox.maxX
@@ -130,49 +122,52 @@ class HeatMapService {
                     println "\nwidth" + width
                     println "\nheight" + height
 
-                    Bounds bounds = new Bounds(minx, miny, maxx, maxy)
-                    bounds.proj = srs
-
-                    def proc = new GeoScriptProcess( "vec:Heatmap" )
-                    
-
-                    def raster = proc.execute(
-                            data: logmap,
-                            radiusPixels: 20,
-                            pixelsPerCell: 1,
-                            outputBBOX: bounds.env,
-                            outputWidth: width,
-                            outputHeight: height
-                    )?.result
-
-                    raster.sytle = new ColorMap( [
-                            [color: color1, quantity: 0, label: "nodata", opacity: 0],
-                            [color: color1, quantity: 0.02, label: "nodata", opacity: 0],
-                            [color: color2, quantity: 0.1, label: "nodata"],
-                            [color: color3, quantity: 0.5, label: "values"],
-                            [color: color4, quantity: 1.0, label: "values"]
-                    ] ).opacity( 0.25 )
-
-                    def map = new GeoScriptMap(
-                            width: width,
-                            height: height,
-                            type:logmap.format.split('/')[-1],
-                            proj: srs,
-                            bounds: bounds,
-                            layers: [raster] )
-
-                    map.render( buffer )
-                    map.close()
+                    layer.proj = srs
 
                     feature.set([
-                        
-                        geom: new Point(minx, miny)
-                        
-                        ])
+
+                            geom: new Point(minx, miny)
+
+                    ])
                     writer.add(feature)
                 }
             }
         }
         layer
     }
+
+
+    def getHeatMap(String request) {
+        def layer = getLayer(request)
+        def proc = new GeoScriptProcess( "vec:Heatmap" )
+        def bounds = "-180,-90,180,90".split( "," )*.toDouble() as Bounds
+        bounds.proj = new Projection(layer.proj)
+        def raster = proc.execute(
+                data: layer,
+                radiusPixels: 20,
+                pixelsPerCell: 1,
+                outputBBOX: bounds.env,
+                outputWidth: 1024,
+                outputHeight: 512
+        )?.result
+
+        def map = new GeoScriptMap(
+                width: 1024,
+                height: 512,
+                type: "png",
+                proj: layer.proj,
+                bounds: bounds,
+                layers: [
+                        raster
+                ]
+        )
+
+        def buffer = new ByteArrayOutputStream()
+        map.render( buffer )
+        map.close()
+
+        println buffer
+    }
+
+
 }
