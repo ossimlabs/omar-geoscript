@@ -1,7 +1,7 @@
 package omar.geoscript
 
 import org.springframework.beans.factory.annotation.Value
-
+import omar.geoscript.WmsRequest
 
 class HeatMapController {
 

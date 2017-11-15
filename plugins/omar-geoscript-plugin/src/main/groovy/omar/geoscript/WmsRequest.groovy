@@ -1,4 +1,4 @@
-package heatmap
+package omar.geoscript
 
 import grails.validation.Validateable
 import groovy.transform.ToString
@@ -8,8 +8,7 @@ import groovy.transform.ToString
  */
 
 @ToString( includeNames = true )
-@Validateable
-class WmsRequest
+class WmsRequest implements Validateable
 {
   String service
   String version
