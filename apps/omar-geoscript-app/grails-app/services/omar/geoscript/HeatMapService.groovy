@@ -37,6 +37,7 @@ import geoscript.workspace.*
 import geoscript.process.Process as GeoScriptProcess
 import geoscript.style.ColorMap
 import geoscript.render.Map as GeoScriptMap
+import geoscript.proj.Projection
 
 
 class HeatMapService {
