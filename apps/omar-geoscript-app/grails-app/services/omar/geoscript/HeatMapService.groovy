@@ -70,7 +70,7 @@ class HeatMapService {
         }
     }
 
-    Layer getLayer(String req) 
+    Layer getLayer(WmsRequest wmsRequest, String req) 
     {
         Workspace workspace = new Memory()
         Schema schema = new Schema("heatmap", [
@@ -92,7 +92,7 @@ class HeatMapService {
         def color4 = "#FFFF00"
         def height = "256"
         def width = "256"
-
+        Projection targetProjection = new Projection(wmsRequest.srs)
         br.close();
 
         layer.withWriter{ writer ->
@@ -102,28 +102,36 @@ class HeatMapService {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                    def minx = logmap.bbox.minX
-                    def miny = logmap.bbox.minY
-                    def maxx = logmap.bbox.maxX
-                    def maxy = logmap.bbox.maxY
-                    def srs = logmap.bbox.proj.id
+
+                    Point centroid = new Point((logmap.bbox.minX+
+                                                logmap.bbox.maxX)/2.0,
+                                              (logmap.bbox.minY+
+                                                logmap.bbox.maxY)/2.0)
+
+                    Point targetPoint = targetProjection.transform(centroid, logmap.bbox.proj.id) as Point
+
+println targetPoint
+                    // def minx = logmap.bbox.minX
+                    // def miny = logmap.bbox.minY
+                    // def maxx = logmap.bbox.maxX
+                    // def maxy = logmap.bbox.maxY
+//                    def srs = logmap.bbox.proj.id
 
                     // temporary print to make sure values are being read in fine
-                    println "\nminx" + minx
-                    println "\nminy" + miny
-                    println "\nmaxx" + maxx
-                    println "\nmaxy" + maxy
-                    println "\nsrs" + srs
+                    // println "\nminx" + minx
+                    // println "\nminy" + miny
+                    // println "\nmaxx" + maxx
+                    // println "\nmaxy" + maxy
+                    // println "\nsrs" + srs
 
                     // causing crash...putting temp values for testing
                     // def width = logmap.params.width
                     // def height = logmap.params.height
 
                     // temporary print to make sure values are being read in fine
-                    println "\nwidth" + width
-                    println "\nheight" + height
+ //                   println "\nwidth" + width
+ //                   println "\nheight" + height
 
-                    layer.proj = srs
 
                     feature.set([
 
@@ -134,14 +142,16 @@ class HeatMapService {
                 }
             }
         }
+        layer.proj = targetProjection
+
         layer
     }
 
 
-    def getHeatMap(String request) {
-        def layer = getLayer(request)
-        def proc = new GeoScriptProcess( "vec:Heatmap" )
-        def bounds = "-180,-90,180,90".split( "," )*.toDouble() as Bounds
+    def getTile(WmsRequest wmsRequest, String elasticURL) {
+        Layer layer = getLayer(wmsRequest, elasticURL)
+        GeoScriptProcess proc = new GeoScriptProcess( "vec:Heatmap" )
+        Bounds bounds = wmsRequest.bbox.split( "," )*.toDouble() as Bounds
         bounds.proj = new Projection(layer.proj)
         def raster = proc.execute(
                 data: layer,
@@ -153,10 +163,10 @@ class HeatMapService {
         )?.result
 
         def map = new GeoScriptMap(
-                width: 1024,
-                height: 512,
-                type: "png",
-                proj: layer.proj,
+                width: wmsRequest.width,
+                height: wmsRequest.height,
+                type: wmsRequest.format.split("/")[-1],
+                proj: targetProjection,
                 bounds: bounds,
                 layers: [
                         raster
@@ -167,7 +177,7 @@ class HeatMapService {
         map.render( buffer )
         map.close()
 
-        println buffer
+        [contentType: wmsRequest.format, buffer: buffer.toByteArray()]
     }
 
 

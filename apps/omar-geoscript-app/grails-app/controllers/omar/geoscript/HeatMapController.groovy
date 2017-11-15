@@ -5,14 +5,20 @@ import org.springframework.beans.factory.annotation.Value
 
 class HeatMapController {
 
-    def heatMapService
+	def heatMapService
 
-    @Value('${geoscript.elasticsearch.url}')
-    def elasticSearchURL
+	@Value('${geoscript.elasticsearch.url}')
+	def elasticSearchURL
 
-    def index () {}
+	def index () {}
 
-    def getTile() {
-        render heatMapService.getTile(elasticSearchURL)
-    }
+	def getTile(WmsRequest wmsRequest)
+	{
+	//println params
+	//println wmsRequest
+
+		def results = heatMapService.getTile( wmsRequest, elasticSearchURL )
+
+		render contentType: results.contentType, file: results.buffer
+	}
 }
