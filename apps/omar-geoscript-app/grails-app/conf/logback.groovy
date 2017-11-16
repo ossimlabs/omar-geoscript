@@ -19,7 +19,7 @@ appender('JSON', ConsoleAppender) {
 }
 
 root(ERROR, ['STDOUT'])
-logger("omar.geoscript.GeoscriptService", INFO, ['JSON'], false)
+logger("omar", INFO, ['JSON'], false)
 
 def targetDir = BuildSettings.TARGET_DIR
 if (Environment.isDevelopmentMode() && targetDir) {
