@@ -14,8 +14,8 @@ class HeatMapController {
 
 	def getTile(WmsRequest wmsRequest)
 	{
-	//println params
-	//println wmsRequest
+	println params
+	println wmsRequest
 
 		def results = heatMapService.getTile( wmsRequest, elasticSearchURL )
 
