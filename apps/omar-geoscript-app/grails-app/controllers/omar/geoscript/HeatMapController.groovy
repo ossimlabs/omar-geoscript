@@ -20,11 +20,11 @@ class HeatMapController {
 		BindUtil.fixParamNames( WmsRequest, params )
 	   bindData( wmsRequest, params )
 
-		// error checking code
+		// error checking bbox
 		def bbox_int = new int[4]
 		def process = 1
 
-		arrayList = wms.bbox.split(",")
+		arrayList = wmsRequest.bbox.split(",")
 		arrayList.length
 		if(arrayList.length != 4)
 		{
@@ -44,6 +44,9 @@ class HeatMapController {
 			log.error "bbox range is wrong"
             process = 0
 		}
+
+		// error checking bbox
+
 
 
 		if(process == 1) {
