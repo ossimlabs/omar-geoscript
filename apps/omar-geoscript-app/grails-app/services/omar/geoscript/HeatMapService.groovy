@@ -150,6 +150,7 @@ class HeatMapService {
     def getTile(WmsRequest wmsRequest, String elasticURL) {
         Layer layer = getLayer(wmsRequest, elasticURL)
         GeoScriptProcess proc = new GeoScriptProcess( "vec:Heatmap" )
+        Projection targetProjection = new Projection(wmsRequest.srs)
         Bounds bounds = wmsRequest.bbox.split( "," )*.toDouble() as Bounds
         bounds.proj = new Projection(layer.proj)
         def raster = proc.execute(
