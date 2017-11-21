@@ -86,15 +86,10 @@ class HeatMapService {
         BufferedReader br = new BufferedReader(isr);
         def result = new JsonSlurper().parse(br)
         def buffer = new ByteArrayOutputStream()
-        def color1 = "#FFFFFF"
-        def color2 = "#4444FF"
-        def color3 = "#FF0000"
-        def color4 = "#FFFF00"
-        def height = "256"
-        def width = "256"
         Projection targetProjection = new Projection(wmsRequest.srs)
         br.close();
 
+        def projectionMap = [:];
         layer.withWriter{ writer ->
             for(Integer i = 0;i<result.hits.hits.size();i++)
             {
@@ -108,9 +103,15 @@ class HeatMapService {
                                               (logmap.bbox.minY+
                                                 logmap.bbox.maxY)/2.0)
 
-                    Point targetPoint = targetProjection.transform(centroid, logmap.bbox.proj.id) as Point
 
-println targetPoint
+                    Projection proj = projectionMap."${logmap.bbox.proj.id}"
+                    if(!proj)
+                    {
+                        proj = new Projection(logmap.bbox.proj.id)
+                        projectionMap."${logmap.bbox.proj.id}" = proj
+                    }
+                    Point targetPoint = proj.transform(centroid, targetProjection) as Point
+
                     // def minx = logmap.bbox.minX
                     // def miny = logmap.bbox.minY
                     // def maxx = logmap.bbox.maxX
@@ -134,9 +135,7 @@ println targetPoint
 
 
                     feature.set([
-
-                            geom: new Point(minx, miny)
-
+                            geom: targetPoint
                     ])
                     writer.add(feature)
                 }
@@ -158,9 +157,16 @@ println targetPoint
                 radiusPixels: 20,
                 pixelsPerCell: 1,
                 outputBBOX: bounds.env,
-                outputWidth: 1024,
-                outputHeight: 512
+                outputWidth: wmsRequest.width,
+                outputHeight: wmsRequest.height
         )?.result
+        raster.style = new ColorMap( [
+            [color: "#FFFFFF", quantity: 0, label: "nodata", opacity: 0],
+            [color: "#FFFFFF", quantity: 0.02, label: "nodata", opacity: 0],
+            [color: "#4444FF", quantity: 0.1, label: "nodata"],
+            [color: "#FF0000", quantity: 0.5, label: "values"],
+            [color: "#FFFF00", quantity: 1.0, label: "values"]
+        ] ).opacity( 0.25 )
 
         def map = new GeoScriptMap(
                 width: wmsRequest.width,
