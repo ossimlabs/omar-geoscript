@@ -1,6 +1,6 @@
 package omar.geoscript
 
-class UrlMappings {
+class GeoscriptUrlMappings {
 
     static mappings = {
         "/heatMap/$action?"( controller: 'heatMap' )
