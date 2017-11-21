@@ -15,11 +15,17 @@ class HeatMapController {
 
 	def getTile(WmsRequest wmsRequest)
 	{
-		println params
-		println wmsRequest
+		println "params" + params
+		println "wmsrequest" + wmsRequest
+
+		println "got before fixParamNames"
 		BindUtil.fixParamNames( WmsRequest, params )
+		println "got before bindData"
 	   bindData( wmsRequest, params )
 
+		// error checking code
+
+		println "got before get tile"
 		def results = heatMapService.getTile( wmsRequest, elasticSearchURL )
 
 		render contentType: results.contentType, file: results.buffer
