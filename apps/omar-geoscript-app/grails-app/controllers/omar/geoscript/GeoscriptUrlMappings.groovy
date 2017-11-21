@@ -3,6 +3,7 @@ package omar.geoscript
 class UrlMappings {
 
     static mappings = {
+        "/heatMap/$action?"( controller: 'heatMap' )
         "/$controller/$action?/$id?(.$format)?"{
             constraints {
                 // apply constraints here
