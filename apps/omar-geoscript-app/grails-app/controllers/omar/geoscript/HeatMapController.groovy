@@ -24,7 +24,7 @@ class HeatMapController {
 		def bbox_int = new int[4]
 		def process = 1
 
-		arrayList = wmsRequest.bbox.split(",")
+		def arrayList = wmsRequest.bbox.split(",")
 		arrayList.length
 		if(arrayList.length != 4)
 		{
