@@ -13,6 +13,15 @@ class HeatMapController {
 
 	def index () {}
 
+	public boolean isInteger(String string) {
+		try {
+			Integer.valueOf(string);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
 	def getTile(WmsRequest wmsRequest)
 	{
 		println "params" + params
@@ -28,24 +37,39 @@ class HeatMapController {
 		arrayList.length
 		if(arrayList.length != 4)
 		{
-			log.error "bbox does not have valid numbers"
 			process = 0
+			log.error "bbox does not have valid numbers"
 		}
 
 		for(int i = 0;i<4;i++)
 			bbox_int[i] = Integer.valueOf(arrayList[i])
 
 		if(bbox_int[0] < -180 || bbox_int[3] > 180 || bbox_int[1] < -90 || bbox_int[3] > 90) {
+			process = 0
 			log.error "bbox out of bounds"
-            process = 0
 		}
 
 		if((bbox_int[2] <= bbox_int[0]) || (bbox_int[3] <= bbox_int[1])) {
+			process = 0
 			log.error "bbox range is wrong"
-            process = 0
 		}
 
-		// error checking bbox
+		// error checking length and width
+        boolean width_valid = isInteger(wmsRequest.width)
+		if(width_valid == false)
+		{
+			process = 0
+			log.error "width is not valid"
+		}
+
+		boolean height_valid = isInteger(wmsRequest.height)
+		if(height_valid == false)
+		{
+			process = 0
+			log.error "height is not valid"
+		}
+
+
 
 
 

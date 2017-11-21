@@ -42,24 +42,6 @@ import geoscript.proj.Projection
 
 class HeatMapService {
 
-/*    @Value('${geoscript.elasticsearch.host}')
-    String host
-
-    @Value('${geoscript.elasticsearch.keystorefile}')
-    String keystorepass
-
-    @Value('${geoscript.elasticsearch.keystorepass}')
-    String keystoreloc
-
-    @Value('${geoscript.elasticsearch.port}')
-    Integer port
-
-    @Value('${geoscript.elasticsearch.index}')
-    String index
-
-    @Value('${geoscript.elasticsearch.search}')
-    String searchIndices */
-
     private Boolean isValidJson(String maybeJson){
         try {
             final ObjectMapper mapper = new ObjectMapper();
@@ -111,27 +93,6 @@ class HeatMapService {
                         projectionMap."${logmap.bbox.proj.id}" = proj
                     }
                     Point targetPoint = proj.transform(centroid, targetProjection) as Point
-
-                    // def minx = logmap.bbox.minX
-                    // def miny = logmap.bbox.minY
-                    // def maxx = logmap.bbox.maxX
-                    // def maxy = logmap.bbox.maxY
-//                    def srs = logmap.bbox.proj.id
-
-                    // temporary print to make sure values are being read in fine
-                    // println "\nminx" + minx
-                    // println "\nminy" + miny
-                    // println "\nmaxx" + maxx
-                    // println "\nmaxy" + maxy
-                    // println "\nsrs" + srs
-
-                    // causing crash...putting temp values for testing
-                    // def width = logmap.params.width
-                    // def height = logmap.params.height
-
-                    // temporary print to make sure values are being read in fine
- //                   println "\nwidth" + width
- //                   println "\nheight" + height
 
 
                     feature.set([
