@@ -2,6 +2,7 @@ package omar.geoscript
 
 import org.springframework.beans.factory.annotation.Value
 import omar.geoscript.WmsRequest
+import omar.core.BindUtil
 
 class HeatMapController {
 
@@ -14,8 +15,10 @@ class HeatMapController {
 
 	def getTile(WmsRequest wmsRequest)
 	{
-	println params
-	println wmsRequest
+		println params
+		println wmsRequest
+		BindUtil.fixParamNames( WmsRequest, params )
+	   bindData( wmsRequest, params )
 
 		def results = heatMapService.getTile( wmsRequest, elasticSearchURL )
 
