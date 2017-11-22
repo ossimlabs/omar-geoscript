@@ -55,7 +55,8 @@ class HeatMapController {
 		}
 
 		// error checking length and width
-        boolean width_valid = isInteger(wmsRequest.width)
+
+        /*boolean width_valid = isInteger(wmsRequest.width)
 		if(width_valid == false)
 		{
 			process = 0
@@ -67,8 +68,7 @@ class HeatMapController {
 		{
 			process = 0
 			log.error "height is not valid"
-		}
-
+		} */
 
 
 
