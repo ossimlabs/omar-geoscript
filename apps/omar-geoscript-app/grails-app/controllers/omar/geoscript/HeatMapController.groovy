@@ -30,14 +30,16 @@ class HeatMapController {
 		println "wmsrequest" + wmsRequest
 		BindUtil.fixParamNames( WmsRequest, params )
         bindData( wmsRequest, params )
+		def results
 
 		try {
 			if (wmsRequest.validate()) {
-				def results = heatMapService.getTile(wmsRequest, elasticSearchURL)
+				results = heatMapService.getTile(wmsRequest, elasticSearchURL)
 			} else {
 				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
-				response.contentType = ogcExceptionResult.contentType
-				response.contentLength = ogcExceptionResult.buffer.length
+				results.contentType = ogcExceptionResult.contentType
+				results.buffer = ogcExceptionResult.buffer
+				// response.contentLength = ogcExceptionResult.buffer.length
 			}
 		}
 
