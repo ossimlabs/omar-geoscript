@@ -15,27 +15,23 @@ class HeatMapController {
 
 	def index () {}
 
-	public boolean isInteger(String string) {
-		try {
-			Integer.valueOf(string);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
-
 	def getTile(WmsRequest wmsRequest)
 	{
 		println "params" + params
 		println "wmsrequest" + wmsRequest
 		BindUtil.fixParamNames( WmsRequest, params )
         bindData( wmsRequest, params )
+		println "params after bind" + params
+		println "wmsrequest after bind" + wmsRequest
 		def results
 
 		try {
 			if (wmsRequest.validate()) {
+				println "got to if"
 				results = heatMapService.getTile(wmsRequest, elasticSearchURL)
+				println "results" + results
 			} else {
+				println "got to else"
 				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
 				results.contentType = ogcExceptionResult.contentType
 				results.buffer = ogcExceptionResult.buffer
