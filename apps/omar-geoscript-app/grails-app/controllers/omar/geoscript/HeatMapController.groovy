@@ -17,25 +17,18 @@ class HeatMapController {
 
 	def getTile(WmsRequest wmsRequest)
 	{
-		println "params" + params
-		println "wmsrequest" + wmsRequest
 		BindUtil.fixParamNames( WmsRequest, params )
         bindData( wmsRequest, params )
-		println "params after bind" + params
-		println "wmsrequest after bind" + wmsRequest
 		def results
 
 		try {
 			if (wmsRequest.validate()) {
 				results = heatMapService.getTile(wmsRequest, elasticSearchURL)
 			} else {
-				println "got to else"
-				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
-				println "got past exception"
-				results.contentType = ogcExceptionResult.contentType
-				println "got after contenttype"
-				results.buffer = ogcExceptionResult.buffer
-				println "got after buffer"
+				log.error "Make sure all fields of the request are non-null"
+//				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
+//				results.contentType = ogcExceptionResult.contentType
+//				results.buffer = ogcExceptionResult.buffer
 				// response.contentLength = ogcExceptionResult.buffer.length
 			}
 		}
@@ -45,6 +38,8 @@ class HeatMapController {
 			log.error(e.toString())
 		}
 
-		render contentType: results.contentType, file: results.buffer
+		if(results != null)
+			render contentType: results.contentType, file: results.buffer
+
 	}
 }
