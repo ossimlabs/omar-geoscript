@@ -25,6 +25,8 @@ class HeatMapController {
 		println "wmsrequest after bind" + wmsRequest
 		def results
 
+		println "validate" + wmsRequest.validate()
+
 		try {
 //			if (wmsRequest.validate()) {
 //				println "got to if"
