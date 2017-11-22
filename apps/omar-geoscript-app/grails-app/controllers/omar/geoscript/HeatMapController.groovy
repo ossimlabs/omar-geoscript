@@ -26,17 +26,17 @@ class HeatMapController {
 		def results
 
 		try {
-			if (wmsRequest.validate()) {
-				println "got to if"
+//			if (wmsRequest.validate()) {
+//				println "got to if"
 				results = heatMapService.getTile(wmsRequest, elasticSearchURL)
-				println "results" + results
-			} else {
-				println "got to else"
-				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
-				results.contentType = ogcExceptionResult.contentType
-				results.buffer = ogcExceptionResult.buffer
+//				println "results" + results
+//			} else {
+//				println "got to else"
+//				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
+//				results.contentType = ogcExceptionResult.contentType
+//				results.buffer = ogcExceptionResult.buffer
 				// response.contentLength = ogcExceptionResult.buffer.length
-			}
+//			}
 		}
 
 		catch ( e )
