@@ -29,8 +29,9 @@ class HeatMapController {
 			if (wmsRequest.validate()) {
 				results = heatMapService.getTile(wmsRequest, elasticSearchURL)
 			} else {
-				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
 				println "got to else"
+				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
+				println "got past exception"
 				results.contentType = ogcExceptionResult.contentType
 				println "got after contenttype"
 				results.buffer = ogcExceptionResult.buffer
