@@ -29,7 +29,6 @@ class HeatMapController {
 //				HashMap ogcExceptionResult = OgcExceptionUtil.formatWmsException(wmsRequest)
 //				results.contentType = ogcExceptionResult.contentType
 //				results.buffer = ogcExceptionResult.buffer
-				// response.contentLength = ogcExceptionResult.buffer.length
 			}
 		}
 
