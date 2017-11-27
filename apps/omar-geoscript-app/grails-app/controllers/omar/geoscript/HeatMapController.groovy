@@ -17,7 +17,7 @@ class HeatMapController {
 
 	def getTile(WmsRequest wmsRequest)
 	{
-		BindUtil.fixParamNames( WmsRequest, params )
+/*		BindUtil.fixParamNames( WmsRequest, params )
         bindData( wmsRequest, params )
 		def results
 
@@ -39,6 +39,6 @@ class HeatMapController {
 
 		if(results != null)
 			render contentType: results.contentType, file: results.buffer
-
+*/
 	}
 }
