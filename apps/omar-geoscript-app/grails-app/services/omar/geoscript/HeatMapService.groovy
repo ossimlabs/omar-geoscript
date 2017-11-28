@@ -87,7 +87,7 @@ class HeatMapService {
                     // load timestamp
 //                    String timestamp = logmap.@timestamp
 
-                    String timestamplog = logmap.message.timestamp
+                    String timestamplog = logmap.timestamp
 
                     DateFormat format = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss.Ms", Locale.ENGLISH);
                     Date date = format.parse(timestamplog);
@@ -101,16 +101,16 @@ class HeatMapService {
 //                    if(timestamp is within range) {
 
 
-                        Point centroid = new Point((logmap.message.bbox.minX +
-                                logmap.message.bbox.maxX) / 2.0,
-                                (logmap.message.bbox.minY +
-                                        logmap.message.bbox.maxY) / 2.0)
+                        Point centroid = new Point((logmap.bbox.minX +
+                                logmap.bbox.maxX) / 2.0,
+                                (logmap.bbox.minY +
+                                        logmap.bbox.maxY) / 2.0)
 
 
-                        Projection proj = projectionMap."${logmap.message.bbox.proj.id}"
+                        Projection proj = projectionMap."${logmap.bbox.proj.id}"
                         if (!proj) {
-                            proj = new Projection(logmap.message.bbox.proj.id)
-                            projectionMap."${logmap.message.bbox.proj.id}" = proj
+                            proj = new Projection(logmap.bbox.proj.id)
+                            projectionMap."${logmap.bbox.proj.id}" = proj
                         }
                         Point targetPoint = proj.transform(centroid, targetProjection) as Point
 
