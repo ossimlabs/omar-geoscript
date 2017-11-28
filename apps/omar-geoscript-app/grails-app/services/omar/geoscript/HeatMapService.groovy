@@ -39,7 +39,8 @@ import geoscript.style.ColorMap
 import geoscript.render.Map as GeoScriptMap
 import geoscript.proj.Projection
 import java.text.SimpleDateFormat
-
+import java.text.DateFormat
+import java.util.Date
 
 class HeatMapService {
 
