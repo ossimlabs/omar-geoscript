@@ -93,7 +93,7 @@ class HeatMapService {
 
                     def currenttime = new Date()
 
-                    timediff = abs(currenttime.getTime() - date.getTime())
+                    timediff = Math.abs(currenttime.getTime() - date.getTime())
                     log.info "timediff" + timediff
 
 //                    if(timestamp is within range) {
