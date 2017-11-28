@@ -1,8 +1,5 @@
 # OMAR Geoscript
 
-## Source Location
-https://github.com/ossimlabs/omar-geoscript
-
 ## Purpose
 The OMAR Geoscript application encapsulates all the geotools dependencies which provide libraries do things like draw footprints and query the OMAR database.
 
