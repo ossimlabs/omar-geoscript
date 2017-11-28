@@ -84,20 +84,17 @@ class HeatMapService {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                    // load timestamp
-//                    String timestamp = logmap.@timestamp
 
                     String timestamplog = logmap.timestamp
                     log.info "timestamp" + timestamplog
-
-                    DateFormat format = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss.Ms", Locale.ENGLISH);
+                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
                     Date date = format.parse(timestamplog);
                     log.info "date" + date
 
-//                    def currenttime = new Date()
+                    def currenttime = new Date()
 
-
-//                    timediff = abs(currenttime.getTime() - logmap.@timestamp)
+                    timediff = abs(currenttime.getTime() - date.getTime())
+                    log.info "timediff" + timediff
 
 //                    if(timestamp is within range) {
 
