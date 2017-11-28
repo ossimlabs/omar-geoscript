@@ -82,10 +82,10 @@ class HeatMapService {
             {
                 if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
                     Feature feature = writer.newFeature
-                    Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source, HashMap.class);
+                    Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
                     // load timestamp
-                    String timestamp = logmap.@timestamp
+//                    String timestamp = logmap.@timestamp
 
                     String timestamplog = logmap.message.timestamp
 
