@@ -38,7 +38,9 @@ import geoscript.process.Process as GeoScriptProcess
 import geoscript.style.ColorMap
 import geoscript.render.Map as GeoScriptMap
 import geoscript.proj.Projection
-
+import java.text.SimpleDateFormat
+import java.text.DateFormat
+import java.util.Date
 
 class HeatMapService {
 
@@ -71,6 +73,9 @@ class HeatMapService {
         Projection targetProjection = new Projection(wmsRequest.srs)
         br.close();
 
+        def timediff
+
+
         def projectionMap = [:];
         layer.withWriter{ writer ->
             for(Integer i = 0;i<result.hits.hits.size();i++)
@@ -79,26 +84,43 @@ class HeatMapService {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
+                    // load timestamp
+//                    String timestamp = logmap.@timestamp
 
-                    Point centroid = new Point((logmap.bbox.minX+
-                                                logmap.bbox.maxX)/2.0,
-                                              (logmap.bbox.minY+
-                                                logmap.bbox.maxY)/2.0)
+                    String timestamplog = logmap.timestamp
+                    log.info "timestamp" + timestamplog
 
+                    DateFormat format = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss.Ms", Locale.ENGLISH);
+                    Date date = format.parse(timestamplog);
+                    log.info "date" + date
 
-                    Projection proj = projectionMap."${logmap.bbox.proj.id}"
-                    if(!proj)
-                    {
-                        proj = new Projection(logmap.bbox.proj.id)
-                        projectionMap."${logmap.bbox.proj.id}" = proj
-                    }
-                    Point targetPoint = proj.transform(centroid, targetProjection) as Point
+//                    def currenttime = new Date()
 
 
-                    feature.set([
-                            geom: targetPoint
-                    ])
-                    writer.add(feature)
+//                    timediff = abs(currenttime.getTime() - logmap.@timestamp)
+
+//                    if(timestamp is within range) {
+
+
+                        Point centroid = new Point((logmap.bbox.minX +
+                                logmap.bbox.maxX) / 2.0,
+                                (logmap.bbox.minY +
+                                        logmap.bbox.maxY) / 2.0)
+
+
+                        Projection proj = projectionMap."${logmap.bbox.proj.id}"
+                        if (!proj) {
+                            proj = new Projection(logmap.bbox.proj.id)
+                            projectionMap."${logmap.bbox.proj.id}" = proj
+                        }
+                        Point targetPoint = proj.transform(centroid, targetProjection) as Point
+
+
+                        feature.set([
+                                geom: targetPoint
+                        ])
+                        writer.add(feature)
+//                    }
                 }
             }
         }

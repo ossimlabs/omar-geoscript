@@ -14,7 +14,7 @@ buildscript {
         "COPY run.sh \${HOME}/",
         "COPY ${project.name}-${buildVersion}-${buildVersionTag}.jar \${HOME}/",
         "WORKDIR \${HOME}",
-        "CMD ./run.sh"
+       "ENTRYPOINT ./run.sh"
       ]
     }
   }
