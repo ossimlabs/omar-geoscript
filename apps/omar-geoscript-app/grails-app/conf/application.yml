@@ -131,14 +131,14 @@ wms:
                     g: 0
                     b: 0
                     a: 255
-      byVideoType:
-          mpeg:
-            filter: filename like '%mpg'
-            color:
-              r: 255
-              g: 0
-              b: 0
-              a: 255
+        byVideoType:
+            mpeg:
+                filter: filename like '%mpg'
+                color:
+                    r: 255
+                    g: 0
+                    b: 0
+                    a: 255
 
 ---
 grails:
