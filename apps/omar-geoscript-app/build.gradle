@@ -6,10 +6,9 @@ buildscript {
     dockerStatementsOverride = {
       [
         "FROM ${project.dockerNamespaceUrl}${project.ext.baseImage}:${project.dockerAppTag}",
-        "MAINTAINER DigitalGlobe-RadiantBlue",
         """ENV SPRING_CLOUD_CONFIG_ENABLED=true \\
-               HOME=/home/omar \\
-               SPRING_CLOUD_DISCOVERY_ENABLED=true """,
+    HOME=/home/omar \\
+    SPRING_CLOUD_DISCOVERY_ENABLED=true """,
         "EXPOSE 8080",
         "COPY run.sh \${HOME}/",
         "COPY ${project.name}-${buildVersion}-${buildVersionTag}.jar \${HOME}/",
