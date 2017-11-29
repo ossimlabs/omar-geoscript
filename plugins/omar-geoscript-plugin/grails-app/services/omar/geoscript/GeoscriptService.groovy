@@ -225,8 +225,8 @@ class GeoscriptService implements InitializingBean
     Date endTime = new Date()
     responseTime = Math.abs(startTime.getTime() - endTime.getTime())
 
-    requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
-            requestMethod: requestMethod, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"), responseTime: responseTime,
+    requestInfoLog = new JsonBuilder(timestamp: startTime.format("yyyy-MM-dd hh:mm:ss.ms"), requestType: requestType,
+            requestMethod: requestMethod, endTime: endTime.format("yyyy-MM-dd hh:mm:ss.ms"), responseTime: responseTime,
             responseSize: schemaInfo.toString().getBytes().length, typeName: typeName)
 
     log.info requestInfoLog.toString()
@@ -254,8 +254,8 @@ class GeoscriptService implements InitializingBean
     Date endTime = new Date()
     responseTime = Math.abs(startTime.getTime() - endTime.getTime())
 
-    requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
-            requestMethod: requestMethod, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"), responseTime: responseTime,
+    requestInfoLog = new JsonBuilder(timestamp: startTime.format("yyyy-MM-dd hh:mm:ss.ms"), requestType: requestType,
+            requestMethod: requestMethod, endTime: endTime.format("yyyy-MM-dd hh:mm:ss.ms"), responseTime: responseTime,
             responseSize: getCapabilities.toString().getBytes().length)
 
     log.info requestInfoLog.toString()
@@ -478,9 +478,9 @@ class GeoscriptService implements InitializingBean
 
       status = (results.features != null) ? 200 : 400
 
-      requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
+      requestInfoLog = new JsonBuilder(timestamp: startTime.format("yyyy-MM-dd hh:mm:ss.ms"), requestType: requestType,
               requestMethod: requestMethod, numberOfFeatures: results?.numberOfFeatures, numberMatched: results?.numberMatched,
-              status: status, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"), responseTime: responseTime,
+              status: status, endTime: endTime.format("yyyy-MM-dd hh:mm:ss.ms"), responseTime: responseTime,
               responseSize: results.toString().bytes.length, typeName: typeName, options: options?.toString())
 
       log.info requestInfoLog.toString()
@@ -578,8 +578,8 @@ class GeoscriptService implements InitializingBean
 
     status = projs != null ? 200 : 400
 
-    requestInfoLog = new JsonBuilder(timestamp: startTime.format("YYYY-MM-DD HH:mm:ss.Ms"), requestType: requestType,
-            requestMethod: requestMethod, endTime: endTime.format("YYYY-MM-DD HH:mm:ss.Ms"), responseTime: responseTime,
+    requestInfoLog = new JsonBuilder(timestamp: startTime.format("yyyy-MM-dd hh:mm:ss.ms"), requestType: requestType,
+            requestMethod: requestMethod, endTime: endTime.format("yyyy-MM-dd hh:mm:ss.ms"), responseTime: responseTime,
             status: status, responseSize: projs.toString().getBytes().length)
 
     log.info requestInfoLog.toString()

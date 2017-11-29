@@ -56,6 +56,9 @@ class HeatMapService {
 
     Layer getLayer(WmsRequest wmsRequest, String req) 
     {
+        // should be passed in from getTile??
+        def days = 1
+
         Workspace workspace = new Memory()
         Schema schema = new Schema("heatmap", [
             new Field("geom","Point",wmsRequest.srs)
@@ -84,22 +87,21 @@ class HeatMapService {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                    // load timestamp
-//                    String timestamp = logmap.@timestamp
 
                     String timestamplog = logmap.timestamp
                     log.info "timestamp" + timestamplog
-
-                    DateFormat format = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss.Ms", Locale.ENGLISH);
+                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
                     Date date = format.parse(timestamplog);
                     log.info "date" + date
 
-//                    def currenttime = new Date()
+                    def currenttime = new Date()
 
+                    timediff = Math.abs(currenttime.getTime() - date.getTime())
+                    log.info "currtime" + currenttime.getTime()
+                    log.info "logtime" + date.getTime()
+                    log.info "timediff" + timediff
 
-//                    timediff = abs(currenttime.getTime() - logmap.@timestamp)
-
-//                    if(timestamp is within range) {
+                    if(timediff <= (days*60*60*24*1000)) {
 
 
                         Point centroid = new Point((logmap.bbox.minX +
@@ -120,7 +122,7 @@ class HeatMapService {
                                 geom: targetPoint
                         ])
                         writer.add(feature)
-//                    }
+                    }
                 }
             }
         }
