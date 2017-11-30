@@ -21,8 +21,7 @@ class WmsRequest implements Validateable
   String layers
   String styles
   Boolean transparent
-
-  // String start_date
-  // String end_date
+  String start_date
+  String end_date
   // Double max_gsd
 }
