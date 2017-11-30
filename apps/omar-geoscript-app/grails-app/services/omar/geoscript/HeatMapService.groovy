@@ -65,11 +65,11 @@ class HeatMapService {
         // append start date and end date to url before opening
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
         Date startdate = format.parse(wmsRequest.start_date);
-        log.info "startdate" + date
+        log.info "startdate" + startdate
 
         // append start date and end date to url before opening
         Date enddate = format.parse(wmsRequest.end_date);
-        log.info "enddate" + date
+        log.info "enddate" + enddate
 
         Integer count = 0;
         URL url = new URL(req);
