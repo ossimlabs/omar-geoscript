@@ -7,8 +7,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
-//import org.apache.http.ssl.TrustStrategy
-//import org.apache.http.ssl.TrustSelfSignedStrategy
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext
@@ -42,6 +40,7 @@ import java.text.SimpleDateFormat
 import java.text.DateFormat
 import java.util.Date
 
+
 class HeatMapService {
 
     private Boolean isValidJson(String maybeJson){
@@ -54,7 +53,28 @@ class HeatMapService {
         }
     }
 
-    Layer getLayer(WmsRequest wmsRequest, String req) 
+    URL buildQueryUrl(String wmsStartDate, String wmsEndDate, String esUrl) {
+      // esUrl = https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/
+        String urlSearchParam = "_search?"
+        String timeStampFormat = "yyyy-MM-dd hh:mm:ss.ms"
+        String query = """{
+            "query": {
+                "range" : {
+                    "timestamp" : {
+                        "gte": "${wmsStartDate}",
+                        "lte": "${wmsEndDate}",
+                        "format": "${timeStampFormat}"
+                    }
+                },
+                "term": { "kubernetes.labels.deploymentconfig": "omar-wms-app" }
+            }
+        }"""
+
+        new URL(esUrl+urlSearchParam+query)
+
+    }
+
+    Layer getLayer(WmsRequest wmsRequest, String req)
     {
         Workspace workspace = new Memory()
         Schema schema = new Schema("heatmap", [
@@ -68,29 +88,26 @@ class HeatMapService {
 
 
         // append start date and end date to url before opening
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
-        Date startdate = format.parse(wmsRequest.start_date);
-        log.info "startdate" + startdate
+//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
+//        Date startdate = format.parse(wmsRequest.start_date);
+//        log.info "startdate" + startdate
 
         // append start date and end date to url before opening
-        Date enddate = format.parse(wmsRequest.end_date);
-        log.info "enddate" + enddate
+//        Date enddate = format.parse(wmsRequest.end_date);
+//        log.info "enddate" + enddate
 
-        Integer count = 0;
-        URL url = new URL(req);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        InputStream is = conn.getInputStream();
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(isr);
+        URL url = buildQueryUrl(wmsRequest.start_date, wmsRequest.end_date, req)
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection()
+        InputStream is = conn.getInputStream()
+
+        InputStreamReader isr = new InputStreamReader(is)
+        BufferedReader br = new BufferedReader(isr)
         def result = new JsonSlurper().parse(br)
-        def buffer = new ByteArrayOutputStream()
         Projection targetProjection = new Projection(wmsRequest.srs)
-        br.close();
-
-        def timediff
+        br.close()
 
 
-        def projectionMap = [:];
+        def projectionMap = [:]
         layer.withWriter{ writer ->
             for(Integer i = 0;i<result.hits.hits.size();i++)
             {
