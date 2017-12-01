@@ -46,7 +46,17 @@ if [ "${TRUST_STORE_PASSWORD}" != "" ] ; then
    else
       export JAVA_ARGS="-Djavax.net.ssl.trustStorePassword${TRUST_STORE_PASSWORD} ${JAVA_ARGS}"
    fi
-fi 
+fi
+
+if [ "${REMOTE_DEBUG}" != "" ] ; then
+   if [ "${JAVA_ARGS}" == "" ] ; then
+      export JAVA_ARGS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
+   else
+      export JAVA_ARGS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005 ${JAVA_ARGS}"
+   fi
+fi
+
+if
 export JAR_FILE=`find ${HOME} -name "*.jar"`
 echo "Running command: java ${JAVA_ARGS} -jar ${JAR_FILE}"
 java ${JAVA_ARGS} -jar ${JAR_FILE}
