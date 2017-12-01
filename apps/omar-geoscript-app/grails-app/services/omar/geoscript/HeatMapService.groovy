@@ -61,9 +61,14 @@ class HeatMapService {
             new Field("geom","Point",wmsRequest.srs)
         ])
         Layer layer = workspace.create(schema)
+        log.info "wmsRequest.start_date" + wmsRequest.start_date
+        log.info "wmsRequest.end_date" + wmsRequest.end_date
+        log.info "req" + req
+
+
 
         // append start date and end date to url before opening
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
         Date startdate = format.parse(wmsRequest.start_date);
         log.info "startdate" + startdate
 
