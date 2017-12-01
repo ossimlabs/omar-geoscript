@@ -56,7 +56,6 @@ if [ "${REMOTE_DEBUG}" != "" ] ; then
    fi
 fi
 
-if
 export JAR_FILE=`find ${HOME} -name "*.jar"`
 echo "Running command: java ${JAVA_ARGS} -jar ${JAR_FILE}"
 java ${JAVA_ARGS} -jar ${JAR_FILE}
