@@ -27,18 +27,7 @@ class HeatMapService {
         // esUrl = https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/
         String urlSearchParam = "_search?"
         String timeStampFormat = "yyyy-MM-dd hh:mm:ss.ms"
-        String query = """{
-            "query": {
-                "range" : {
-                    "timestamp" : {
-                        "gte": "${wmsStartDate}",
-                        "lte": "${wmsEndDate}",
-                        "format": "${timeStampFormat}"
-                    }
-                },
-                "term": { "kubernetes.labels.deploymentconfig": "omar-wms-app" }
-            }
-        }""".replace("\n", "")
+        String query = """{"query":{"range":{"timestamp":{"gte":"${wmsStartDate}","lte":"${wmsEndDate}","format":"${timeStampFormat}"}},"term":{"kubernetes.labels.deploymentconfig":"omar-wms-app"}}}"""
 
         (esUrl + urlSearchParam + query).toURL()
 
