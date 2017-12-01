@@ -68,7 +68,9 @@ class HeatMapService {
                 },
                 "term": { "kubernetes.labels.deploymentconfig": "omar-wms-app" }
             }
-        }"""
+        }""".replace("\n", "")
+
+        logger.info("ES Search URL: " + esUrl+urlSearchParam+query)
 
         new URL(esUrl+urlSearchParam+query)
 
