@@ -40,9 +40,7 @@ class HeatMapService {
             }
         }""".replace("\n", "")
 
-        log.info("ES Search URL: " + esUrl + urlSearchParam + query)
-
-        new URL(esUrl + urlSearchParam + query)
+        (esUrl + urlSearchParam + query).toURL()
 
     }
 
@@ -58,6 +56,8 @@ class HeatMapService {
 
 
         URL url = buildQueryUrl(wmsRequest.start_date, wmsRequest.end_date, req)
+        log.info("ES Search URL: " + url)
+
         HttpURLConnection conn = (HttpURLConnection) url.openConnection()
         InputStream is = conn.getInputStream()
 
