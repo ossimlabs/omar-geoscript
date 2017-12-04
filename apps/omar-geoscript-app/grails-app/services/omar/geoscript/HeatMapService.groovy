@@ -31,10 +31,11 @@ class HeatMapService {
         String timeStampFormat = "yyyy-MM-dd hh:mm:ss.ms"
 //        String query = """{"query":{"range":{"timestamp":{"gte":"${wmsStartDate}","lte":"${wmsEndDate}","format":"${timeStampFormat}"}},"term":{"kubernetes.labels.deploymentconfig":"omar-wms-app"}}}"""
 
-        String query = """{"query":{"range":{"@timestamp":{"gte":"2017-11-30T05:48:42.809770+00:00","lte": "2017-11-30T18:06:38.779477+00:00"}}}}"""
+//        String query = """{"query":{"range":{"@timestamp":{"gte":"2017-11-30T05:48:42.809770+00:00","lte": "2017-11-30T18:06:38.779477+00:00"}}}}"""
+        String query = """%7b"query":%7b"bool":%7b"must":%5b%7b"range":%7b"@timestamp":%7b"gt":"2017-11-28T14:04:21+0000"%2c"lt":"2017-11-30T14:04:21+0000"%7d%7d%7d%5d%2c"must_not":%5b%5d%2c"should":%5b%5d%7d%7d%2c"from":0%2c"size":10%2c"sort":%5b%5d%2c%7d"""
 
-        (esUrl + urlSearchParam +  URLEncoder.encode(query, "UTF-8")).toURL()
-//        (esUrl + urlSearchParam +  query ).toURL()
+//        (esUrl + urlSearchParam +  URLEncoder.encode(query, "UTF-8")).toURL()
+        (esUrl + urlSearchParam +  query ).toURL()
     }
 
     Layer getLayer(WmsRequest wmsRequest, String req) {
