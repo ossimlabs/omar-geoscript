@@ -27,12 +27,13 @@ class HeatMapService {
     URL buildQueryUrl(String wmsStartDate, String wmsEndDate, String esUrl) {
         // esUrl = https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/
         String urlSearchParam = "_search?"
-        String timeStampFormat = "yyyy-MM-dd hh:mm:ss.ms"
+//        String timeStampFormat = "yyyy-MM-dd hh:mm:ss.ms"
+        String timeStampFormat = "yyyy-MM-dd%20hh:mm:ss.ms"
         String query = """{"query":{"range":{"timestamp":{"gte":"${wmsStartDate}","lte":"${wmsEndDate}","format":"${timeStampFormat}"}},"term":{"kubernetes.labels.deploymentconfig":"omar-wms-app"}}}"""
 
 
-        (esUrl + urlSearchParam +  URLEncoder.encode(query, "UTF-8")).toURL()
-
+//        (esUrl + urlSearchParam +  URLEncoder.encode(query, "UTF-8")).toURL()
+        (esUrl + urlSearchParam +  query ).toURL()
     }
 
     Layer getLayer(WmsRequest wmsRequest, String req) {
