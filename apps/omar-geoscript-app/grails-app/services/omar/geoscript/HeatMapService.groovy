@@ -55,6 +55,7 @@ class HeatMapService {
         InputStreamReader isr = new InputStreamReader(is)
         BufferedReader br = new BufferedReader(isr)
         def result = new JsonSlurper().parse(br)
+        log.info "result" + result
         Projection targetProjection = new Projection(wmsRequest.srs)
         br.close()
 
