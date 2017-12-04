@@ -10,6 +10,7 @@ import geoscript.render.Map as GeoScriptMap
 import geoscript.style.ColorMap
 import geoscript.workspace.*
 import groovy.json.JsonSlurper
+import java.net.URLEncoder
 
 class HeatMapService {
 
@@ -29,7 +30,8 @@ class HeatMapService {
         String timeStampFormat = "yyyy-MM-dd hh:mm:ss.ms"
         String query = """{"query":{"range":{"timestamp":{"gte":"${wmsStartDate}","lte":"${wmsEndDate}","format":"${timeStampFormat}"}},"term":{"kubernetes.labels.deploymentconfig":"omar-wms-app"}}}"""
 
-        (esUrl + urlSearchParam + query).toURL()
+
+        (esUrl + urlSearchParam +  URLEncoder.encode(query, "UTF-8")).toURL()
 
     }
 
