@@ -20,7 +20,7 @@ class HeatMapService {
         try {
             final ObjectMapper mapper = new ObjectMapper()
             mapper.readTree(maybeJson)
-            log.info "TRUE JSON"
+            log.info "TRUE JSON" + maybeJson
             return true
         } catch (IOException e) {
             log.info "FALSE JSON"
