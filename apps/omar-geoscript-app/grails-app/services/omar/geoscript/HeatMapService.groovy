@@ -11,6 +11,8 @@ import geoscript.style.ColorMap
 import geoscript.workspace.*
 import groovy.json.JsonSlurper
 import java.net.URLEncoder
+import java.text.SimpleDateFormat
+import java.text.DateFormat
 
 class HeatMapService {
 
