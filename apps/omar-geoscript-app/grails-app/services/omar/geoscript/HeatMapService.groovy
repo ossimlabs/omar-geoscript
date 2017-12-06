@@ -72,7 +72,7 @@ class HeatMapService {
         def projectionMap = [:]
         layer.withWriter { writer ->
             for (Integer i = 0; i < result.hits.hits.size(); i++) {
-                log.info "message i = " + i + result.hits.hits.getAt(i)._source.message.toString()
+                log.info "\nmessage i = " + i + result.hits.hits.getAt(i)._source.message.toString()
                 if ((isValidJson(result.hits.hits.getAt(i)._source.message.toString()))) {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
@@ -85,7 +85,7 @@ class HeatMapService {
 
                     def currenttime = new Date()
 
-                    timediff = Math.abs(currenttime.getTime() - date.getTime())
+                    def timediff = Math.abs(currenttime.getTime() - date.getTime())
                     log.info "currtime" + currenttime.getTime()
                     log.info "logtime" + date.getTime()
                     log.info "timediff" + timediff
