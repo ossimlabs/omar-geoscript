@@ -20,8 +20,10 @@ class HeatMapService {
         try {
             final ObjectMapper mapper = new ObjectMapper()
             mapper.readTree(maybeJson)
+            log.info "TRUE JSON"
             return true
         } catch (IOException e) {
+            log.info "FALSE JSON"
             return false
         }
     }
@@ -70,9 +72,9 @@ class HeatMapService {
         def projectionMap = [:]
         layer.withWriter { writer ->
             for (Integer i = 0; i < result.hits.hits.size(); i++) {
-                if ((isValidJson(result.hits.hits.getAt(i)._source.message))) {
+                log.info "message i = " + i + result.hits.hits.getAt(i)._source.message.toString()
+                if ((isValidJson(result.hits.hits.getAt(i)._source.message.toString()))) {
                     Feature feature = writer.newFeature
-                    log.info "result.hits.hits.getAt(i)._source.message" + result.hits.hits.getAt(i)._source.message
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
                     String timestamplog = logmap.timestamp
