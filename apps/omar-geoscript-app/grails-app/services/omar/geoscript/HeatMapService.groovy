@@ -95,7 +95,7 @@ class HeatMapService {
                     def currenttime = new Date()
 
                     timediff = Math.abs(currenttime.getTime() - date.getTime())
-                    log.info "message" + result.hits.hits.getAt(i)._source.message
+                    // log.info "message" + result.hits.hits.getAt(i)._source.message
 
                     if(timediff <= (days*60*60*24*1000)) {
 
@@ -105,17 +105,14 @@ class HeatMapService {
                                 (logmap.bbox.minY +
                                         logmap.bbox.maxY) / 2.0)
 
-                        log.info "centroid" + centroid
 
                         Projection proj = projectionMap."${logmap.bbox.proj.id}"
                         if (!proj) {
                             proj = new Projection(logmap.bbox.proj.id)
                             projectionMap."${logmap.bbox.proj.id}" = proj
                         }
-                        log.info "proj" + proj
                         Point targetPoint = proj.transform(centroid, targetProjection) as Point
 
-                        log.info "targetPoint" + targetPoint
 
                         feature.set([
                                 geom: targetPoint
@@ -132,10 +129,15 @@ class HeatMapService {
 
 
     def getTile(WmsRequest wmsRequest, String elasticURL) {
+        log.info "before layer"
         Layer layer = getLayer(wmsRequest, elasticURL)
+        log.info "after layer"
         GeoScriptProcess proc = new GeoScriptProcess( "vec:Heatmap" )
+        log.info "after proc"
         Projection targetProjection = new Projection(wmsRequest.srs)
+        log.info "after targetProjection"
         Bounds bounds = wmsRequest.bbox.split( "," )*.toDouble() as Bounds
+        log.info "after bounds"
         bounds.proj = new Projection(layer.proj)
         log.info "before raster"
 
