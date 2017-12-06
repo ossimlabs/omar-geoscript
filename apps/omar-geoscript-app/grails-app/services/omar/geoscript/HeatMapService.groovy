@@ -63,13 +63,13 @@ class HeatMapService {
         InputStreamReader isr = new InputStreamReader(is)
         BufferedReader br = new BufferedReader(isr)
         def result = new JsonSlurper().parse(br)
-        log.info "result" + result
         Projection targetProjection = new Projection(wmsRequest.srs)
         br.close()
 
 
         def projectionMap = [:]
         layer.withWriter { writer ->
+            log.info "size" + result.hits.hits.size()
             for (Integer i = 0; i < result.hits.hits.size(); i++) {
                 if ((isValidJson(result.hits.hits.getAt(i)._source.message))) {
                     Feature feature = writer.newFeature
