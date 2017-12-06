@@ -69,10 +69,10 @@ class HeatMapService {
 
         def projectionMap = [:]
         layer.withWriter { writer ->
-            log.info "size" + result.hits.hits.size()
             for (Integer i = 0; i < result.hits.hits.size(); i++) {
                 if ((isValidJson(result.hits.hits.getAt(i)._source.message))) {
                     Feature feature = writer.newFeature
+                    log.info "result.hits.hits.getAt(i)._source.message" + result.hits.hits.getAt(i)._source.message
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
                     String timestamplog = logmap.timestamp
