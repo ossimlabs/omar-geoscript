@@ -89,6 +89,7 @@ class HeatMapService {
 
 
                     String timestamplog = logmap.timestamp
+                    log.info "\ntimestamp" + logmap.timestamp
                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
                     Date date = format.parse(timestamplog);
 
