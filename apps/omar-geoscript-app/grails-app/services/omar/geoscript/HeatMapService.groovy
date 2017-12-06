@@ -100,6 +100,7 @@ class HeatMapService {
                     log.info "currtime" + currenttime.getTime()
                     log.info "logtime" + date.getTime()
                     log.info "timediff" + timediff
+                    log.info "message" + result.hits.hits.getAt(i)._source.message
 
                     if(timediff <= (days*60*60*24*1000)) {
 
