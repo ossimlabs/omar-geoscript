@@ -89,17 +89,12 @@ class HeatMapService {
 
 
                     String timestamplog = logmap.timestamp
-                    log.info "timestamp" + timestamplog
                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
                     Date date = format.parse(timestamplog);
-                    log.info "date" + date
 
                     def currenttime = new Date()
 
                     timediff = Math.abs(currenttime.getTime() - date.getTime())
-                    log.info "currtime" + currenttime.getTime()
-                    log.info "logtime" + date.getTime()
-                    log.info "timediff" + timediff
                     log.info "message" + result.hits.hits.getAt(i)._source.message
 
                     if(timediff <= (days*60*60*24*1000)) {
@@ -110,14 +105,17 @@ class HeatMapService {
                                 (logmap.bbox.minY +
                                         logmap.bbox.maxY) / 2.0)
 
+                        log.info "centroid" + centroid
 
                         Projection proj = projectionMap."${logmap.bbox.proj.id}"
                         if (!proj) {
                             proj = new Projection(logmap.bbox.proj.id)
                             projectionMap."${logmap.bbox.proj.id}" = proj
                         }
+                        log.info "proj" + proj
                         Point targetPoint = proj.transform(centroid, targetProjection) as Point
 
+                        log.info "targetPoint" + targetPoint
 
                         feature.set([
                                 geom: targetPoint
@@ -139,6 +137,8 @@ class HeatMapService {
         Projection targetProjection = new Projection(wmsRequest.srs)
         Bounds bounds = wmsRequest.bbox.split( "," )*.toDouble() as Bounds
         bounds.proj = new Projection(layer.proj)
+        log.info "before raster"
+
         def raster = proc.execute(
                 data: layer,
                 radiusPixels: 20,
@@ -155,6 +155,8 @@ class HeatMapService {
                 [color: "#FFFF00", quantity: 1.0, label: "values"]
         ] ).opacity( 0.25 )
 
+        log.info "before map"
+
         def map = new GeoScriptMap(
                 width: wmsRequest.width,
                 height: wmsRequest.height,
@@ -168,6 +170,9 @@ class HeatMapService {
 
         def buffer = new ByteArrayOutputStream()
         map.render( buffer )
+
+        log.info "after render"
+
         map.close()
 
         [contentType: wmsRequest.format, buffer: buffer.toByteArray()]
