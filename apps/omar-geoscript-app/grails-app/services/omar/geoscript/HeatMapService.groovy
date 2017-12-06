@@ -68,11 +68,10 @@ class HeatMapService {
         Projection targetProjection = new Projection(wmsRequest.srs)
         br.close()
 
-
+        def timediff
         def projectionMap = [:]
         layer.withWriter { writer ->
             for (Integer i = 0; i < result.hits.hits.size(); i++) {
-                log.info "\nmessage i = " + i + result.hits.hits.getAt(i)._source.message.toString()
                 if ((isValidJson(result.hits.hits.getAt(i)._source.message.toString()))) {
                     Feature feature = writer.newFeature
                     Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
@@ -85,7 +84,7 @@ class HeatMapService {
 
                     def currenttime = new Date()
 
-                    def timediff = Math.abs(currenttime.getTime() - date.getTime())
+                    timediff = Math.abs(currenttime.getTime() - date.getTime())
                     log.info "currtime" + currenttime.getTime()
                     log.info "logtime" + date.getTime()
                     log.info "timediff" + timediff
@@ -97,13 +96,20 @@ class HeatMapService {
                                         logmap.bbox.maxY) / 2.0)
 
 
+                        log.info "centroid" + centroid
+
                         Projection proj = projectionMap."${logmap.bbox.proj.id}"
+
                         if (!proj) {
                             proj = new Projection(logmap.bbox.proj.id)
                             projectionMap."${logmap.bbox.proj.id}" = proj
                         }
+
+                        log.info "proj" + proj
+
                         Point targetPoint = proj.transform(centroid, targetProjection) as Point
 
+                        log.info "targetPoint" + targetPoint
 
                         feature.set([
                                 geom: targetPoint
