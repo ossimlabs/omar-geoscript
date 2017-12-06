@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: omar-geoscript-app
+  namespace: omar-dev
+  selfLink: /oapi/v1/namespaces/omar-dev/deploymentconfigs/omar-geoscript-app
+  uid: dcd59893-82c2-11e7-ba3b-0e704fd9c8b2
+  resourceVersion: '9380909'
+  generation: 365
+  creationTimestamp: '2017-08-16T20:38:29Z'
+  labels:
+    app: omar-openshift
+  annotations:
+    openshift.io/generated-by: OpenShiftNewApp
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 1
+      intervalSeconds: 1
+      timeoutSeconds: 600
+      maxUnavailable: 25%
+      maxSurge: 25%
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - omar-geoscript-app
+        from:
+          kind: ImageStreamTag
+          namespace: o2
+          name: 'omar-geoscript-app:latest'
+        lastTriggeredImage: >-
+          172.30.181.173:5000/o2/omar-geoscript-app@sha256:01e0df2934927b3b60d5acfe9480e0cbfa262cfbe83f77b000f26b965078ad12
+    - type: ConfigChange
+  replicas: 1
+  test: false
+  selector:
+    app: omar-openshift
+    deploymentconfig: omar-geoscript-app
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: omar-openshift
+        deploymentconfig: omar-geoscript-app
+      annotations:
+        openshift.io/generated-by: OpenShiftNewApp
+    spec:
+      volumes:
+        - name: volume-2on0o
+          secret:
+            secretName: logging-elasticsearch
+            defaultMode: 420
+        - name: volume-xr0x5
+          persistentVolumeClaim:
+            claimName: ossim-data-dev-pvc
+      containers:
+        - name: omar-geoscript-app
+          image: >-
+            172.30.181.173:5000/o2/omar-geoscript-app@sha256:01e0df2934927b3b60d5acfe9480e0cbfa262cfbe83f77b000f26b965078ad12
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            - name: SPRING_CLOUD_CONFIG_LABEL
+              value: master
+            - name: KEY_STORE
+              value: /home/omar/es/admin.jks
+            - name: KEY_STORE_PASSWORD
+              value: <PASSWORD>
+            - name: TRUST_STORE
+              value: /home/omar/es/truststore
+          resources: {}
+          volumeMounts:
+            - name: volume-2on0o
+              readOnly: true
+              mountPath: /home/omar/es
+            - name: volume-xr0x5
+              mountPath: /data
+          terminationMessagePath: /dev/termination-log
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+status:
+  latestVersion: 341
+  observedGeneration: 365
+  replicas: 1
+  updatedReplicas: 1
+  availableReplicas: 1
+  unavailableReplicas: 0
+  details:
+    message: image change
+    causes:
+      - type: ImageChange
+        imageTrigger:
+          from:
+            kind: ImageStreamTag
+            namespace: o2
+            name: 'omar-geoscript-app:latest'
+  conditions:
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2017-12-01T22:42:55Z'
+      lastTransitionTime: '2017-12-01T22:42:55Z'
+      message: Deployment config has minimum availability.
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2017-12-06T18:14:01Z'
+      lastTransitionTime: '2017-12-06T18:13:59Z'
+      reason: NewReplicationControllerAvailable
+      message: replication controller "omar-geoscript-app-341" successfully rolled out
+  readyReplicas: 1
