@@ -126,7 +126,9 @@ dependencies {
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.2'
   compile group: 'org.elasticsearch', name: 'elasticsearch', version: '6.0.1'
   compile group: 'org.elasticsearch.client', name: 'transport', version: '6.0.1'
-  compile "org.elasticsearch.plugin:shield:2.4.6"
+  compile "org.elasticsearch:elasticsearch-shield:1.2.3"
+  compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
+
 
 
   compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
@@ -156,7 +158,6 @@ dependencies {
   runtime "com.h2database:h2"
   runtime "org.apache.tomcat:tomcat-jdbc"
   runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.2"
-  runtime "org.elasticsearch:elasticsearch-license-plugin:1.0.0"
   testCompile "org.grails:grails-gorm-testing-support"
   testCompile "org.grails.plugins:geb"
   testCompile "org.grails:grails-web-testing-support"
