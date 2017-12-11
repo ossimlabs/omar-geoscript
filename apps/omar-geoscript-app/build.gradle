@@ -68,6 +68,10 @@ repositories {
   maven { url "https://repo.grails.org/grails/core" }
   // Add the Elasticsearch Maven Repository
   maven {
+    url "https://artifacts.elastic.co/maven"
+  }
+  // Add the Elasticsearch Maven Repository
+  maven {
     url "http://maven.elasticsearch.org/releases"
   }
 }
@@ -128,6 +132,7 @@ dependencies {
   compile group: 'org.elasticsearch.client', name: 'transport', version: '5.6.2'
   provided group: 'org.elasticsearch.plugin', name: 'shield', version: '2.4.6'
   compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
+  compile "org.elasticsearch.client:x-pack-transport:5.5"
 //  compile 'com.floragunn:search-guard-ssl:5.6.2-23'
 
   compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
