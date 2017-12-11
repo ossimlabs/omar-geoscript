@@ -126,7 +126,7 @@ dependencies {
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.2'
   compile group: 'org.elasticsearch', name: 'elasticsearch', version: '6.0.1'
   compile group: 'org.elasticsearch.client', name: 'transport', version: '6.0.1'
-  compile "org.elasticsearch:elasticsearch-shield:1.2.3"
+  provided group: 'org.elasticsearch.plugin', name: 'shield', version: '2.4.6'
   compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
   compile 'com.floragunn:search-guard-ssl:5.6.2-23'
 
