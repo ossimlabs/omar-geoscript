@@ -132,6 +132,7 @@ dependencies {
 
   compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
   compile "org.springframework.boot:spring-boot-starter-logging"
+  compile "org.springframework.boot:spring-boot-starter-web"
   compile "org.springframework.boot:spring-boot-autoconfigure"
   compile "org.grails:grails-core"
   compile "org.springframework.boot:spring-boot-starter-actuator"
