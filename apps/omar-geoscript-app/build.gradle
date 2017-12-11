@@ -25,6 +25,7 @@ buildscript {
     mavenLocal()
     maven { url "${ossimMavenProxy}" }
     maven { url "https://repo.grails.org/grails/core" }
+
   }
   dependencies {
     classpath "org.grails:grails-gradle-plugin:$grailsVersion"
@@ -65,6 +66,10 @@ repositories {
   maven { url "https://artifacts.unidata.ucar.edu/content/repositories/unidata" }
   maven { url "https://github.com/ElectronicChartCentre/ecc-mvn-repo/raw/master/releases" }
   maven { url "https://repo.grails.org/grails/core" }
+  // Add the Elasticsearch Maven Repository
+  maven {
+    url "http://maven.elasticsearch.org/releases"
+  }
 }
 
 dependencyManagement {
@@ -121,7 +126,7 @@ dependencies {
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.2'
   compile group: 'org.elasticsearch', name: 'elasticsearch', version: '6.0.1'
   compile group: 'org.elasticsearch.client', name: 'transport', version: '6.0.1'
-  provided group: 'org.elasticsearch.plugin', name: 'shield', version: '2.4.6'
+  compile "org.elasticsearch:elasticsearch-shield:1.0.2"
 
 
   compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
