@@ -133,6 +133,8 @@ dependencies {
   compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
   compile "org.elasticsearch.client:x-pack-transport:5.5.3"
   compile 'com.floragunn:search-guard-ssl:5.6.2-23'
+  provided group: 'com.floragunn', name: 'search-guard-2', version: '2.4.4.10'
+
 
   compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
   compile "org.springframework.boot:spring-boot-starter-logging"
