@@ -58,6 +58,7 @@ ext {
 
 repositories {
   mavenLocal()
+  jcenter()
   maven { url "${ossimMavenProxy}" }
   maven { url "https://repo.boundlessgeo.com/main" }
   maven { url "http://download.osgeo.org/webdav/geotools" }
@@ -134,7 +135,9 @@ dependencies {
   compile "org.elasticsearch.client:x-pack-transport:5.5.3"
   provided group: 'com.floragunn', name: 'search-guard-ssl', version: '5.6.2-23'
   provided group: 'com.floragunn', name: 'search-guard-5', version: '5.6.2-16'
-
+  compile 'org.codehaus.groovy:groovy-all:2.4.6'
+  compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.6'
+  testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
 
   compile "de.codecentric:spring-boot-admin-starter-client:1.5.4"
   compile "org.springframework.boot:spring-boot-starter-logging"
