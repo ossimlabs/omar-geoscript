@@ -66,17 +66,25 @@ class HeatMapService {
                 new Field("geom","Point",wmsRequest.srs)
         ])
         Layer layer = workspace.create(schema)
-        
-        // TEMP
-        def http = new HTTPBuilder('https://logging-es.logging.svc.cluster.local:9200')
-        http.get(path: "/_status") { resp -> 
-            println "TEMP: Status ${resp.statusLine}"
-        }
-        // --- TEMP
 
         Integer count = 0;
         URL url = new URL(req);
+
+        // temp query for testing
+        String x = """{"from":0, "size":10000, "query":{"range":{"@timestamp":{"gte":"2017-12-12","lte":"now"}}}}}}}"""
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
+        conn.setRequestMethod("POST");
+
+
+
+        OutputStream os = conn.getOutputStream();
+        os.write(x.getBytes("UTF-8"));
+        os.close();
+
+
         InputStream is = conn.getInputStream();
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);
@@ -97,38 +105,24 @@ class HeatMapService {
                     try {
                         Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
 
-                        String timestamplog = logmap.timestamp
-                        log.info "\ntimestamp" + logmap.timestamp
-                        DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.ms", Locale.ENGLISH);
-                        Date date = format.parse(timestamplog);
-
-                        def currenttime = new Date()
-
-                        timediff = Math.abs(currenttime.getTime() - date.getTime())
-                        // log.info "message" + result.hits.hits.getAt(i)._source.message
-
-                        if(timediff <= (days*60*60*24*1000)) {
-
-
-                            Point centroid = new Point((logmap.bbox.minX +
+                        Point centroid = new Point((logmap.bbox.minX +
                                     logmap.bbox.maxX) / 2.0,
                                     (logmap.bbox.minY +
                                             logmap.bbox.maxY) / 2.0)
 
 
-                            Projection proj = projectionMap."${logmap.bbox.proj.id}"
-                            if (!proj) {
+                        Projection proj = projectionMap."${logmap.bbox.proj.id}"
+                        if (!proj) {
                                 proj = new Projection(logmap.bbox.proj.id)
                                 projectionMap."${logmap.bbox.proj.id}" = proj
-                            }
-                            Point targetPoint = proj.transform(centroid, targetProjection) as Point
-
-
-                            feature.set([
-                                    geom: targetPoint
-                            ])
-                            writer.add(feature)
                         }
+                        Point targetPoint = proj.transform(centroid, targetProjection) as Point
+
+
+                         feature.set([
+                                 geom: targetPoint
+                         ])
+                         writer.add(feature)
                     }
                     catch (Exception e) {
                         log.error "Can't parse json"
