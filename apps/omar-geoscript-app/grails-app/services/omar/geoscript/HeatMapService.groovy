@@ -42,6 +42,8 @@ import java.text.SimpleDateFormat
 import java.text.DateFormat
 import java.util.Date
 
+import groovyx.net.http.HTTPBuilder
+
 class HeatMapService {
 
     private Boolean isValidJson(String maybeJson){
@@ -64,6 +66,13 @@ class HeatMapService {
                 new Field("geom","Point",wmsRequest.srs)
         ])
         Layer layer = workspace.create(schema)
+        
+        // TEMP
+        def http = new HTTPBuilder('https://logging-es.logging.svc.cluster.local:9200')
+        http.get(path: "/_status") { resp -> 
+            println "TEMP: Status ${resp.statusLine}"
+        }
+        // --- TEMP
 
         Integer count = 0;
         URL url = new URL(req);
