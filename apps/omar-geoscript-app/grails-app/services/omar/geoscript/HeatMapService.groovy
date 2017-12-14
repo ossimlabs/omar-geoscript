@@ -71,7 +71,7 @@ class HeatMapService {
         URL url = new URL(req);
 
         // temp query for testing
-        String x = """{"from":0, "size":10000, "query":{"range":{"@timestamp":{"gte":"2017-12-12","lte":"now"}}}}}}}"""
+        String x = """{"from":0, "size":10000, "query":{"range":{"@timestamp":{"gte":"${wmsRequest.start_date}","lte":"${wmsRequest.end_date"}}}}}}}"""
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
