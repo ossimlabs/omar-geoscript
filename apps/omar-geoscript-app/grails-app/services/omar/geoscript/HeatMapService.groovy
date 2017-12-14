@@ -58,20 +58,16 @@ class HeatMapService {
 
     Layer getLayer(WmsRequest wmsRequest, String req)
     {
-        // should be passed in from getTile??
-        def days = 1
-
         Workspace workspace = new Memory()
         Schema schema = new Schema("heatmap", [
                 new Field("geom","Point",wmsRequest.srs)
         ])
         Layer layer = workspace.create(schema)
 
-        Integer count = 0;
         URL url = new URL("https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/_search?pretty");
-
-        // temp query for testing
-        String x = """{"from":0, "size":10000, "query":{"range":{"@timestamp":{"gte":"${wmsRequest.start_date}","lte":"${wmsRequest.end_date}"}}}}}}}"""
+        println "url" + url
+        String x = """{"from":0, "size":10000, "query":{"range":{"@timestamp":{"gte": "${wmsRequest.start_date}","lte":"${wmsRequest.end_date}"}}}}"""
+        println "\nx" + x
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
