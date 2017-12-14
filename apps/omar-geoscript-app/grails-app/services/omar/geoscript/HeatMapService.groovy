@@ -64,10 +64,8 @@ class HeatMapService {
         ])
         Layer layer = workspace.create(schema)
 
-        URL url = new URL("https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/_search?pretty");
-        println "url" + url
+        URL url = new URL(req);
         String x = """{"from":0, "size":10000, "query":{"range":{"@timestamp":{"gte": "${wmsRequest.start_date}","lte":"${wmsRequest.end_date}"}}}}"""
-        println "\nx" + x
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
