@@ -65,7 +65,7 @@ class HeatMapService {
         Layer layer = workspace.create(schema)
 
         URL url = new URL(req);
-        String x = """{"from":0, "size":7000, "query":{"bool": { "must": [ { "term": {"requestMethod": "GetMap"}}, {"range":{"@timestamp":{"gte": "${wmsRequest.start_date}","lte":"${wmsRequest.end_date}"}}}]}}}"""
+        String x = """{"from":0, "size":7000, "query":{"bool": { "must": [ { "term": {"requestMethod": "GetMap"}}, {"range":{"@timestamp":{"gte": "${wmsRequest.start_date}","lte":"${wmsRequest.end_date}"}}}]}}, "sort": {"@timestamp": { "order": "desc"}}}"""
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
