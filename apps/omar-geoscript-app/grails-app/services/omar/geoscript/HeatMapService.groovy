@@ -65,7 +65,7 @@ class HeatMapService {
         Layer layer = workspace.create(schema)
 
         URL url = new URL(req);
-        String x = """{"from":0, "size":10000, "query":{"bool": { "must": [ { "term": {"requestMethod": "GetMap"}}, {"range":{"@timestamp":{"gte": "${wmsRequest.start_date}","lte":"${wmsRequest.end_date}"}}}]}}}"""
+        String x = """{"from":0, "size":1000, "query":{"bool": { "must": [ { "term": {"requestMethod": "GetMap"}}, {"range":{"@timestamp":{"gte": "${wmsRequest.start_date}","lte":"${wmsRequest.end_date}"}}}]}}}"""
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
@@ -94,7 +94,7 @@ class HeatMapService {
         layer.withWriter{ writer ->
             for(Integer i = 0;i<result.hits.hits.size();i++)
             {
-                if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
+ //               if((isValidJson(result.hits.hits.getAt(i)._source.message))) {
                     Feature feature = writer.newFeature
                     try {
                         Map<String, Object> logmap = new ObjectMapper().readValue(result.hits.hits.getAt(i)._source.message, HashMap.class);
@@ -121,7 +121,6 @@ class HeatMapService {
                     catch (Exception e) {
                         log.error "Can't parse json"
                     }
-                }
             }
         }
         layer.proj = targetProjection
