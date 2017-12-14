@@ -68,7 +68,7 @@ class HeatMapService {
         Layer layer = workspace.create(schema)
 
         Integer count = 0;
-        URL url = new URL(req);
+        URL url = new URL("https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/_search?pretty");
 
         // temp query for testing
         String x = """{"from":0, "size":10000, "query":{"range":{"@timestamp":{"gte":"${wmsRequest.start_date}","lte":"${wmsRequest.end_date}"}}}}}}}"""
