@@ -4,7 +4,6 @@ import geoscript.GeoScript
 import geoscript.filter.Function
 import geoscript.geom.GeometryCollection
 import geoscript.layer.io.CsvWriter
-import geoscript.proj.Projection
 import geoscript.workspace.Memory
 import geoscript.workspace.Workspace
 import groovy.json.JsonBuilder
@@ -12,7 +11,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.Memoized
 import groovy.xml.StreamingMarkupBuilder
-
+import omar.core.DateUtil
 import org.geotools.data.DataStoreFinder
 import org.geotools.factory.CommonFactoryFinder
 import org.geotools.referencing.CRS
@@ -20,7 +19,7 @@ import org.opengis.filter.capability.FunctionName
 
 import org.springframework.beans.factory.InitializingBean
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 
 @Transactional( readOnly = true )
 class GeoscriptService implements InitializingBean
@@ -225,8 +224,8 @@ class GeoscriptService implements InitializingBean
     Date endTime = new Date()
     responseTime = Math.abs(startTime.getTime() - endTime.getTime())
 
-    requestInfoLog = new JsonBuilder(timestamp: startTime.format("yyyy-MM-dd hh:mm:ss.ms"), requestType: requestType,
-            requestMethod: requestMethod, endTime: endTime.format("yyyy-MM-dd hh:mm:ss.ms"), responseTime: responseTime,
+    requestInfoLog = new JsonBuilder(timestamp: DateUtil.formatUTC(startTime), requestType: requestType,
+            requestMethod: requestMethod, endTime: DateUtil.formatUTC(endTime), responseTime: responseTime,
             responseSize: schemaInfo.toString().getBytes().length, typeName: typeName)
 
     log.info requestInfoLog.toString()
@@ -254,8 +253,8 @@ class GeoscriptService implements InitializingBean
     Date endTime = new Date()
     responseTime = Math.abs(startTime.getTime() - endTime.getTime())
 
-    requestInfoLog = new JsonBuilder(timestamp: startTime.format("yyyy-MM-dd hh:mm:ss.ms"), requestType: requestType,
-            requestMethod: requestMethod, endTime: endTime.format("yyyy-MM-dd hh:mm:ss.ms"), responseTime: responseTime,
+    requestInfoLog = new JsonBuilder(timestamp: DateUtil.formatUTC(startTime), requestType: requestType,
+            requestMethod: requestMethod, endTime: DateUtil.formatUTC(endTime), responseTime: responseTime,
             responseSize: getCapabilities.toString().getBytes().length)
 
     log.info requestInfoLog.toString()
@@ -441,7 +440,7 @@ class GeoscriptService implements InitializingBean
       def requestMethod = "QueryLayer"
       Date startTime = new Date()
       def responseTime
-      def status
+      def httpStatus
       def requestInfoLog
 
       def (prefix, layerName) = typeName?.split(':')
@@ -476,11 +475,11 @@ class GeoscriptService implements InitializingBean
       Date endTime = new Date()
       responseTime = Math.abs(startTime.getTime() - endTime.getTime())
 
-      status = (results.features != null) ? 200 : 400
+      httpStatus = (results.features != null) ? 200 : 400
 
-      requestInfoLog = new JsonBuilder(timestamp: startTime.format("yyyy-MM-dd hh:mm:ss.ms"), requestType: requestType,
+      requestInfoLog = new JsonBuilder(timestamp: DateUtil.formatUTC(startTime), requestType: requestType,
               requestMethod: requestMethod, numberOfFeatures: results?.numberOfFeatures, numberMatched: results?.numberMatched,
-              status: status, endTime: endTime.format("yyyy-MM-dd hh:mm:ss.ms"), responseTime: responseTime,
+              httpStatus: httpStatus, endTime: DateUtil.formatUTC(endTime), responseTime: responseTime,
               responseSize: results.toString().bytes.length, typeName: typeName, options: options?.toString())
 
       log.info requestInfoLog.toString()
@@ -557,7 +556,7 @@ class GeoscriptService implements InitializingBean
     Date startTime = new Date()
     def responseTime
     def requestInfoLog
-    def status
+    def httpStatus
 
     def projs = CRS.getSupportedAuthorities(true).collect { auth ->
         CRS.getSupportedCodes(auth)?.inject([]) { list, code ->
@@ -576,11 +575,11 @@ class GeoscriptService implements InitializingBean
     Date endTime = new Date()
     responseTime = Math.abs(startTime.getTime() - endTime.getTime())
 
-    status = projs != null ? 200 : 400
+    httpStatus = projs != null ? 200 : 400
 
-    requestInfoLog = new JsonBuilder(timestamp: startTime.format("yyyy-MM-dd hh:mm:ss.ms"), requestType: requestType,
-            requestMethod: requestMethod, endTime: endTime.format("yyyy-MM-dd hh:mm:ss.ms"), responseTime: responseTime,
-            status: status, responseSize: projs.toString().getBytes().length)
+    requestInfoLog = new JsonBuilder(timestamp: DateUtil.formatUTC(startTime), requestType: requestType,
+            requestMethod: requestMethod, endTime: DateUtil.formatUTC(endTime), responseTime: responseTime,
+            httpStatus: httpStatus, responseSize: projs.toString().getBytes().length)
 
     log.info requestInfoLog.toString()
     projs
