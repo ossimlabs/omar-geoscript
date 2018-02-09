@@ -6,7 +6,7 @@ import grails.transaction.Transactional
 import groovy.xml.StreamingMarkupBuilder
 
 
-@Transactional//( readOnly = true )
+@Transactional( readOnly = true )
 class KmlService { //implements InitializingBean {
     def grailsApplication
 
