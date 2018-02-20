@@ -101,27 +101,6 @@ dependencies {
   compile "net.errbuddy.plugins:babel-asset-pipeline:${babelAssetPipelineV}"
   compile "org.webjars:bootstrap:3.3.5"
 
-/*
-  if ( System.getenv('O2_DEV_HOME') ) {
-    compile project(':omar-openlayers-plugin')
-    compile project(':omar-geoscript-plugin')
-    compile project(':omar-hibernate-spatial-plugin')
-    compile files(' gt-elasticsearch-2.11-20171013.185453-1.jar')
-  } else {
-      compile(group: "io.ossim.omar.plugins", name: "omar-geoscript-plugin", version: "1.1.1-${buildVersionTag}", changing: jarArtifactsChanging)
-      compile(group: "io.ossim.omar.plugins", name: "omar-openlayers-plugin", version: "1.0.0-${buildVersionTag}", changing: true)
-      compile(group: "io.ossim.omar.plugins", name: "omar-hibernate-spatial-plugin", version: "1.0.0-${buildVersionTag}", changing: true)
-  }
-*/
-
-//   compile ( "org.geoscript:geoscript-groovy:1.8.0" ) {
-//     exclude module: "commons-beanutils"
-//     exclude module: "ehcache"
-//     exclude module: "groovy-all"
-//     exclude module: "slf4j-log4j12"
-//     exclude module: "xml-apis"
-//   }
-  // compile "commons-beanutils:commons-beanutils:1.9.2"
 
 //  compile(group: 'mil.nga.giat', name: 'gt-elasticsearch', version: '2.11-20171013.185453-1')
 //  compile(group: 'elasticgeo', name: 'elasticgeo', version: '2.11-20171101.191256-1')
