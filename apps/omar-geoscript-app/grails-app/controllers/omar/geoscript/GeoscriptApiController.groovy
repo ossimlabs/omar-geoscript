@@ -7,7 +7,7 @@ import io.swagger.annotations.*
 @Api(value = "/geoscriptApi",
      description = "GeoScript Support"
 )
-class GeoscriptController
+class GeoscriptApiController
 {
   def geoscriptService
 
