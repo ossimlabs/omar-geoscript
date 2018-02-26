@@ -11,19 +11,25 @@ class GeoscriptApiController
 {
   def geoscriptService
 
-  @ApiOperation(value = "Get the capabilities of the server", produces='application/json')
+  @ApiOperation(value = "Get the capabilities of the server", 
+                produces='application/json',
+                httpMethod="GET")
   def getCapabilitiesData()
   {
     render geoscriptService.capabilitiesData as JSON
   }
 
-  @ApiOperation(value = "List available projections", produces='application/json')
+  @ApiOperation(value = "List available projections", 
+                produces='application/json',
+                httpMethod="GET")
   def listProjections()
   {
     render geoscriptService.listProjections() as JSON
   }
 
-  @ApiOperation(value = "Get the schema of a given type", produces='application/json')
+  @ApiOperation(value = "Get the schema of a given type", 
+                produces='application/json',
+                httpMethod="GET")
   @ApiImplicitParams([
     @ApiImplicitParam(name = 'typeName', value = 'Type Name', defaultValue="omar:raster_entry", paramType = 'query', dataType = 'string', required=true)
   ])
@@ -34,6 +40,8 @@ class GeoscriptApiController
 
   @ApiOperation(value = "Query a layer",
     produces='application/json',
+    httpMethod="GET",
+
         notes = """
 *   **sort** Is a comma separated field list of the form  
     <tab><field> <sort></tab>  
