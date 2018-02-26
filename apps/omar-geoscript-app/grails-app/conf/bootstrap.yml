@@ -18,3 +18,9 @@ spring:
   cloud:
     config:
       uri: http://omar-config-server:8888/omar-config-server
+
+# Define the http protocols that swagger will use
+swagger:
+  schemes:
+    - HTTPS
+    - HTTP
