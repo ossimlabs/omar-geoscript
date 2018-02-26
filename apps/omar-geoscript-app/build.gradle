@@ -88,6 +88,7 @@ dependencyManagement {
 
 grails {
   plugins {
+    compile project(':omar-core-plugin')
     compile project(':omar-openlayers-plugin')
     compile project(':omar-geoscript-plugin')
     compile project(':omar-hibernate-spatial-plugin')
