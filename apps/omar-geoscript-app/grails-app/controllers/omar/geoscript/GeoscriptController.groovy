@@ -7,7 +7,7 @@ import io.swagger.annotations.*
 @Api(value = "/geoscriptApi",
      description = "GeoScript Support"
 )
-class GeoscriptApiController
+class GeoscriptController
 {
   def geoscriptService
 
@@ -50,8 +50,8 @@ class GeoscriptApiController
     @ApiImplicitParam(name = 'featureFormat', value = 'Feature Output format', defaultValue="JSON", allowableValues="[JSON, KML, CSV, GML2, GML3, GML32]", paramType = 'query', dataType = 'string', required=false),
     @ApiImplicitParam(name = 'sort', value = 'Sort by', paramType = 'query', dataType = 'string'),
     @ApiImplicitParam(name = 'fields', value = 'Field names (comma separated fields)', defaultValue="", paramType = 'query', dataType = 'string', required=false),
-    @ApiImplicitParam(name = 'max', value = 'Maximum Features in the result', defaultValue="10", paramType = 'query', dataType = 'int', required=false),
-    @ApiImplicitParam(name = 'start', value = 'Starting offset', defaultValue="0", paramType = 'query', dataType = 'int', required=false),
+    @ApiImplicitParam(name = 'max', value = 'Maximum Features in the result', defaultValue="10", paramType = 'query', dataType = 'integer', required=false),
+    @ApiImplicitParam(name = 'start', value = 'Starting offset', defaultValue="0", paramType = 'query', dataType = 'integer', required=false),
   ])
   def queryLayer()
   {
