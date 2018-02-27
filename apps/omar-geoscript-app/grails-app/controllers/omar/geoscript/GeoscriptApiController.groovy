@@ -47,9 +47,9 @@ class GeoscriptApiController
     <tab><field> <sort></tab>  
 
     <tab>**Examples:**</tab>  
-    <tab><tab>**acquisition_date DESC**</tab></tab>****  
-    <tab><tab>**acquisition_date ASC**</tab></tab>****  
-    <tab><tab>**acquisition_date DESC,width ASC**</tab></tab>********
+    <tab><tab>**acquisition_date DESC**</tab></tab>
+    <tab><tab>**acquisition_date ASC**</tab></tab>
+    <tab><tab>**acquisition_date DESC,width ASC**</tab></tab>
 """)
   @ApiImplicitParams([
     @ApiImplicitParam(name = 'typeName', value = 'Type name', defaultValue="omar:raster_entry", paramType = 'query', dataType = 'string', required=true),
