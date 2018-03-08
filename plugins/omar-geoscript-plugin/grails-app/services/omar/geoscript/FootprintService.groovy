@@ -22,7 +22,11 @@ class FootprintService
   {
     def ostream = new ByteArrayOutputStream()
     def (prefix, layerName) = params.layers.split( ':' )
+
+    // Retrieve the styles for this configuration
     def styles = grailsApplication.config.wms.styles
+    // Store all the style map's keys as a list
+    def styleKeys = styles.keySet() as List
 
     def layerInfo = LayerInfo.where {
       name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
@@ -30,7 +34,16 @@ class FootprintService
 
     Workspace.withWorkspace( geoscriptService.getWorkspace( layerInfo.workspaceInfo.workspaceParams ) ) { workspace ->
 
+      // Attempt to retrieve the requested style from our styles map
       def outlineLookupTable = styles[params.styles]
+
+      // If the requested style doesn't exist in this map, then use the first style
+      // we do have. A size of zero, indicates there are no elements to this style.
+      if (outlineLookupTable.size() == 0) {
+        println "WARNING: Style '${params.styles}' does not exist on this instance. " +
+           "Defaulting to first available style '${styleKeys.first()}'."
+        outlineLookupTable = styles[styleKeys.first()]
+      }
 
       def style = outlineLookupTable.collect { k, v ->
         ( stroke( color: new Color( v.color ) ) + fill( opacity: 0.0 ) ).where( v.filter )
