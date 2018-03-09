@@ -38,30 +38,30 @@ node(""){
     try {
       stage ("Publish Artifactory")
       {
-          withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+          withCredentials([[$class: 'UsernamePasswordMultiBinding',
                             credentialsId: 'artifactoryCredentials',
-                            usernameVariable: 'ARTIFACTORY_USER', 
+                            usernameVariable: 'ARTIFACTORY_USER',
                             passwordVariable: 'ARTIFACTORY_PASSWORD']])
             {
 
                     sh """
                     pushd ${workspaceDir}/${appName}
-                    ./gradlew ${appName}-plugin:artifactoryPublish
-                    ./gradlew ${appName}-app:artifactoryPublish
+                    gradle ${appName}-plugin:artifactoryPublish
+                    gradle ${appName}-app:artifactoryPublish
                     """
             }
       }
-      stage ("Publish Docker App") 
-      {      
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+      stage ("Publish Docker App")
+      {
+        withCredentials([[$class: 'UsernamePasswordMultiBinding',
                         credentialsId: 'dockerCredentials',
-                        usernameVariable: 'OPENSHIFT_USERNAME', 
+                        usernameVariable: 'OPENSHIFT_USERNAME',
                         passwordVariable: 'OPENSHIFT_PASSWORD']])
         {
             // Run all tasks on the app. This includes pushing to OpenShift and S3.
             sh """
             pushd ${workspaceDir}/${appName}
-            ./gradlew :${appName}-app:${GRADLE_TASK}
+            gradle :${appName}-app:${GRADLE_TASK}
             popd
             """
         }
@@ -77,7 +77,7 @@ node(""){
             <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
             recipientProviders: [[$class: 'DevelopersRecipientProvider']]
         )    }
-    
+
     try {
         stage('SonarQube analysis') {
             withSonarQubeEnv('sonarqube') {
@@ -85,7 +85,7 @@ node(""){
                 // It's important to add --info because of SONARJNKNS-281
                 sh """
                   pushd ${workspaceDir}/${appName}/
-                  ./gradlew --info sonarqube
+                  gradle --info sonarqube
                   popd
                 """
             }
