@@ -28,23 +28,23 @@ Only required for Jenkins pipelines or if you are running Artifactory and/or Ope
 3. Install omar-core-plugin (it is part of the omar-core repo).
 ```
  cd omar-core/plugins/omar-core-plugin
- ./gradlew clean install
+ gradle clean install
 ```
 
 4. Install omar-openlayers-plugin
 ```
  cd omar-openlayers/plugins/omar-openlayers-plugin
- ./gradlew clean install
+ gradle clean install
 ```
 
 5. Build/Install omar-geoscript-app
 #### Build:
 ```
  cd omar-geoscript/apps/omar-geoscript-app
- ./gradlew clean build
+ gradle clean build
  ```
 #### Install:
 ```
  cd omar-geoscript/apps/omar-geoscript-app
- ./gradlew clean install
+ gradle clean install
 ```
