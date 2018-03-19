@@ -10,4 +10,10 @@ class FootprintsController
 
     render contentType: results.contentType, file: results.buffer
   }
+
+  def getFootprintsLegend(def params)
+  {
+    render contentType: 'application/json',
+      text:  footprintService.getFootprintsLegend(params)
+  }
 }
