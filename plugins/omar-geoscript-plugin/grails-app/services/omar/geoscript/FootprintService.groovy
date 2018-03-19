@@ -8,6 +8,7 @@ import geoscript.style.Composite
 import geoscript.workspace.Workspace
 import static geoscript.style.Symbolizers.*
 
+import grails.converters.JSON
 import grails.transaction.Transactional
 
 import omar.core.ISO8601DateParser
@@ -117,5 +118,27 @@ class FootprintService
     }
 
     [contentType: params.format, buffer: ostream.toByteArray()]
+  }
+
+  def getFootprintsLegend(def params)
+  {
+    def styles = grailsApplication.config.wms.styles
+    def outlineLookupTable = styles[params.style]
+    def styleKeys = styles.keySet() as List
+
+    // If the requested style doesn't exist in this map, then use the first style
+    // we do have. A size of zero, indicates there are no elements to this style.
+    if (outlineLookupTable.size() == 0) {
+      println "WARNING: Style '${params.styles}' does not exist on this instance. " +
+         "Defaulting to first available style '${styleKeys.first()}'."
+      outlineLookupTable = styles[styleKeys.first()]
+    }
+
+    def style = outlineLookupTable.collect { k, v -> [
+      label: k,
+      color: new Color( v.color ).hex
+    ] }
+
+    (style as JSON)?.toString()
   }
 }
