@@ -95,6 +95,14 @@ wfs:
               - video_data_set
               - features
           datastoreId: omar_prod
+        - name: basic_encyclopedia
+          title: basic_encyclopedia
+          description: ''
+          keywords:
+              - omar
+              - basic_encyclopedia
+              - features
+          datastoreId: omar_prod
 
 wms:
     styles:
@@ -281,7 +289,7 @@ environments:
     production:
         grails:
           dbconsole:
-            enabled: true      
+            enabled: true
         dataSource:
             dbCreate: update
             # This is defined above
@@ -304,4 +312,3 @@ environments:
                 testOnReturn: false
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
-
