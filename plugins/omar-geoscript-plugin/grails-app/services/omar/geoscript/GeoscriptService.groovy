@@ -503,17 +503,12 @@ class GeoscriptService implements InitializingBean
 
   def findLayer(String prefix, String layerName)
   {
-println prefix
-println layerName
-println LayerInfo.properties
       def layerInfo = LayerInfo.where {
           name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
       }.get()
-println layerInfo
       def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
-println workspaceParams
       def workspace = getWorkspace(workspaceParams)
-println workspace
+
 
       workspace[layerName]
   }
