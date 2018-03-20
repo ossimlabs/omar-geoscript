@@ -505,8 +505,7 @@ class GeoscriptService implements InitializingBean
   {
 println prefix
 println layerName
-println LayerInfo
-println workspaceInfo
+println LayerInfo.properties
       def layerInfo = LayerInfo.where {
           name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
       }.get()
