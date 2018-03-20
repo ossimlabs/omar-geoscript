@@ -95,14 +95,6 @@ wfs:
               - video_data_set
               - features
           datastoreId: omar_prod
-        - name: basic_encyclopedia
-          title: basic_encyclopedia
-          description: ''
-          keywords:
-              - omar
-              - basic_encyclopedia
-              - features
-          datastoreId: omar_prod
 
 wms:
     styles:
