@@ -134,7 +134,7 @@ class GeoscriptService implements InitializingBean
     }.get()
   }
 
-  private def getWorkspaceAndLayer(String layerName)
+  def getWorkspaceAndLayer(String layerName)
   {
     def layerInfo = findLayerInfo( [typeName: layerName] )
     def workspace = getWorkspace( layerInfo?.workspaceInfo?.workspaceParams )

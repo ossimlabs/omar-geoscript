@@ -51,7 +51,7 @@ class GeorssService
             item {
               title( "${entry.acquisition_date ?: ""} ${entry.country_code ?:  ""} ${entry.target_id?:""} ${entry.image_id?: entry.filename}" )
 
-              def serverBaseURL = grailsApplication.config.grails.serverURL - grailsApplication.config.grails.server.contextPath
+              def serverBaseURL = grailsApplication.config.grails.serverURL - grailsApplication.config.server.contextPath
               def bounds = entry.ground_geom.bounds
 
               def tlvParams = [
