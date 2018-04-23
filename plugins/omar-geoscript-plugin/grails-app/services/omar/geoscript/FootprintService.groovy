@@ -13,6 +13,10 @@ import grails.transaction.Transactional
 
 import omar.core.ISO8601DateParser
 
+import javax.imageio.ImageIO
+
+import org.springframework.util.FastByteArrayOutputStream
+
 @Transactional(readOnly=true)
 class FootprintService
 {
@@ -21,7 +25,7 @@ class FootprintService
 
   def getFootprints(GetFootprintsRequest params)
   {
-    def ostream = new ByteArrayOutputStream()
+     byte[] buffer = []
     def (prefix, layerName) = params.layers.split( ':' )
 
     // Retrieve the styles for this configuration
@@ -113,11 +117,19 @@ class FootprintService
         map.@renderers['gif'] = new TransparentGif()
       }
 
-      map.render( ostream )
+      def image = map.renderToImage()
+
       map.close()
+
+      def ostream = new FastByteArrayOutputStream(
+        (image.sampleModel.sampleSize.sum() / 8 * image.width * image.height).intValue()
+      )
+
+      ImageIO.write(image, map.type, ostream)
+      buffer = ostream.toByteArrayUnsafe()
     }
 
-    [contentType: params.format, buffer: ostream.toByteArray()]
+    [contentType: params.format, buffer: buffer]
   }
 
   def getFootprintsLegend(def params)
