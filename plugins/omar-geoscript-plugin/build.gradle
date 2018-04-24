@@ -9,7 +9,7 @@ buildscript {
   }
   repositories {
     maven { url "${ossimMavenProxy}" }
-    if( Boolean.parseBoolean( System.env.WWW_CONNECTED ) ) {
+    if( !System.env.WWW_CONNECTED || Boolean.parseBoolean( System.env.WWW_CONNECTED ) ) {
         mavenLocal()
         //maven { url "${ossimMavenProxy}" }
         maven { url "https://repo.grails.org/grails/core" }
@@ -22,7 +22,7 @@ buildscript {
 }
 
 plugins {
-  id "com.github.ben-manes.versions" version "0.17.0"
+    id "com.github.ben-manes.versions" version "0.17.0"
 }
 
 apply plugin: "eclipse"
@@ -44,7 +44,7 @@ ext {
 
 repositories {
   maven { url "${ossimMavenProxy}" }
-  if( Boolean.parseBoolean( System.env.WWW_CONNECTED ) ) {
+  if( !System.env.WWW_CONNECTED || Boolean.parseBoolean( System.env.WWW_CONNECTED ) ) {
     mavenLocal()
     maven { url "http://download.osgeo.org/webdav/geotools/" }
     maven { url "https://repo.grails.org/grails/core" }
