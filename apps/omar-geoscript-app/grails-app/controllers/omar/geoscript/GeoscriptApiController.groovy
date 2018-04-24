@@ -1,7 +1,7 @@
 package omar.geoscript
 
 import grails.converters.JSON
-
+import groovy.json.JsonSlurper
 import io.swagger.annotations.*
 
 @Api(value = "/geoscriptApi",
