@@ -82,6 +82,9 @@ class GeoscriptApiController
         case 'fields':
           a['fields'] = b?.value?.split(',')?.collect { it.trim() } as List<String>
           break
+        case 'bbox':
+          a['bbox'] = new JsonSlurper().parseText(b.value)
+          break
         }
       }
       a
