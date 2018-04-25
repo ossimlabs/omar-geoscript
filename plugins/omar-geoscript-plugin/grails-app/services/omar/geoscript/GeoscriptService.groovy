@@ -452,9 +452,12 @@ class GeoscriptService implements InitializingBean
 
       if ( options.bbox ) {
         def bbox = options.bbox
+        if(bbox?.proj?.id)
+        {
+          filter = Filter.bbox('ground_geom',
+            new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id) )
 
-        filter = Filter.bbox('ground_geom',
-          new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id) )
+        }
       }
 
       if (  options?.filter ) {
