@@ -448,15 +448,20 @@ class GeoscriptService implements InitializingBean
       def (prefix, layerName) = typeName?.split(':')
       def layer = findLayer(prefix, layerName)
       def results
-
-      def filter = new Filter( options?.filter )
+      def filter
 
       if ( options.bbox ) {
         def bbox = options.bbox
 
-        filter = filter.and( Filter.bbox('ground_geom',
-          new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id) ) )
+        filter = Filter.bbox('ground_geom',
+          new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id) )
       }
+
+      if (  options?.filter ) {
+        filter = filter.and( options?.filter )
+      }
+
+      options.filter = filter
 
       Workspace.withWorkspace(layer?.workspace) {
           def matched = layer?.count( filter )
@@ -578,7 +583,7 @@ class GeoscriptService implements InitializingBean
             }
             catch ( e )
             {
-              e.printStackTrace()
+              // e.printStackTrace()
             }
             list
         }
