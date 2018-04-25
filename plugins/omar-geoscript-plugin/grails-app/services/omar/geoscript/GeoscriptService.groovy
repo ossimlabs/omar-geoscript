@@ -458,7 +458,11 @@ class GeoscriptService implements InitializingBean
       }
 
       if (  options?.filter ) {
-        filter = filter.and( options?.filter )
+        if ( filter ) {
+          filter = filter.and( options?.filter )
+        } else {
+          filter = filter
+        }
       }
 
       options.filter = filter
