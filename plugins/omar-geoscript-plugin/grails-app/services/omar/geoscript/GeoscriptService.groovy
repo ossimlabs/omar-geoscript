@@ -448,30 +448,23 @@ class GeoscriptService implements InitializingBean
       def (prefix, layerName) = typeName?.split(':')
       def layer = findLayer(prefix, layerName)
       def results
-      def filter
 
-      if ( options.bbox ) {
+      if ( options.bbox )
+      {
         def bbox = options.bbox
-        if(bbox?.proj?.id)
-        {
-          filter = Filter.bbox('ground_geom',
-            new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id) )
+        def bounds = new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id)
+        def geom = bounds.proj.transform(bounds.geometry, 'epsg:4326')
+        def filter = Filter.intersects('ground_geom', geom)
 
-        }
-      }
-
-      if (  options?.filter ) {
-        if ( filter ) {
-          filter = filter.and( options?.filter )
+        if ( options.filter ) {
+            options.filter =  filter.and( options?.filter )
         } else {
-          filter = filter
+          options.filter = filter
         }
       }
-
-      options.filter = filter
 
       Workspace.withWorkspace(layer?.workspace) {
-          def matched = layer?.count( filter )
+          def matched = layer?.count( options.filter )
           def count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
           def features = []
 
