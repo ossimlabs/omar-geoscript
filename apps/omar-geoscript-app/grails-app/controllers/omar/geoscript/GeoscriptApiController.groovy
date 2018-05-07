@@ -1,7 +1,7 @@
 package omar.geoscript
 
 import grails.converters.JSON
-
+import groovy.json.JsonSlurper
 import io.swagger.annotations.*
 
 @Api(value = "/geoscriptApi",
@@ -81,6 +81,9 @@ class GeoscriptApiController
           break
         case 'fields':
           a['fields'] = b?.value?.split(',')?.collect { it.trim() } as List<String>
+          break
+        case 'bbox':
+          a['bbox'] = new JsonSlurper().parseText(b.value)
           break
         }
       }

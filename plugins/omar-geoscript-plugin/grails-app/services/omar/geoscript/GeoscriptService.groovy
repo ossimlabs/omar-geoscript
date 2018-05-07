@@ -1,7 +1,9 @@
 package omar.geoscript
 
 import geoscript.GeoScript
+import geoscript.filter.Filter
 import geoscript.filter.Function
+import geoscript.geom.Bounds
 import geoscript.geom.GeometryCollection
 import geoscript.layer.io.CsvWriter
 import geoscript.workspace.Memory
@@ -447,8 +449,22 @@ class GeoscriptService implements InitializingBean
       def layer = findLayer(prefix, layerName)
       def results
 
+      if ( options.bbox )
+      {
+        def bbox = options.bbox
+        def bounds = new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id)
+        def geom = bounds.proj.transform(bounds.geometry, 'epsg:4326')
+        def filter = Filter.intersects('ground_geom', geom)
+
+        if ( options.filter ) {
+            options.filter =  filter.and( options?.filter )
+        } else {
+          options.filter = filter
+        }
+      }
+
       Workspace.withWorkspace(layer?.workspace) {
-          def matched = layer?.count( options?.filter )
+          def matched = layer?.count( options.filter )
           def count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
           def features = []
 
@@ -506,9 +522,9 @@ class GeoscriptService implements InitializingBean
       def layerInfo = LayerInfo.where {
           name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
       }.get()
+
       def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
       def workspace = getWorkspace(workspaceParams)
-
 
       workspace[layerName]
   }
@@ -563,10 +579,11 @@ class GeoscriptService implements InitializingBean
             def id = "${auth}:${code}"
             try
             {
-                list <<   [id: id, units: CRS.decode(id)?.unit?.toString()]
+                list << [id: id, units: CRS.decode(id)?.unit?.toString()]
             }
             catch ( e )
             {
+              // e.printStackTrace()
             }
             list
         }
