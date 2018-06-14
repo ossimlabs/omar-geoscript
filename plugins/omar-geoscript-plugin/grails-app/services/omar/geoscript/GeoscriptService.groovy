@@ -394,7 +394,6 @@ class GeoscriptService implements InitializingBean
         def count = layer.count( wfsParams.filter ?: Filter.PASS )
 
         def features = ( wfsParams.resultType != 'hits' ) ? layer.collectFromFeature( options ) { feature ->
-println feature
           return new JsonSlurper().parseText( feature.geoJSON )
         } : []
 
