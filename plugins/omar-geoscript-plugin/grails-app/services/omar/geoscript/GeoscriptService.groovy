@@ -474,6 +474,7 @@ class GeoscriptService implements InitializingBean
                 features = exportCSV(layer, options)
               } else {
                 features = layer?.collectFromFeature(options) { feature ->
+println feature
                   formatFeature(feature, featureFormat, [prefix: prefix])
                 }
               }
