@@ -60,6 +60,7 @@ class GeoscriptApiController
     @ApiImplicitParam(name = 'fields', value = 'Field names (comma separated fields)', defaultValue="", paramType = 'query', dataType = 'string', required=false),
     @ApiImplicitParam(name = 'max', value = 'Maximum Features in the result', defaultValue="10", paramType = 'query', dataType = 'integer', required=false),
     @ApiImplicitParam(name = 'start', value = 'Starting offset', defaultValue="0", paramType = 'query', dataType = 'integer', required=false),
+    @ApiImplicitParam(name = 'includeNumberMatched', value = 'Include match count', allowableValues="true,false", defaultValue="", paramType = 'query', dataType = 'boolean', required=false),
   ])
   def queryLayer()
   {
@@ -89,15 +90,19 @@ class GeoscriptApiController
       }
       a
     }
-
-    render geoscriptService.queryLayer(
+    def layer = geoscriptService.queryLayer(
       params?.typeName,
       options,
       params?.resultType ?: 'results',
-      params?.featureFormat
-    ) as JSON
-
-    // render geoscriptService.queryLayer(params) as JSON
+      params?.featureFormat,
+      params?.includeNumberMatched?.toBoolean()
+    ) 
+    if(layer)
+    {
+      render  layer as JSON
+    }
+    else 
+      render status:400, text:  [statusMessage:"Unable to create layer for queryLayer"] as JSON, contentType: 'application/json'
   }
 
 }

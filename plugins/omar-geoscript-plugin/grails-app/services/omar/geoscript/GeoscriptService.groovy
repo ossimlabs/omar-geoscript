@@ -436,7 +436,7 @@ class GeoscriptService implements InitializingBean
     result
   }
 
-  def queryLayer(String typeName, Map<String,Object> options, String resultType='results', String featureFormat=null)
+  def queryLayer(String typeName, Map<String,Object> options, String resultType='results', String featureFormat=null, Boolean includeNumberMatched=null)
   {
       def requestType = "GET"
       def requestMethod = "QueryLayer"
@@ -445,10 +445,14 @@ class GeoscriptService implements InitializingBean
       def httpStatus
       def requestInfoLog
 
-      def (prefix, layerName) = typeName?.split(':')
+      def (prefix, layerName) = typeName?typeName.split(':'):[null,null]
       def layer = findLayer(prefix, layerName)
       def results
-
+      if(includeNumberMatched==null)
+      {
+        // default to hit type
+        includeNumberMatched = resultType?resultType.toLowerCase() == "hits":false
+      }
       if ( options.bbox )
       {
         def bbox = options.bbox
@@ -462,37 +466,49 @@ class GeoscriptService implements InitializingBean
           options.filter = filter
         }
       }
-
-      Workspace.withWorkspace(layer?.workspace) {
-          def matched = layer?.count( options.filter )
-          def count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
-          def features = []
-
-          if ( resultType == 'results' )
-          {
-              if ( featureFormat == 'CSV' ) {
-                features = exportCSV(layer, options)
-              } else {
-                features = layer?.collectFromFeature(options) { feature ->
-println feature
-                  formatFeature(feature, featureFormat, [prefix: prefix])
+      if(layer)
+      {
+        Workspace.withWorkspace(layer?.workspace) {
+            Long matched 
+            if(includeNumberMatched)
+            {
+              matched =  layer?.count( options.filter )
+            }
+          // def count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
+            def features = []
+            Integer count = 0;
+            if ( resultType == 'results' )
+            {
+                if ( featureFormat == 'CSV' ) {
+                  def csvResult = exportCSV(layer, options)
+                  features = csvResult?.data
+                  count = features.count
+                } else {
+                  features = layer?.collectFromFeature(options) { feature ->
+                    ++count;
+                    formatFeature(feature, featureFormat, [prefix: prefix])
+                  }
                 }
-              }
-          }
+            }
 
-          results = [
-            namespace: [prefix: prefix, uri: layer?.schema?.uri],
-            numberOfFeatures: count,
-            numberMatched: matched,
-            timeStamp: new Date().format( "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", TimeZone.getTimeZone( 'GMT' ) ),
-            features: features
-          ]
+            results = [
+              namespace: [prefix: prefix, uri: layer?.schema?.uri],
+              numberOfFeatures: count,
+              //numberMatched: matched,
+              timeStamp: new Date().format( "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", TimeZone.getTimeZone( 'GMT' ) ),
+              features: features
+            ]
+            if(includeNumberMatched)
+            {
+              results.numberMatched = matched
+            }
+        }
       }
 
       Date endTime = new Date()
       responseTime = Math.abs(startTime.getTime() - endTime.getTime())
 
-      httpStatus = (results.features != null) ? 200 : 400
+      httpStatus = (results?.features != null) ? 200 : 400
 
       requestInfoLog = new JsonBuilder(timestamp: DateUtil.formatUTC(startTime), requestType: requestType,
               requestMethod: requestMethod, numberOfFeatures: results?.numberOfFeatures, numberMatched: results?.numberMatched,
@@ -506,20 +522,28 @@ println feature
 
   def exportCSV(def inputLayer, def options)
   {
+    HashMap result = [:]
     def memory = new Memory()
     def outputLayer = memory.create(inputLayer.schema)
-
+    Integer count = 0;
     inputLayer.collectFromFeature(options) { f ->
+      ++count
       outputLayer.add(f)
     }
-
+    result.count = count
     def writer = new CsvWriter()
 
-    writer.write(outputLayer)//?.readLines()
+    result.data = writer.write(outputLayer)//?.readLines()
+
+    result;
   }
 
   def findLayer(String prefix, String layerName)
   {
+    if(!prefix&!layerName)
+    {
+      return null
+    }
       def layerInfo = LayerInfo.where {
           name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
       }.get()
