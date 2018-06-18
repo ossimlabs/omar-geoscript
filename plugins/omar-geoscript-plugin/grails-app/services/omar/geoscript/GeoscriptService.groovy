@@ -480,7 +480,7 @@ class GeoscriptService implements InitializingBean
                 if ( featureFormat == 'CSV' ) {
                   def csvResult = exportCSV(layer, options)
                   features = csvResult?.data
-                  count = features.count
+                  count = csvResult.count
                 } else {
                   features = layer?.collectFromFeature(options) { feature ->
                     ++count;
