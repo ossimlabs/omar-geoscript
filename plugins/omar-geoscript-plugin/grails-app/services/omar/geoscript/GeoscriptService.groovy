@@ -448,10 +448,9 @@ class GeoscriptService implements InitializingBean
       def (prefix, layerName) = typeName?typeName.split(':'):[null,null]
       def layer = findLayer(prefix, layerName)
       def results
-      if(includeNumberMatched==null)
+      if(resultType?.toLowerCase() == "hits")
       {
-        // default to hit type
-        includeNumberMatched = resultType?resultType.toLowerCase() == "hits":false
+        includeNumberMatched = true
       }
       if ( options.bbox )
       {
@@ -474,9 +473,8 @@ class GeoscriptService implements InitializingBean
             {
               matched =  layer?.count( options.filter )
             }
-          // def count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
             def features = []
-            Integer count = 0;
+            Long count = 0;
             if ( resultType == 'results' )
             {
                 if ( featureFormat == 'CSV' ) {
@@ -489,6 +487,10 @@ class GeoscriptService implements InitializingBean
                     formatFeature(feature, featureFormat, [prefix: prefix])
                   }
                 }
+            }
+            else if(includeNumberMatched)
+            {
+              count = ( options?.max ) ? Math.min( matched, options?.max ) : matched
             }
 
             results = [
