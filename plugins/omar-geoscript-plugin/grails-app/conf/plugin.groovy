@@ -94,4 +94,6 @@ geoscript {
           ]
       ]
   ]
+
+  defaultMaxFeatures = 1000
 }

@@ -23,11 +23,17 @@ import org.springframework.beans.factory.InitializingBean
 
 import grails.gorm.transactions.Transactional
 
+// import org.springframework.beans.factory.annotation.Value
+
 @Transactional( readOnly = true )
 class GeoscriptService implements InitializingBean
 {
   def grailsLinkGenerator
+  def grailsApplication
   def jsonSlurper = new JsonSlurper()
+
+  // @Value('${geoscript.defaultMaxFeatures}')
+  Integer defaultMaxFeatures
 
   def parseOptions(def wfsParams)
   {
@@ -175,6 +181,8 @@ class GeoscriptService implements InitializingBean
 
       Class.forName( multiType ).newInstance( geometries )
     }
+
+    defaultMaxFeatures = grailsApplication.config.geoscript.defaultMaxFeatures as Integer
   }
 
   Workspace getWorkspace(Map params)
@@ -468,7 +476,7 @@ class GeoscriptService implements InitializingBean
       if(layer)
       {
         Workspace.withWorkspace(layer?.workspace) {
-            Long matched 
+            Long matched
             if(includeNumberMatched)
             {
               matched =  layer?.count( options.filter )
@@ -482,6 +490,17 @@ class GeoscriptService implements InitializingBean
                   features = csvResult?.data
                   count = csvResult.count
                 } else {
+                  // Clamp number of features returned to prevent
+                  // memory/performance issues.  defaultMaxFeatures can be set
+                  // via configuration paramters
+                  if ( ! options.max || options.max > defaultMaxFeatures ) {
+                    options.max = defaultMaxFeatures
+                  }
+
+                  println '-' * 50
+                  println options
+                  println '-' * 50
+
                   features = layer?.collectFromFeature(options) { feature ->
                     ++count;
                     formatFeature(feature, featureFormat, [prefix: prefix])
