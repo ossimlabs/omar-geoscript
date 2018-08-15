@@ -1,7 +1,7 @@
 # omar-geoscript
 
 ## Description
-The OMAR Geoscript application encapsulates all the geotools dependencies which provides libraries to query the OMAR database, draw footprints and manipulate shape files among other features.
+The OMAR Geoscript application encapsulates all the geotools dependencies which provides libraries to query the OMAR database, draw footprints and manipulate shape files among other spatial capabilities.
 
 [![Build Status](https://jenkins.radiantbluecloud.com/buildStatus/icon?job=omar-geoscript-dev)]()
 
