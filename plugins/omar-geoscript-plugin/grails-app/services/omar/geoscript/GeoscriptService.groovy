@@ -604,6 +604,10 @@ class GeoscriptService implements InitializingBean
       jsonSlurper.parseText(feature.geoJSON)
       //feature
     }
+    else if (featureFormat == 'WMS')
+    {
+      jsonSlurper.parseText(feature.geoJSON)
+    }
     else
     {
       feature
