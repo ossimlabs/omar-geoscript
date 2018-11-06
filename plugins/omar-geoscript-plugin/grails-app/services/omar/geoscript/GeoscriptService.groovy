@@ -293,13 +293,13 @@ class GeoscriptService implements InitializingBean
         }
 
         layerData = [
-            name: layerInfo.name,
+            name: layerInfo?.name,
             namespace: [prefix: prefix, uri: uri],
-            title: layerInfo.title,
-            description: layerInfo.description,
-            keywords: layerInfo.keywords,
-            proj: layer.proj.id,
-            geoBounds: [minX: geoBounds.minX, minY: geoBounds.minY, maxX: geoBounds.maxX, maxY: geoBounds.maxY,]
+            title: layerInfo?.title,
+            description: layerInfo?.description,
+            keywords: layerInfo?.keywords,
+            proj: layer?.proj?.id,
+            geoBounds: [minX: geoBounds?.minX, minY: geoBounds?.minY, maxX: geoBounds?.maxX, maxY: geoBounds?.maxY,]
         ]
 
       }
