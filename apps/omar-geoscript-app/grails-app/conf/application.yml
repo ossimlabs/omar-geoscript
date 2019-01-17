@@ -149,6 +149,8 @@ grails:
     plugin:
       console:
         enabled: true
+        csrfProtection:
+            enabled: false
     profile: web
     codegen:
         defaultPackage: omar.geoscript
