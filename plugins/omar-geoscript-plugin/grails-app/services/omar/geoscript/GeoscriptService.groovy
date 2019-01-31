@@ -1,11 +1,13 @@
 package omar.geoscript
 
 import geoscript.GeoScript
+import geoscript.feature.Field
 import geoscript.filter.Filter
 import geoscript.filter.Function
 import geoscript.geom.Bounds
 import geoscript.geom.GeometryCollection
 import geoscript.layer.io.CsvWriter
+import geoscript.workspace.Database
 import geoscript.workspace.Memory
 import geoscript.workspace.Workspace
 import groovy.json.JsonBuilder
@@ -146,9 +148,32 @@ class GeoscriptService implements InitializingBean
   {
     def layerInfo = findLayerInfo( [typeName: layerName] )
     def workspace = getWorkspace( layerInfo?.workspaceInfo?.workspaceParams )
-    def layer = workspace[layerInfo?.name]
+
+    def layer = getLayerFromInfo(layerInfo, workspace)
 
     [workspace, layer]
+  }
+
+  def getLayerFromInfo(LayerInfo layerInfo, Workspace workspace)
+  {
+    def layer
+
+    try 
+    {
+      if (layerInfo.query && layerInfo.geomName && layerInfo.geomType && layerInfo.geomSrs ) {
+          Database database = new Database( workspace.ds )
+          layer = database.createView(layerInfo.name, layerInfo.query,
+            new Field( layerInfo.geomName, layerInfo.geomType, layerInfo.geomSrs ) ) 
+        } else {
+          layer = workspace[layerInfo?.name]
+        }  
+    }
+    catch ( Exception e )
+    {
+      throw new Exception("Can't instantiate layer: ${layerInfo}")
+    }
+    
+    return layer  
   }
 
   @Memoized
@@ -216,7 +241,7 @@ class GeoscriptService implements InitializingBean
     ]
 
     Workspace.withWorkspace( getWorkspace( workspaceInfo?.workspaceParams ) ) { workspace ->
-      def layer = workspace[layerName]
+      def layer = getLayerFromInfo(layerInfo, workspace)
       def schema = layer.schema
 
       schemaInfo.attributes = layer.schema.fields.collect { field ->
@@ -278,7 +303,7 @@ class GeoscriptService implements InitializingBean
       def layerData
       WorkspaceInfo workspaceInfo = WorkspaceInfo.findByName( layerInfo.workspaceInfo.name )
       Workspace.withWorkspace( getWorkspace( workspaceInfo?.workspaceParams ) ) { Workspace workspace ->
-        def layer = workspace[layerInfo.name]
+        def layer = getLayerFromInfo(layerInfo, workspace)
         def uri = layer?.schema?.uri
         def prefix = NamespaceInfo.findByUri( uri )?.prefix
         def geoBounds
@@ -456,10 +481,12 @@ class GeoscriptService implements InitializingBean
       def (prefix, layerName) = typeName?typeName.split(':'):[null,null]
       def layer = findLayer(prefix, layerName)
       def results
+
       if(resultType?.toLowerCase() == "hits")
       {
         includeNumberMatched = true
       }
+
       if ( options.bbox )
       {
         def bbox = options.bbox
@@ -473,6 +500,7 @@ class GeoscriptService implements InitializingBean
           options.filter = filter
         }
       }
+
       if(layer)
       {
         Workspace.withWorkspace(layer?.workspace) {
@@ -565,16 +593,16 @@ class GeoscriptService implements InitializingBean
     {
       return null
     }
-      def layerInfo = LayerInfo.where {
-          name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
-      }.get()
 
-      def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
-      def workspace = getWorkspace(workspaceParams)
+    def layerInfo = LayerInfo.where {
+        name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
+    }.get()
 
-      workspace[layerName]
+    def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
+    def workspace = getWorkspace(workspaceParams)
+
+    getLayerFromInfo(layerInfo, workspace)
   }
-
 
   private def formatFeature(def feature, def featureFormat, def formatParams)
   {

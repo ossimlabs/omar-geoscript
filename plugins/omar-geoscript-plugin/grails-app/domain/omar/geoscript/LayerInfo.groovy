@@ -12,7 +12,7 @@ class LayerInfo
   String query
   String geomName
   String geomType
-  String geomSRS
+  String geomSrs
 
   static belongsTo = [workspaceInfo: WorkspaceInfo]
 
@@ -29,6 +29,6 @@ class LayerInfo
     query(nullable: true)
     geomName(nullable: true)
     geomType(nullable: true)
-    geomSRS(nullable: true)
+    geomSrs(nullable: true)
   }
 }
