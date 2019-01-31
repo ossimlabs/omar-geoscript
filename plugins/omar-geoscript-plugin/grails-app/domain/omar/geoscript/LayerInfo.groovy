@@ -9,6 +9,10 @@ class LayerInfo
   String title
   String description
   String[] keywords
+  String query
+  String geomName
+  String geomType
+  String geomSRS
 
   static belongsTo = [workspaceInfo: WorkspaceInfo]
 
@@ -22,5 +26,9 @@ class LayerInfo
     title()
     description()
     keywords()
+    query(nullable: true)
+    geomName(nullable: true)
+    geomType(nullable: true)
+    geomSRS(nullable: true)
   }
 }

@@ -36,9 +36,15 @@ class WFSConfig
   {
     String name
     String title
-    String description
+    String description    
     List<String> keywords
     String datastoreId
+
+    // Optional
+    String query
+    String geomName
+    String geomType
+    String geomSrs
   }
 
   @ConfigurationPropertiesBinding
