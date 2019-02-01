@@ -62,13 +62,8 @@ dependencyManagement {
   applyMavenExclusions false
 }
 
-grails {
-  plugins {
-    compile project(':omar-core-plugin')
-  }
-}
-
 dependencies {
+  compile "io.ossim.omar.plugins:omar-core-plugin:+"
   compile "commons-beanutils:commons-beanutils:1.9.3"
 
   compile( "org.geoscript:geoscript-groovy:1.10.0" ) {
