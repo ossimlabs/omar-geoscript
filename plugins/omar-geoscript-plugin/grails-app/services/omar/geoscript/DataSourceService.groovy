@@ -76,6 +76,10 @@ class DataSourceService
 							title = featureType.title
 							description = featureType.description
 							keywords = featureType.keywords
+							query = featureType.query
+							geomName = featureType.geomName
+							geomType = featureType.geomType
+							geomSrs = featureType.geomSrs
 						}
 
 						workspaceInfo.addToLayerInfoList( layerInfo )
