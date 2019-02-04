@@ -5,13 +5,8 @@ pluginManagement {
   }
 }
 
-def final O2_DEV_HOME = System.getenv('O2_DEV_HOME')
+include 'omar-geoscript-app',
+        'omar-geoscript-plugin'
 
-if ( O2_DEV_HOME ) {
-
-   include 'omar-geoscript-app',
-           'omar-geoscript-plugin'
-
-   project(':omar-geoscript-app').projectDir = "./apps/omar-geoscript-app" as File
-   project(':omar-geoscript-plugin').projectDir = "./plugins/omar-geoscript-plugin" as File
-}
+project(':omar-geoscript-app').projectDir = "${rootProject.projectDir}/apps/omar-geoscript-app" as File
+project(':omar-geoscript-plugin').projectDir = "${rootProject.projectDir}/plugins/omar-geoscript-plugin" as File
