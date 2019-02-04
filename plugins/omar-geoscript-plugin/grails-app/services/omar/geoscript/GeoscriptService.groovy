@@ -6,6 +6,7 @@ import geoscript.filter.Filter
 import geoscript.filter.Function
 import geoscript.geom.Bounds
 import geoscript.geom.GeometryCollection
+import geoscript.layer.Layer
 import geoscript.layer.io.CsvWriter
 import geoscript.workspace.Database
 import geoscript.workspace.Memory
@@ -154,9 +155,9 @@ class GeoscriptService implements InitializingBean
     [workspace, layer]
   }
 
-  def getLayerFromInfo(LayerInfo layerInfo, Workspace workspace)
+  Layer getLayerFromInfo(LayerInfo layerInfo, Workspace workspace)
   {
-    def layer
+    Layer layer
 
     try 
     {
