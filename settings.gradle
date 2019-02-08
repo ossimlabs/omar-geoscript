@@ -10,3 +10,17 @@ include 'omar-geoscript-app',
 
 project(':omar-geoscript-app').projectDir = "${rootProject.projectDir}/apps/omar-geoscript-app" as File
 project(':omar-geoscript-plugin').projectDir = "${rootProject.projectDir}/plugins/omar-geoscript-plugin" as File
+
+if ( System.getenv('O2_INLINE_BUILD')) {
+  def modules = [
+      "omar-core",
+      "omar-hibernate-spatial"
+  ]
+
+  modules.each { module ->
+    include "${module}-plugin"
+
+    project(":${module}-plugin").projectDir = "${rootProject.projectDir}/../${module}/plugins/${module}-plugin" as File
+  }
+}
+
