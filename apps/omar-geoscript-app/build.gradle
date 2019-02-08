@@ -74,9 +74,13 @@ grails {
     compile project(':omar-geoscript-plugin')
   }
 }
+
 dependencies {
-  compile "io.ossim.omar.plugins:omar-openlayers-plugin:+"
-  compile "io.ossim.omar.plugins:omar-hibernate-spatial-plugin:+"
+
+  if ( ! System.getenv('O2_INLINE_BUILD') ) {
+    //compile "io.ossim.omar.plugins:omar-openlayers-plugin:+"
+    // compile "io.ossim.omar.plugins:omar-hibernate-spatial-plugin:+"
+  }
 
   runtime 'org.grails.plugins:grails-console:2.1.1'
   compile "org.springframework.cloud:spring-cloud-starter-config"
