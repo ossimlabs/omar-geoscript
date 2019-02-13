@@ -245,7 +245,6 @@ class KmlService { //implements InitializingBean {
 
     def getKmlWmsParams(params) {
         return [
-            BANDS: "default",
             FORMAT: "image/png",
             LAYERS: "omar:raster_entry",
             REQUEST: "GetMap",
