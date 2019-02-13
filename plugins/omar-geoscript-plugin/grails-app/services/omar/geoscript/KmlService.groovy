@@ -251,6 +251,7 @@ class KmlService { //implements InitializingBean {
             REQUEST: "GetMap",
             SERVICE: "WMS",
             SRS: "EPSG:4326",
+            STYLES: '{"bands":"default","brightness":0,"contrast":1,"hist_center":false,"hist_op":"auto-minmax","nullPixelFlip":true,"resampler_filter":"bilinear","sharpen_mode":"none"}',
             TRANSPARENT: true,
             VERSION: "1.1.1"
         ]
