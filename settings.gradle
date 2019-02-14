@@ -1,6 +1,7 @@
 pluginManagement {
   repositories {
-    maven { url "${ System.getenv('REPOSITORY_MANAGER_URL') }/ossim-deps" }
+    // maven { url "${ System.getenv('REPOSITORY_MANAGER_URL') }/ossim-deps" }
+    maven { url = ossimlabsMavenUrl }
     gradlePluginPortal()
   }
 }
