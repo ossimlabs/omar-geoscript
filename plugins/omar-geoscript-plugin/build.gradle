@@ -64,6 +64,7 @@ dependencies {
   compile "org.grails.plugins:actuator-ui:1.1"
 
   compile "commons-beanutils:commons-beanutils:1.9.3"
+  compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
 
   compile( "org.geoscript:geoscript-groovy:1.10.0" ) {
     exclude module: "ehcache"
