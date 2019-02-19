@@ -1,7 +1,7 @@
 buildscript {
   repositories {
     mavenLocal()
-    maven { url "${ossimMavenProxy}" }
+    maven { url ossimMavenProxy }
   }
   dependencies {
     classpath "org.grails:grails-gradle-plugin:$grailsVersion"
@@ -61,7 +61,7 @@ dependencies {
   runtime 'org.grails.plugins:grails-console:2.1.1'
   compile "org.springframework.cloud:spring-cloud-starter-config"
   compile "org.springframework.cloud:spring-cloud-starter-eureka"
-  compile "net.errbuddy.plugins:babel-asset-pipeline:${babelAssetPipelineV}"
+  compile "net.errbuddy.plugins:babel-asset-pipeline:2.1.1"
   compile "org.webjars:bootstrap:3.3.5"
 
   compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
