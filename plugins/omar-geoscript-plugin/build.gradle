@@ -54,6 +54,7 @@ if ( System.getenv('O2_INLINE_BUILD') ) {
 }
 
 dependencies {
+
   if ( ! System.getenv('O2_INLINE_BUILD') ) {
     compile "io.ossim.omar.plugins:omar-core-plugin:${latestGradleIdentifier}"
     compile "io.ossim.omar.plugins:omar-hibernate-spatial-plugin:${latestGradleIdentifier}"
@@ -62,6 +63,8 @@ dependencies {
   compile "io.swagger:swagger-annotations:1.5.15"
   compile "io.swagger:swagger-models:1.5.15"
   compile "org.grails.plugins:actuator-ui:1.1"
+
+  compile "org.hibernate:hibernate-spatial:${hibernateSpatialV}"
 
   compile "commons-beanutils:commons-beanutils:1.9.3"
   compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
