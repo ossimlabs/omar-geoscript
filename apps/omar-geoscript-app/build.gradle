@@ -9,7 +9,7 @@ buildscript {
     classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.10"
     classpath "net.errbuddy.plugins:babel-asset-pipeline:2.1.1"
     classpath 'com.bmuschko:gradle-docker-plugin:3.0.12'
-    classpath 'io.ossim:gradleDefaults:1.4-SNAPSHOT'
+    classpath 'io.ossim:gradleDefaults:1.5-SNAPSHOT'
   }
 }
 
