@@ -1,36 +1,15 @@
 buildscript {
-  ext {
-    grailsVersion = project.grailsVersion
-    baseImage = "omar-base"
-    dockerFile="docker/Dockerfile"
-    dockerStatementsOverride = {
-      [
-        "FROM ${project.dockerNamespaceUrl}${project.ext.baseImage}:${project.dockerAppTag}",
-        """ENV SPRING_CLOUD_CONFIG_ENABLED=true \\
-    HOME=/home/omar \\
-    SPRING_CLOUD_DISCOVERY_ENABLED=true """,
-        "EXPOSE 8080",
-        "EXPOSE 5005",
-        "COPY run.sh \${HOME}/",
-        "COPY ${project.name}-${buildVersion}-${buildVersionTag}.jar \${HOME}/",
-        "WORKDIR \${HOME}",
-       "ENTRYPOINT ./run.sh"
-      ]
-    }
-  }
-  if(System.env.OMAR_COMMON_PROPERTIES)
-  {
-    apply from: System.env.OMAR_COMMON_PROPERTIES
-  }
   repositories {
     mavenLocal()
-    maven { url "${ossimMavenProxy}" }
+    maven { url ossimMavenProxy }
   }
   dependencies {
     classpath "org.grails:grails-gradle-plugin:$grailsVersion"
     classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
-    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:${assetPipelineGradleV}"
-    classpath "net.errbuddy.plugins:babel-asset-pipeline:${babelAssetPipelineV}"
+    classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.10"
+    classpath "net.errbuddy.plugins:babel-asset-pipeline:2.1.1"
+    classpath 'com.bmuschko:gradle-docker-plugin:3.0.12'
+    classpath 'io.ossim:gradleDefaults:1.4-SNAPSHOT'
   }
 }
 
@@ -49,21 +28,23 @@ apply plugin: "java"
 apply plugin: "maven-publish"
 apply plugin: "maven"
 
-group "io.ossim.omar.apps"
-
-ext {
-  grailsVersion = project.grailsVersion
-  gradleWrapperVersion = project.gradleWrapperVersion
-}
-
 repositories {
   mavenLocal()
-  maven { url "${ossimMavenProxy}" }
+  maven { url ossimMavenProxy }
 }
+
+io.ossim.gradleDefaults.Variables.setAdditionalVariables(project)
+io.ossim.gradleDefaults.Variables.setVersionVariables(project)
+dockerBuildDir="${rootProject.projectDir}/docker"
+version "${buildVersion}-${buildVersionTag}"
+jarDestination = "${projectDir}/build/libs/${project.name}-${version}.jar"
+io.ossim.gradleDefaults.Publications.addPublication(project, groupName, name, "${buildVersion}-${buildVersionTag}")
+io.ossim.gradleDefaults.Publications.addRepository(project, mavenPublishUrl, mavenRepoUsername, mavenRepoPassword)
+io.ossim.gradleDefaults.Docker.addDockerTasks(project, dockerRegistryUrl, dockerRegistryUsername, dockerRegistryPassword, name, dockerImageTag, dockerBuildDir, jarDestination, ["BASE_IMAGE": dockerBaseImage])
+io.ossim.gradleDefaults.Openshift.addOpenshiftTasks(project, openshiftUrl, openshiftUsername, openshiftPassword, openshiftProjectName, openshiftServiceName,  dockerRegistryUrl, name, dockerImageTag)
 
 dependencyManagement {
   imports {
-    // mavenBom "org.grails:grails-bom:$grailsVersion"
     mavenBom "org.springframework.cloud:spring-cloud-starter-parent:${springCloudDependencyV}"
   }
   applyMavenExclusions false
@@ -77,21 +58,11 @@ grails {
 
 dependencies {
 
-  if ( ! System.getenv('O2_INLINE_BUILD') ) {
-    //compile "io.ossim.omar.plugins:omar-openlayers-plugin:+"
-    // compile "io.ossim.omar.plugins:omar-hibernate-spatial-plugin:+"
-  }
-
   runtime 'org.grails.plugins:grails-console:2.1.1'
   compile "org.springframework.cloud:spring-cloud-starter-config"
   compile "org.springframework.cloud:spring-cloud-starter-eureka"
-  //compile "org.springframework.cloud:spring-cloud-starter-zipkin"
-  compile "net.errbuddy.plugins:babel-asset-pipeline:${babelAssetPipelineV}"
+  compile "net.errbuddy.plugins:babel-asset-pipeline:2.1.1"
   compile "org.webjars:bootstrap:3.3.5"
-
-
-//  compile(group: 'mil.nga.giat', name: 'gt-elasticsearch', version: '2.11-20171013.185453-1')
-//  compile(group: 'elasticgeo', name: 'elasticgeo', version: '2.11-20171101.191256-1')
 
   compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
   compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.2'
@@ -159,34 +130,6 @@ assets {
   "**/*.txt",
   "**/*.es6"
   ]
-
-
-  // assets {
-  //   minifyJs = true
-  //   minifyCss = true
-  //   includes = ["fonts/*"]
-  //   excludes = [
-  //     "**/*-debug.js",
-  //     "**/*-deps.js",
-  //     "**/*.gz",
-  //     "**/*.txt",
-  //     "**/*.less",
-  //     "**/*.html",
-  //     "**/i18n/**",
-  //     "**/",
-  //     ".grunt/**",
-  //     "**/locale/**",
-  //     "webjars/jquery/2.1.4/src/intro.js",
-  //     "webjars/jquery/2.1.4/src/outro.js"
-  //     ]
-}
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      from components.java
-    }
-  }
 }
 
 bootRun {
