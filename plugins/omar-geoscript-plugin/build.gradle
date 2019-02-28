@@ -66,8 +66,6 @@ dependencies {
   compile 'org.grails.plugins:swagger:1.0.0'
   compile "org.grails.plugins:actuator-ui:1.1"
 
-  compile "org.hibernate:hibernate-spatial:${hibernateSpatialV}"
-
   compile "commons-beanutils:commons-beanutils:1.9.3"
   compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
 
@@ -107,6 +105,7 @@ dependencies {
   testCompile "org.grails:grails-plugin-testing"
   testCompile "org.grails.plugins:geb"
   testCompile "org.grails:grails-web-testing-support"
+  testCompile "org.grails:grails-test-mixins:3.3.0"
   testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:${seleniumHtmlUnitDriverV}"
   testRuntime "net.sourceforge.htmlunit:htmlunit:${htmlUnitV}"
 }
