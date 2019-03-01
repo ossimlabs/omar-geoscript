@@ -11,8 +11,4 @@ class GeorssServiceSpec extends Specification implements ServiceUnitTest<GeorssS
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }

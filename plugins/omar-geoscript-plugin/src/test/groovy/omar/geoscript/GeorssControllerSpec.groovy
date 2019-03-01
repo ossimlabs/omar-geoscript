@@ -11,8 +11,4 @@ class GeorssControllerSpec extends Specification implements ControllerUnitTest<G
     def cleanup() {
     }
 
-    void "test something"() {
-        expect:"fix me"
-            true == false
-    }
 }
