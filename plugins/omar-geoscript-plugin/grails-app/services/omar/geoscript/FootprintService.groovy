@@ -17,35 +17,31 @@ import javax.imageio.ImageIO
 
 import org.springframework.util.FastByteArrayOutputStream
 
+import  groovy.transform.Memoized
 @Transactional(readOnly=true)
 class FootprintService
 {
   def grailsApplication
   def geoscriptService
 
-  def getFootprints(GetFootprintsRequest params)
-  {
-     byte[] buffer = []
-    def (prefix, layerName) = params.layers.split( ':' )
+  static final int INITIAL_SIZE = 8196
+  static final TransparentGif transparentGif = new TransparentGif()
 
+  @Memoized
+  private def createStyle(String styleName) 
+  {
     // Retrieve the styles for this configuration
     def styles = grailsApplication.config.wms.styles
     // Store all the style map's keys as a list
     def styleKeys = styles.keySet() as List
 
-    def layerInfo = LayerInfo.where {
-      name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
-    }.get()
-
-    Workspace.withWorkspace( geoscriptService.getWorkspace( layerInfo.workspaceInfo.workspaceParams ) ) { workspace ->
-
       // Attempt to retrieve the requested style from our styles map
-      def outlineLookupTable = styles[params.styles]
+      def outlineLookupTable = styles[styleName]
 
       // If the requested style doesn't exist in this map, then use the first style
       // we do have. A size of zero, indicates there are no elements to this style.
       if (outlineLookupTable.size() == 0) {
-        println "WARNING: Style '${params.styles}' does not exist on this instance. " +
+        println "WARNING: Style '${styleName}' does not exist on this instance. " +
            "Defaulting to first available style '${styleKeys.first()}'."
         outlineLookupTable = styles[styleKeys.first()]
       }
@@ -61,7 +57,23 @@ class FootprintService
 
       style << ( stroke( color: '#000000' ) + fill( opacity: 0.0 ) ).where( "not (${allFilters})" )
 
-      def footprints = new QueryLayer( workspace[layerName], style as Composite )
+      style as Composite
+  }
+
+  def getFootprints(GetFootprintsRequest params)
+  {
+     byte[] buffer = []
+    def (prefix, layerName) = params.layers.split( ':' )
+
+    def layerInfo = LayerInfo.where {
+      name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
+    }.get()
+
+    Workspace.withWorkspace( geoscriptService.getWorkspace( layerInfo.workspaceInfo.workspaceParams ) ) { workspace ->
+
+      def style = createStyle(params.styles)
+
+      def footprints = new QueryLayer( workspace[layerName], style )
       def viewBbox = new Bounds( *( params.bbox.split( ',' )*.toDouble() ), params.srs )
       def geomField = workspace[layerName].schema.geom
       def queryBbox
@@ -114,16 +126,14 @@ class FootprintService
       )
 
       if ( map?.type?.equalsIgnoreCase('gif') ) {
-        map.@renderers['gif'] = new TransparentGif()
+        map.@renderers['gif'] = transparentGif
       }
 
       def image = map.renderToImage()
 
       map.close()
 
-      def ostream = new FastByteArrayOutputStream(
-        (image.sampleModel.sampleSize.sum() / 8 * image.width * image.height).intValue()
-      )
+      def ostream = new FastByteArrayOutputStream(INITIAL_SIZE)
 
       ImageIO.write(image, map.type, ostream)
       buffer = ostream.toByteArrayUnsafe()
