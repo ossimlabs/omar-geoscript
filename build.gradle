@@ -44,7 +44,10 @@ subprojects { project ->
         apply plugin: "asset-pipeline"
         apply plugin: "java"
 
+        sourceSets.main.output.classesDir = 'build/classes/groovy/main'
+
         io.ossim.gradleDefaults.Variables.setAdditionalVariables(project)
+
         io.ossim.gradleDefaults.Variables.setVersionVariables(project)
         dockerBuildDir="${rootProject.projectDir}/docker"
         version "${buildVersion}-${buildVersionTag}"
