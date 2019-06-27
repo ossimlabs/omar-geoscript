@@ -3,16 +3,16 @@
 #server:
 #    contextPath: /omar-geoscript
 
-environments:
-    production:
-        dataSource:
-            pooled: true
-            jmxExport: true
-            driverClassName: org.postgresql.Driver
-            dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
-            url: jdbc:postgres://localhost:5432/omar_db
-            username: postgres
-            password: password
+#environments:
+#    production:
+#        dataSource:
+#            pooled: true
+#            jmxExport: true
+#            driverClassName: org.postgresql.Driver
+#            dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
+#            url: jdbc:postgres://localhost:5432/omar_db
+#            username: postgres
+#            password: password
 
 geoscript:
     evwhs:
