@@ -44,16 +44,24 @@ subprojects { project ->
         apply plugin: "asset-pipeline"
         apply plugin: "java"
 
-        sourceSets.main.output.classesDir = 'build/classes/groovy/main'
-
         io.ossim.gradleDefaults.Variables.setAdditionalVariables(project)
-
         io.ossim.gradleDefaults.Variables.setVersionVariables(project)
-        dockerBuildDir="${rootProject.projectDir}/docker"
         version "${buildVersion}-${buildVersionTag}"
-        jarDestination = "${projectDir}/build/libs/${project.name}-${version}.jar"
-        io.ossim.gradleDefaults.Docker.addDockerTasks(project, dockerRegistryUrl, dockerRegistryUsername, dockerRegistryPassword, name, dockerImageTag, dockerBuildDir, jarDestination, ["BASE_IMAGE": "${dockerRegistryUrl}/${dockerBaseImage}:${dockerFromTag}"])
-        io.ossim.gradleDefaults.Openshift.addOpenshiftTasks(project, openshiftUrl, openshiftUsername, openshiftPassword, openshiftProjectName, openshiftServiceName,  dockerRegistryUrl, name, dockerImageTag)
+
+        if ( isGrailsApp )        
+        {
+            dockerBuildDir="${rootProject.projectDir}/docker"
+            jarDestination = "${project.projectDir}/build/libs/${project.name}-${version}.jar"
+            io.ossim.gradleDefaults.Docker.addDockerTasks(project, dockerRegistryUrl, dockerRegistryUsername, dockerRegistryPassword, name, dockerImageTag, dockerBuildDir, jarDestination, ["BASE_IMAGE": "${dockerRegistryUrl}/${dockerBaseImage}:${dockerFromTag}"])
+            io.ossim.gradleDefaults.Openshift.addOpenshiftTasks(project, openshiftUrl, openshiftUsername, openshiftPassword, openshiftProjectName, openshiftServiceName,  dockerRegistryUrl, name, dockerImageTag)
+        }
+        else if ( isGrailsPlugin )
+        {
+            sourceSets.main.output.classesDir = 'build/classes/groovy/main'
+            jarDestination = "${project.projectDir}/build/libs/${project.name}-${version}.jar"
+            io.ossim.gradleDefaults.Publications.addPublication(project, groupName, name, "${buildVersion}-${buildVersionTag}")
+            io.ossim.gradleDefaults.Publications.addRepository(project, mavenPublishUrl, mavenRepoUsername, mavenRepoPassword)
+        }
 
         repositories {
             mavenLocal()
