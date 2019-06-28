@@ -1,7 +1,7 @@
 ---
 # Set the context path for the application.
-#server:
-#    contextPath: /omar-geoscript
+server:
+    contextPath: /omar-geoscript
 
 environments:
     production:
