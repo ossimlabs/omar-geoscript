@@ -8,6 +8,10 @@ import grails.converters.JSON
 import groovy.json.JsonSlurper
 
 import geoscript.feature.Feature
+
+
+import geoscript.filter.Function
+
 /**
  * Created by sbortman on 1/4/16.
  */
@@ -34,6 +38,22 @@ class OmarGeoScriptBootStrap
     JSON.registerObjectMarshaller(Feature) {
       new JsonSlurper().parseText(it.geoJSON)
     }
+
+/*
+    Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
+      def (workspace, layer) = getWorkspaceAndLayer( layerName )
+      def results = layer?.collectFromFeature( filter ) { it[attributeName] }
+      workspace?.close()
+      results
+    }
+
+    Function.registerFunction( 'collectGeometries' ) { def geometries ->
+      def multiType = ( geometries ) ? "geoscript.geom.Multi${geometries[0].class.simpleName}" : new GeometryCollection( geometries )
+
+      Class.forName( multiType ).newInstance( geometries )
+    }
+*/    
+
   }
 
   def destroy = {
