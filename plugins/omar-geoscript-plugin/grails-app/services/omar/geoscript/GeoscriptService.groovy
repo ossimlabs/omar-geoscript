@@ -180,6 +180,8 @@ class GeoscriptService implements InitializingBean
   @Memoized
   def listFunctions2()
   {
+    def start = System.currentTimeMillis()
+
     List names = []
     CommonFactoryFinder.getFunctionFactories().each { f ->
       f.functionNames.each { fn ->
@@ -189,24 +191,31 @@ class GeoscriptService implements InitializingBean
         }
       }
     }
+
+    def stop = System.currentTimeMillis()
+
+    log.info ( [name: 'listFunctions2', time: stop - start] as String )
+
     names.sort { a, b -> a.name.compareToIgnoreCase b.name }
   }
 
   @Override
   void afterPropertiesSet() throws Exception
   {
-    Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
-      def (workspace, layer) = getWorkspaceAndLayer( layerName )
-      def results = layer?.collectFromFeature( filter ) { it[attributeName] }
-      workspace?.close()
-      results
-    }
+//    Thread.start {      
+      Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
+        def (workspace, layer) = getWorkspaceAndLayer( layerName )
+        def results = layer?.collectFromFeature( filter ) { it[attributeName] }
+        workspace?.close()
+        results
+      }
 
-    Function.registerFunction( 'collectGeometries' ) { def geometries ->
-      def multiType = ( geometries ) ? "geoscript.geom.Multi${geometries[0].class.simpleName}" : new GeometryCollection( geometries )
+      Function.registerFunction( 'collectGeometries' ) { def geometries ->
+        def multiType = ( geometries ) ? "geoscript.geom.Multi${geometries[0].class.simpleName}" : new GeometryCollection( geometries )
 
-      Class.forName( multiType ).newInstance( geometries )
-    }
+        Class.forName( multiType ).newInstance( geometries )
+      }
+//    }
 
     defaultMaxFeatures = grailsApplication.config.geoscript.defaultMaxFeatures as Integer
   }
@@ -298,8 +307,11 @@ class GeoscriptService implements InitializingBean
     getCapabilities
   }
 
+  @Memoized
   def getLayerData()
   {
+    def start = System.currentTimeMillis()
+
     LayerInfo.list()?.collect { layerInfo ->
       def layerData
       WorkspaceInfo workspaceInfo = WorkspaceInfo.findByName( layerInfo.workspaceInfo.name )
@@ -329,6 +341,10 @@ class GeoscriptService implements InitializingBean
         ]
 
       }
+
+      def stop = System.currentTimeMillis()
+
+      log.info ( [name: 'getLayerData', time: stop - start] as String )
 
       layerData
     }
@@ -653,6 +669,7 @@ class GeoscriptService implements InitializingBean
     def requestInfoLog
     def httpStatus
 
+/*
     def projs = CRS.getSupportedAuthorities(true).collect { auth ->
         CRS.getSupportedCodes(auth)?.inject([]) { list, code ->
             def id = "${auth}:${code}"
@@ -667,6 +684,9 @@ class GeoscriptService implements InitializingBean
             list
         }
     }?.flatten()
+*/
+
+    def projs = ProjectionCache.list 
 
     Date endTime = new Date()
     responseTime = Math.abs(startTime.getTime() - endTime.getTime())
