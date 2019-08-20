@@ -202,6 +202,7 @@ class GeoscriptService implements InitializingBean
   @Override
   void afterPropertiesSet() throws Exception
   {
+/*    
 //    Thread.start {      
       Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
         def (workspace, layer) = getWorkspaceAndLayer( layerName )
@@ -216,7 +217,7 @@ class GeoscriptService implements InitializingBean
         Class.forName( multiType ).newInstance( geometries )
       }
 //    }
-
+*/
     defaultMaxFeatures = grailsApplication.config.geoscript.defaultMaxFeatures as Integer
   }
 
@@ -488,6 +489,17 @@ class GeoscriptService implements InitializingBean
 
   def queryLayer(String typeName, Map<String,Object> options, String resultType='results', String featureFormat=null, Boolean includeNumberMatched=null)
   {
+    def info = [
+      name: 'queryLayer',
+      typeName: typeName,
+      options: options,
+      resultType: resultType,
+      featureFormat: featureFormat,
+      includeNumberMatched: includeNumberMatched
+    ]
+
+    log.info( info as String )
+
       def requestType = "GET"
       def requestMethod = "QueryLayer"
       Date startTime = new Date()

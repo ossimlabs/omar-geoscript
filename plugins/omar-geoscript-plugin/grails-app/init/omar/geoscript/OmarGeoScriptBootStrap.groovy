@@ -39,7 +39,6 @@ class OmarGeoScriptBootStrap
       new JsonSlurper().parseText(it.geoJSON)
     }
 
-/*
     Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
       def (workspace, layer) = getWorkspaceAndLayer( layerName )
       def results = layer?.collectFromFeature( filter ) { it[attributeName] }
@@ -52,8 +51,6 @@ class OmarGeoScriptBootStrap
 
       Class.forName( multiType ).newInstance( geometries )
     }
-*/    
-
   }
 
   def destroy = {
