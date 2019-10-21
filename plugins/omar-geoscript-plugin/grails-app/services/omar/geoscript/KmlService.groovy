@@ -2,8 +2,8 @@ package omar.geoscript
 
 
 import geoscript.geom.GeometryCollection
-import grails.transaction.Transactional
 import groovy.xml.StreamingMarkupBuilder
+import grails.gorm.transactions.Transactional
 
 
 @Transactional( readOnly = true )

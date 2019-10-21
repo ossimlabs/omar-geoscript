@@ -1,18 +1,20 @@
-package omar.geoscript
+package omar.geoscript.plugin
+
+import omar.geoscript.WFSConfig
 
 import grails.plugins.*
 
-class OmarGeoscriptGrailsPlugin extends Plugin {
+class OmarGeoscriptPluginGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "3.1.10 > *"
+    def grailsVersion = "4.0.0 > *"
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/views/error.gsp"
     ]
 
     // TODO Fill in these fields
-    def title = "Omar Geoscript" // Headline display name of the plugin
+    def title = "Omar Geoscript Plugin" // Headline display name of the plugin
     def author = "Your name"
     def authorEmail = ""
     def description = '''\
@@ -21,7 +23,7 @@ Brief summary/description of the plugin.
     def profiles = ['web']
 
     // URL to the plugin's documentation
-    def documentation = "http://grails.org/plugin/omar-geoscript"
+    def documentation = "http://grails.org/plugin/omar-geoscript-plugin"
 
     // Extra (optional) plugin metadata
 
@@ -41,7 +43,6 @@ Brief summary/description of the plugin.
 //    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
 
     Closure doWithSpring() { {->
-            // TODO Implement runtime spring config (optional)
             wfsConfig( WFSConfig )
             featureTypeNamespaceConverter( WFSConfig.FeatureTypeNamespaceConverter )
             datastoreConverter( WFSConfig.DatastoreConverter )

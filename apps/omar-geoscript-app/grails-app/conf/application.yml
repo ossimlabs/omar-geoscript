@@ -1,67 +1,183 @@
 ---
-# Set the context path for the application.
+grails:
+    profile: web
+    codegen:
+        defaultPackage: omar.geoscript.app
+    gorm:
+        reactor:
+            # Whether to translate GORM events into Reactor events
+            # Disabled by default for performance reasons
+            events: false
+info:
+    app:
+        name: '@info.app.name@'
+        version: '@info.app.version@'
+        grailsVersion: '@info.app.grailsVersion@'
+spring:
+    jmx:
+        unique-names: true
+    main:
+        banner-mode: "off"
+    groovy:
+        template:
+            check-template-location: false
+    devtools:
+        restart:
+            additional-exclude:
+                - '*.gsp'
+                - '**/*.gsp'
+                - '*.gson'
+                - '**/*.gson'
+                - 'logback.groovy'
+                - '*.properties'
+management:
+    endpoints:
+        enabled-by-default: false
+
+---
+grails:
+    mime:
+        disable:
+            accept:
+                header:
+                    userAgents:
+                        - Gecko
+                        - WebKit
+                        - Presto
+                        - Trident
+        types:
+            all: '*/*'
+            atom: application/atom+xml
+            css: text/css
+            csv: text/csv
+            form: application/x-www-form-urlencoded
+            html:
+              - text/html
+              - application/xhtml+xml
+            js: text/javascript
+            json:
+              - application/json
+              - text/json
+            multipartForm: multipart/form-data
+            pdf: application/pdf
+            rss: application/rss+xml
+            text: text/plain
+            hal:
+              - application/hal+json
+              - application/hal+xml
+            xml:
+              - text/xml
+              - application/xml
+    urlmapping:
+        cache:
+            maxsize: 1000
+    controllers:
+        defaultScope: singleton
+    converters:
+        encoding: UTF-8
+    views:
+        default:
+            codec: html
+        gsp:
+            encoding: UTF-8
+            htmlcodec: xml
+            codecs:
+                expression: html
+                scriptlet: html
+                taglib: none
+                staticparts: none
+management:
+    endpoints:
+        jmx:
+            unique-names: true
+
+---
+hibernate:
+    cache:
+        queries: false
+        use_second_level_cache: false
+        use_query_cache: false
+dataSource:
+    pooled: true
+    jmxExport: true
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+
+environments:
+    development:
+        dataSource:
+            dbCreate: create-drop
+            url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+    test:
+        dataSource:
+            dbCreate: update
+            url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+    production:
+        dataSource:
+            dbCreate: none
+            url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+            properties:
+                jmxEnabled: true
+                initialSize: 5
+                maxActive: 50
+                minIdle: 5
+                maxIdle: 25
+                maxWait: 10000
+                maxAge: 600000
+                timeBetweenEvictionRunsMillis: 5000
+                minEvictableIdleTimeMillis: 60000
+                validationQuery: SELECT 1
+                validationQueryTimeout: 3
+                validationInterval: 15000
+                testOnBorrow: true
+                testWhileIdle: true
+                testOnReturn: false
+                jdbcInterceptors: ConnectionState
+                defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+---
 server:
-    contextPath: /omar-geoscript
+    servlet:
+        context-path: /omar-geoscript
+    contextPath: ${server.servlet.context-path}
 
-#environments:
-#    production:
-#        dataSource:
-#            pooled: true
-#            jmxExport: true
-#            driverClassName: org.postgresql.Driver
-#            dialect: org.hibernate.spatial.dialect.postgis.PostgisDialect
-#            url: jdbc:postgres://localhost:5432/omar_db
-#            username: postgres
-#            password: password
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    env:
+      enabled: true
+      sensitive: fasle
+    health:
+      enabled: true
+    
+grails:
+    cors:
+        enabled: true
+    resources:
+        pattern: '/**'
+    servlet:
+        version: 3.0
+---
+spring:
+  application:
+    name: omar-geoscript
+  cloud:
+    discovery:
+      enabled: ${SPRING_CLOUD_DISCOVERY_ENABLED:false}
+    service-registry:
+      auto-registration:
+        enabled: ${spring.cloud.discovery.enabled}
 
-geoscript:
-    evwhs:
-        url: 'https://evwhs.digitalglobe.com/mapservice/wmsaccess?connectid=a59618a4-3656-4b09-ba85-934f162bd9d6&version=1.3.0&request=GetCapabilities'
-        username: ''
-        password: ''
-    elasticsearch:
-        host: 'logging-es.logging.svc.cluster.local'
-        port: '9200'
-        index: 'wms'
-        search: 'searchIndices'
-        keystorepass: 'kpass'
-        url: 'https://logging-es.logging.svc.cluster.local:9200/project.omar-dev.ebadd419-70ba-11e7-a545-0e704fd9c8b2.2017.11.07/_search?q=requestMethod&q=GetMap&pretty&size=10000&filter_path=hits.hits._source.message'
-
-logging:
-    config: classpath:logback.groovy
-
-omar:
-    openlayers:
-        baseMaps:
-            - layerType: "tilewms"
-              title: "OSM Basic"
-              url: "https://dev.ossim.io/service-proxy/wmsProxy"
-              params:
-                  layers: "o2-basemap-basic"
-                  format: "image/jpeg"
-              options:
-                  visible: false
-            - layerType: "tilewms"
-              title: "OSM Bright"
-              url: "https://dev.ossim.io/service-proxy/wmsProxy"
-              params:
-                  layers: "o2-basemap-bright"
-                  format: "image/jpeg"
-              options:
-                  visible: true
-        overlayLayers:
-            - layerType: "tilewms"
-              title: "DGI"
-              url: "http://geoscript.dev.o2.ossimc2s.com/geoscript-app/evwhs/wms"
-              params:
-                  filter: ""
-                  version: "1.3.0"
-                  layers: ""
-                  styles: ""
-                  format: "image/png"
-              options:
-                  visible: true
-
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://omar-eureka-server:8761/omar-eureka-server/eureka}
+  instance:
+    preferIpAddress: true
+---
 wfs:
     datastores:
         - namespaceId: omar
@@ -139,7 +255,6 @@ wms:
                     g: 0
                     b: 0
                     a: 255
-
 ---
 grails:
     cors:
@@ -151,158 +266,9 @@ grails:
         enabled: true
         csrfProtection:
             enabled: false
-    profile: web
-    codegen:
-        defaultPackage: omar.geoscript
-    spring:
-        transactionManagement:
-            proxies: false
-    gorm:
-        reactor:
-            # Whether to translate GORM events into Reactor events
-            # Disabled by default for performance reasons
-            events: false
-
-
-info:
-    app:
-        name: '@info.app.name@'
-        version: '@info.app.version@'
-        grailsVersion: '@info.app.grailsVersion@'
-spring:
-    main:
-        banner-mode: "off"
-    groovy:
-        template:
-            check-template-location: false
-
-# Spring Actuator Endpoints are Disabled by Default
-endpoints:
-  enabled: true
-  health:
-    enabled: true
-  actuator:
-    sensitive: false
-  beans:
-    sensitive: false
-  metrics:
-    sensitive: false
-  configprops:
-    sensitive: false
-  trace:
-    sensitive: false
-  mappings:
-    sensitive: false
-  env:
-    sensitive: false
----
-grails:
-    mime:
-        disable:
-            accept:
-                header:
-                    userAgents:
-                        - Gecko
-                        - WebKit
-                        - Presto
-                        - Trident
-        types:
-            all: '*/*'
-            atom: application/atom+xml
-            css: text/css
-            csv: text/csv
-            form: application/x-www-form-urlencoded
-            html:
-              - text/html
-              - application/xhtml+xml
-            js: text/javascript
-            json:
-              - application/json
-              - text/json
-            multipartForm: multipart/form-data
-            pdf: application/pdf
-            rss: application/rss+xml
-            text: text/plain
-            hal:
-              - application/hal+json
-              - application/hal+xml
-            xml:
-              - text/xml
-              - application/xml
-    urlmapping:
-        cache:
-            maxsize: 1000
-    controllers:
-        defaultScope: singleton
-    converters:
-        encoding: UTF-8
-    views:
-        default:
-            codec: html
-        gsp:
-            encoding: UTF-8
-            htmlcodec: xml
-            codecs:
-                expression: html
-                scriptlets: html
-                taglib: none
-                staticparts: none
-endpoints:
-    jmx:
-        unique-names: true
-
----
-hibernate:
-    cache:
-        queries: false
-        use_second_level_cache: false
-        use_query_cache: false
-dataSource:
-    # This is defined above
-    #pooled: true
-    # This is defined above
-    #jmxExport: true
-    # This is defined above
-    #driverClassName: org.h2.Driver
-    # This is defined above
-    #username: sa
-    # This is defined above
-    #password: ''
-    # This is defined above
-    #dialect: org.hibernate.spatial.dialect.h2geodb.GeoDBDialect
 
 environments:
-    development:
-        dataSource:
-            dbCreate: create-drop
-            url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
-    test:
-        dataSource:
-            dbCreate: update
-            url: jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
     production:
         grails:
           dbconsole:
-            enabled: true
-        dataSource:
-            dbCreate: update
-            # This is defined above
-            # url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
-            properties:
-                jmxEnabled: true
-                initialSize: 5
-                maxActive: 50
-                minIdle: 5
-                maxIdle: 25
-                maxWait: 10000
-                maxAge: 600000
-                timeBetweenEvictionRunsMillis: 5000
-                minEvictableIdleTimeMillis: 60000
-                validationQuery: SELECT 1
-                validationQueryTimeout: 3
-                validationInterval: 15000
-                testOnBorrow: true
-                testWhileIdle: true
-                testOnReturn: false
-                jdbcInterceptors: ConnectionState
-                defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+            enabled: true            

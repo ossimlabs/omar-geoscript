@@ -5,9 +5,9 @@ import groovy.xml.StreamingMarkupBuilder
 import geoscript.geom.Point
 import geoscript.proj.DecimalDegrees
 
-// import grails.gorm.transactions.Transactional
-//
-// @Transactional
+import grails.gorm.transactions.Transactional
+
+@Transactional
 class GeorssService
 {
   def grailsLinkGenerator

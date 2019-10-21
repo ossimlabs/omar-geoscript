@@ -1,6 +1,6 @@
 package omar.geoscript
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import geoscript.geom.Bounds
 import geoscript.layer.WMS
 import geoscript.layer.WMSLayer

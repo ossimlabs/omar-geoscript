@@ -26,6 +26,8 @@ import org.springframework.beans.factory.InitializingBean
 
 import grails.gorm.transactions.Transactional
 
+import java.time.Instant
+
 // import org.springframework.beans.factory.annotation.Value
 
 @Transactional( readOnly = true )
@@ -252,7 +254,7 @@ class GeoscriptService implements InitializingBean
     ]
 
     Workspace.withWorkspace( getWorkspace( workspaceInfo?.workspaceParams ) ) { workspace ->
-      def layer = getLayerFromInfo(layerInfo, workspace)
+      def layer =  workspace[layerName] //getLayerFromInfo(layerInfo, workspace)
       def schema = layer.schema
 
       schemaInfo.attributes = layer.schema.fields.collect { field ->
@@ -293,7 +295,6 @@ class GeoscriptService implements InitializingBean
         featureTypeNamespacesByPrefix: NamespaceInfo.list().inject( [:] ) { a, b ->
           a[b.prefix] = b.uri; a
         }
-
     ]
 
     Date endTime = new Date()
@@ -313,11 +314,11 @@ class GeoscriptService implements InitializingBean
   {
     def start = System.currentTimeMillis()
 
-    LayerInfo.list()?.collect { layerInfo ->
+    def listOfLayers = LayerInfo.list()?.collect { layerInfo ->
       def layerData
       WorkspaceInfo workspaceInfo = WorkspaceInfo.findByName( layerInfo.workspaceInfo.name )
       Workspace.withWorkspace( getWorkspace( workspaceInfo?.workspaceParams ) ) { Workspace workspace ->
-        def layer = getLayerFromInfo(layerInfo, workspace)
+        def layer = workspace[layerInfo.name] // getLayerFromInfo(layerInfo, workspace)
         def uri = layer?.schema?.uri
         def prefix = NamespaceInfo.findByUri( uri )?.prefix
         def geoBounds
@@ -330,25 +331,25 @@ class GeoscriptService implements InitializingBean
         {
           geoBounds = [minX: -180.0, minY: -90.0, maxX: 180.0, maxY: 90.0]
         }
-
-        layerData = [
+       layerData = [
             name: layerInfo?.name,
-            namespace: [prefix: prefix, uri: uri],
+           namespace: [prefix: prefix, uri: uri],
             title: layerInfo?.title,
             description: layerInfo?.description,
             keywords: layerInfo?.keywords,
             proj: layer?.proj?.id,
             geoBounds: [minX: geoBounds?.minX, minY: geoBounds?.minY, maxX: geoBounds?.maxX, maxY: geoBounds?.maxY,]
         ]
-
       }
-
-      def stop = System.currentTimeMillis()
-
-      log.info ( [name: 'getLayerData', time: stop - start] as String )
 
       layerData
     }
+
+    def stop = System.currentTimeMillis()
+
+    log.info ( [name: 'getLayerData', time: stop - start] as String )
+
+    listOfLayers
   }
 
   def getFeatureCsv(def wfsParams)
@@ -573,7 +574,7 @@ class GeoscriptService implements InitializingBean
               namespace: [prefix: prefix, uri: layer?.schema?.uri],
               numberOfFeatures: count,
               //numberMatched: matched,
-              timeStamp: new Date().format( "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", TimeZone.getTimeZone( 'GMT' ) ),
+              timeStamp: Instant.now() as String,
               features: features
             ]
             if(includeNumberMatched)
@@ -630,7 +631,8 @@ class GeoscriptService implements InitializingBean
     def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
     def workspace = getWorkspace(workspaceParams)
 
-    getLayerFromInfo(layerInfo, workspace)
+    //getLayerFromInfo(layerInfo, workspace)
+    workspace[layerName]
   }
 
   private def formatFeature(def feature, def featureFormat, def formatParams)
