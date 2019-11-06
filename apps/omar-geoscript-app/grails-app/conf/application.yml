@@ -272,3 +272,9 @@ environments:
         grails:
           dbconsole:
             enabled: true            
+
+# Define the http protocols that swagger will use
+swagger:
+  schemes:
+    - HTTPS
+    - HTTP
