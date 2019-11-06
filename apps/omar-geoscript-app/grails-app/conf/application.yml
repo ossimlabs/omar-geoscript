@@ -102,7 +102,7 @@ dataSource:
     jmxExport: true
     driverClassName: org.postgresql.Driver
     username: postgres
-    password: postgres
+    password: ${omarDb.password}
     dialect: 'org.hibernate.spatial.dialect.postgis.PostgisDialect'
     
 environments:
@@ -117,7 +117,7 @@ environments:
     production:
         dataSource:
             dbCreate: update
-            url: jdbc:postgresql:omardb-prod
+            url: ${omarDb.url}
             properties:
                 jmxEnabled: true
                 initialSize: 5
