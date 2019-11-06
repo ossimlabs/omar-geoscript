@@ -1,8 +1,8 @@
 package omar.geoscript
 
-import org.geotools.factory.Hints
-import com.vividsolutions.jts.geom.Geometry
-import com.vividsolutions.jts.geom.GeometryCollection
+import org.geotools.util.factory.Hints
+import org.locationtech.jts.geom.Geometry
+import org.locationtech.jts.geom.GeometryCollection
 import geoscript.GeoScript
 import grails.converters.JSON
 import groovy.json.JsonSlurper

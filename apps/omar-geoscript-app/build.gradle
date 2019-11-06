@@ -1,38 +1,15 @@
-// io.ossim.gradleDefaults.Variables.setAdditionalVariables(project)
-// io.ossim.gradleDefaults.Variables.setVersionVariables(project)
-// dockerBuildDir="${rootProject.projectDir}/docker"
-// version "${buildVersion}-${buildVersionTag}"
-// jarDestination = "${projectDir}/build/libs/${project.name}-${version}.jar"
-// io.ossim.gradleDefaults.Docker.addDockerTasks(project, dockerRegistryUrl, dockerRegistryUsername, dockerRegistryPassword, name, dockerImageTag, dockerBuildDir, jarDestination, ["BASE_IMAGE": "${dockerRegistryUrl}/${dockerBaseImage}:${dockerFromTag}"])
-// io.ossim.gradleDefaults.Openshift.addOpenshiftTasks(project, openshiftUrl, openshiftUsername, openshiftPassword, openshiftProjectName, openshiftServiceName,  dockerRegistryUrl, name, dockerImageTag)
-
 grails {
-  plugins {
-    compile project(':omar-geoscript-plugin')
-  }
+    plugins {
+        compile project( ":${ rootProject.name }-plugin" )
+        if ( System.getenv('O2_INLINE_BUILD') ) {
+        //    compile project(":omar-core-plugin")
+        }
+    }
 }
-
 dependencies {
+    if ( ! System.getenv('O2_INLINE_BUILD') ) {
+    // compile "io.ossim.omar.plugins:omar-core-plugin:+"
+    }
 
-  runtime 'org.grails.plugins:grails-console:2.1.1'
-  compile "net.errbuddy.plugins:babel-asset-pipeline:2.1.1"
-
-  compile "org.webjars:bootstrap:3.3.5"
-
-  // compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
-  // compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.2'
-  // compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.2'
-  // compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.2'
-  // compile group: 'org.elasticsearch', name: 'elasticsearch', version: '5.6.2'
-  // compile group: 'org.elasticsearch.client', name: 'transport', version: '5.6.2'
-  // compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
-  // compile "org.elasticsearch.client:x-pack-transport:5.5.3"
-  // provided group: 'com.floragunn', name: 'search-guard-ssl', version: '5.6.2-23'
-  // provided group: 'com.floragunn', name: 'search-guard-5', version: '5.6.2-16'
-  // // compile 'org.codehaus.groovy:groovy-all:2.4.6'
-  // compile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.6'
-  // testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
-
-  compile "de.codecentric:spring-boot-admin-starter-client:${springBootAdminStarterClientV}"
+  runtime 'org.grails.plugins:grails-console:2.1.1'    
 }
-

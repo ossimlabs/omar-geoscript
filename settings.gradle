@@ -1,25 +1,36 @@
 pluginManagement {
-  repositories {
-    maven { url ossimMavenProxy }
-  }
+	repositories {
+		mavenLocal()
+		maven { url ossimMavenProxy }
+		gradlePluginPortal()
+	}
 }
 
-include 'omar-geoscript-app',
-        'omar-geoscript-plugin'
+rootProject.name='omar-geoscript'
 
-project(':omar-geoscript-app').projectDir = "${rootProject.projectDir}/apps/omar-geoscript-app" as File
-project(':omar-geoscript-plugin').projectDir = "${rootProject.projectDir}/plugins/omar-geoscript-plugin" as File
+[ 'lib', 'plugin', 'app' ].each { String projectType ->
+	File projectTypeDir = new File( rootDir, "${ projectType }s" )
 
-if ( System.getenv('O2_INLINE_BUILD')) {
-  def modules = [
-      "omar-core",
-      "omar-hibernate-spatial"
-  ]
+	if ( projectTypeDir.exists() )
+	{
+		projectTypeDir.eachDirMatch( { it.endsWith( projectType ) } ) { File subprojectDir ->
+			include subprojectDir.name
 
-  modules.each { module ->
-    include "${module}-plugin"
-
-    project(":${module}-plugin").projectDir = "${rootProject.projectDir}/../${module}/plugins/${module}-plugin" as File
-  }
+			project( ":${ subprojectDir.name }" ).projectDir = subprojectDir
+		}
+	}
 }
 
+if ( System.getenv( 'O2_INLINE_BUILD' ) )
+{
+	def modules = [ 
+          "omar-core",
+          "omar-hibernate-spatial"
+        ]
+
+	modules.each { module ->
+		include "${ module }-plugin"
+
+		project( ":${ module }-plugin" ).projectDir = "${ rootProject.projectDir }/../${ module }/plugins/${ module }-plugin" as File
+	}
+}

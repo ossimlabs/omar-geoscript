@@ -1,6 +1,6 @@
 package omar.geoscript
 
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 
 import java.util.regex.Pattern
 import java.util.regex.Matcher

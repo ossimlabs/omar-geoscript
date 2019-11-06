@@ -9,7 +9,7 @@ import geoscript.workspace.Workspace
 import static geoscript.style.Symbolizers.*
 
 import grails.converters.JSON
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 
 import omar.core.ISO8601DateParser
 

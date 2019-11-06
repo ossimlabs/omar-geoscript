@@ -1,4 +1,4 @@
-package omar.geoscript
+package omar.geoscript.app
 
 class BootStrap {
 
