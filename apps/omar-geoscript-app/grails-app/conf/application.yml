@@ -103,7 +103,7 @@ dataSource:
     driverClassName: org.postgresql.Driver
     username: postgres
     password: postgres
-    dialect: org.hibernate.spatial.postgis.PostgisDialect
+    dialect: 'org.hibernate.spatial.dialect.postgis.PostgisDialect'
     
 environments:
     development:
