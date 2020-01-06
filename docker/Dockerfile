@@ -1,6 +1,7 @@
 #ARG BASE_IMAGE
 #FROM ${BASE_IMAGE}
-FROM adoptopenjdk/openjdk8:alpine-slim
+#FROM adoptopenjdk/openjdk8:alpine-slim
+FROM quay.io/radiantsolutions/openjdk8:alpine-slim
 
 ENV HOME /home/omar
 RUN adduser -D -h $HOME -s /sbin/nologin -u 1001 omar
