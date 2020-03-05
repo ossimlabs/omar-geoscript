@@ -43,8 +43,6 @@ node("${BUILD_NODE}"){
           sh """
              export PATH=${PATH}:/opt/HPE_Security/Fortify_SCA_and_Apps_17.20/bin
              echo hello world 43
-             sourceanalyzer -show-build-ids
-             fortifyclient -url "${HP_FORTIFY_URL}" -authtoken "${HP_FORTIFY_TOKEN}" uploadFPR -file fortifyResults-myDG.fpr -project ossim -version 1.0
 
              """
           }
