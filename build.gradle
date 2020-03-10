@@ -70,7 +70,7 @@ subprojects { project ->
 
             docker {
                 registryCredentials {
-                    url = getConfigurationProperty( 'DOCKER_REGISTRY_PRIVATE_URL', 'dockerRegistryPrivateUrl' )
+                    url = dockerRegistryPrivateUrl 
                     username = getConfigurationProperty( 'DOCKER_REGISTRY_USERNAME', 'dockerRegistryUsername' )
                     password = getConfigurationProperty( 'DOCKER_REGISTRY_PASSWORD', 'dockerRegistryPassword' )
                 }
