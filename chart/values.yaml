@@ -1,0 +1,84 @@
+# Default values for omar-geoscript.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicas: 1
+
+appName: omar-geoscript
+
+global:
+  dockerRepository: nexus-docker-private-group.ossim.io
+  imagePullSecret:
+    registry: null
+    username: null
+    password: null
+  hostname: omar-dev.ossim.io
+
+  createIngress: true
+  useTls: false
+  useTLSClientAuth: false
+  sslCertSecretName: null
+  authSslCertSecretName: null
+
+  createImagePullSecret: true
+  useImagePullSecret: true
+  
+  createHpa: true
+
+  useSpringConfigServer: false
+
+# These variables can be overridden because of the use of the 'pluck' function:
+# - createIngress
+# - useTls
+# - useTlsClientAuth
+# - createImagePullSecret
+# - createHpa
+# - createPVs
+# - useSpringConfigServer
+
+resources:
+  limits:
+    cpu: 1500m
+    memory: 1000Mi
+  requests:
+    cpu: 500m
+    memory: 500Mi
+
+minReplicas: 3
+maxReplicas: 20
+targetCpu: 75
+
+image:
+  name: omar-geoscript-app
+  tag: dev
+  pullPolicy: Always
+
+ingressPath: /omar-geoscript
+internalPort: 8080
+externalPort: 8080
+
+livenessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 60
+  periodSeconds: 15
+  successThreshold: 1
+  timeoutSeconds: 380
+
+readinessProbe:
+  failureThreshold: 15
+  initialDelaySeconds: 30
+  periodSeconds: 15
+  successThreshold: 1
+  timeoutSeconds: 3
+  path: /omar-geoscript/actuator/health
+
+
+terminationGracePeriodSeconds: 30
+
+envVars:
+  SPRING_CLOUD_CONFIG_LABEL: master
+  KEY_STORE: /home/omar/es/admin.jks
+  KEY_STORE_PASSWORD: kspass
+  TRUST_STORE: /home/omar/es/truststore
+  REMOTE_DEBUG:
+  JAVA_OPTS: "-server -Xms256m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -XX:+CMSClassUnloadingEnabled -XX:+UseGCOverheadLimit -Djava.awt.headless=true -XshowSettings:vm -Djava.security.egd=file:/dev/./urandom"
