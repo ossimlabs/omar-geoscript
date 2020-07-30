@@ -39,12 +39,12 @@ global:
 resources:
   limits:
     cpu: 1500m
-    memory: 1000Mi
+    memory: 2000Mi
   requests:
     cpu: 500m
     memory: 500Mi
 
-minReplicas: 3
+minReplicas: 8
 maxReplicas: 20
 targetCpu: 75
 
