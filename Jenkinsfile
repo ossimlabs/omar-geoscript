@@ -135,7 +135,7 @@ podTemplate(
           }
         }
     }
-      //testingWebHook
+     
     stage('Docker build') {
       container('docker') {
         withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {  //TODO
