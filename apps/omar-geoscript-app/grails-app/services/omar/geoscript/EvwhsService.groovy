@@ -4,7 +4,6 @@ import grails.gorm.transactions.Transactional
 import geoscript.geom.Bounds
 import geoscript.layer.WMS
 import geoscript.layer.WMSLayer
-import geoscript.proj.Projection
 import geoscript.render.Map as GeoScriptMap
 
 import java.awt.image.BufferedImage

@@ -97,12 +97,11 @@ class GeoscriptApiController
       params?.featureFormat,
       params?.includeNumberMatched?.toBoolean()
     ) 
-    if(layer)
-    {
+    if(layer) {
       render  layer as JSON
+    } else {
+        render status:400, text:  [statusMessage:"Unable to create layer for queryLayer"] as JSON, contentType: 'application/json'
     }
-    else 
-      render status:400, text:  [statusMessage:"Unable to create layer for queryLayer"] as JSON, contentType: 'application/json'
   }
 
 }
