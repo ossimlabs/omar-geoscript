@@ -16,6 +16,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.Memoized
 import groovy.xml.StreamingMarkupBuilder
+import groovy.util.logging.Log
 import omar.core.DateUtil
 import org.geotools.data.DataStoreFinder
 import org.geotools.factory.CommonFactoryFinder
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.InitializingBean
 import grails.gorm.transactions.Transactional
 
 import java.time.Instant
+
 
 // import org.springframework.beans.factory.annotation.Value
 
@@ -554,7 +556,7 @@ class GeoscriptService implements InitializingBean
                   if ( ! options.max || options.max > defaultMaxFeatures ) {
                     options.max = defaultMaxFeatures
                   }
-
+                  
                   println '-' * 50
                   println options
                   println '-' * 50
