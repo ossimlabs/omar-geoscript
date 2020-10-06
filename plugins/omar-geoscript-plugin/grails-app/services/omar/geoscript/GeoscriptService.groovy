@@ -557,9 +557,9 @@ class GeoscriptService implements InitializingBean
                     options.max = defaultMaxFeatures
                   }
                   
-                  println '-' * 50
-                  println options
-                  println '-' * 50
+                  log.info '-' * 50
+                  log.info options
+                  log.info '-' * 50
 
                   features = layer?.collectFromFeature(options) { feature ->
                     ++count;
