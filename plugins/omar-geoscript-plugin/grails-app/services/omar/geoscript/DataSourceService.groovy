@@ -61,7 +61,7 @@ class DataSourceService
 
 				if ( workspaceInfo.hasErrors() )
 				{
-					workspaceInfo.errors.allErrors.each { println messageSource.getMessage( it, null ) }
+					workspaceInfo.errors.allErrors.each { log.info messageSource.getMessage( it, null ) }
 				}
 			}
 
@@ -87,7 +87,7 @@ class DataSourceService
 
 						if ( workspaceInfo.hasErrors() )
 						{
-							workspaceInfo.errors.allErrors.each { println messageSource.getMessage( it, null ) }
+							workspaceInfo.errors.allErrors.each { log.info messageSource.getMessage( it, null ) }
 						}
 					}
 				}
