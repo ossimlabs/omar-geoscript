@@ -41,7 +41,7 @@ class FootprintService
       // If the requested style doesn't exist in this map, then use the first style
       // we do have. A size of zero, indicates there are no elements to this style.
       if (outlineLookupTable.size() == 0) {
-        println "WARNING: Style '${styleName}' does not exist on this instance. " +
+        log.info "WARNING: Style '${styleName}' does not exist on this instance. " +
            "Defaulting to first available style '${styleKeys.first()}'."
         outlineLookupTable = styles[styleKeys.first()]
       }
@@ -151,7 +151,7 @@ class FootprintService
     // If the requested style doesn't exist in this map, then use the first style
     // we do have. A size of zero, indicates there are no elements to this style.
     if (outlineLookupTable.size() == 0) {
-      println "WARNING: Style '${params.styles}' does not exist on this instance. " +
+      log.info "WARNING: Style '${params.styles}' does not exist on this instance. " +
          "Defaulting to first available style '${styleKeys.first()}'."
       outlineLookupTable = styles[styleKeys.first()]
     }
