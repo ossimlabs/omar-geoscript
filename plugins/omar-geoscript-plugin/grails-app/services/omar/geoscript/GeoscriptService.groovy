@@ -16,7 +16,6 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.Memoized
 import groovy.xml.StreamingMarkupBuilder
-import groovy.util.logging.Log
 import omar.core.DateUtil
 import org.geotools.data.DataStoreFinder
 import org.geotools.factory.CommonFactoryFinder
