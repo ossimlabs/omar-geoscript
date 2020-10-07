@@ -8,10 +8,10 @@ import spock.lang.Specification
  */
 @TestFor(FootprintsController)
 class FootprintsControllerSpec extends Specification {
-
+    @Override
     def setup() {
     }
-
+    @Override
     def cleanup() {
     }
 

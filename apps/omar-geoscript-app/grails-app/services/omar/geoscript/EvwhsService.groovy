@@ -68,7 +68,7 @@ class EvwhsService
 
             ostream = new ByteArrayOutputStream()
             ImageIO.write(image, 'png', ostream)
-            println e.message
+            log.info e.message
         }
 
         map.close()
@@ -103,7 +103,7 @@ class EvwhsService
 
             ostream = new ByteArrayOutputStream()
             ImageIO.write(image, 'png', ostream)
-            println e.message
+            log.info e.message
         }
 
         map.close()

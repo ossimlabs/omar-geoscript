@@ -16,7 +16,6 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.Memoized
 import groovy.xml.StreamingMarkupBuilder
-import groovy.util.logging.Log
 import omar.core.DateUtil
 import org.geotools.data.DataStoreFinder
 import org.geotools.factory.CommonFactoryFinder
@@ -557,9 +556,9 @@ class GeoscriptService implements InitializingBean
                     options.max = defaultMaxFeatures
                   }
                   
-                  println '-' * 50
-                  println options
-                  println '-' * 50
+                  log.info '-' * 50
+                  log.info options
+                  log.info '-' * 50
 
                   features = layer?.collectFromFeature(options) { feature ->
                     ++count;

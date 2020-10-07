@@ -8,10 +8,10 @@ import spock.lang.Specification
  */
 @TestFor(LayerInfoController)
 class LayerInfoControllerSpec extends Specification {
-
+    @Override
     def setup() {
     }
-
+    @Override
     def cleanup() {
     }
 
