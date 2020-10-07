@@ -143,7 +143,7 @@ podTemplate(
         }
     }
      
-        stage('Docker build') {
+    stage('Docker build') {
       container('docker') {
         withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {  //TODO
           if (BRANCH_NAME == 'master'){
