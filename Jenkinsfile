@@ -198,7 +198,6 @@ podTemplate(
            }
          }
        }
-    }
      stage('New Deploy'){
         container('kubectl-aws-helm') {
             withAWS(
