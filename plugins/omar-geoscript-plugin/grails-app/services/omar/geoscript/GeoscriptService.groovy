@@ -557,7 +557,7 @@ class GeoscriptService implements InitializingBean
                   }
                   
                   log.info '-' * 50
-                  log.info options
+                  log.info options as String
                   log.info '-' * 50
 
                   features = layer?.collectFromFeature(options) { feature ->
