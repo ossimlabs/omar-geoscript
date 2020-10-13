@@ -523,6 +523,7 @@ class GeoscriptService implements InitializingBean
         def bbox = options.bbox
         def bounds = new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id)
         def geom = bounds.proj.transform(bounds.geometry, 'epsg:4326')
+        def geoBbox = bounds.proj.transform(bounds.geometry, 'epsg:4326')
         def filter = Filter.intersects('ground_geom', geom)
 
         if ( options.filter ) {
@@ -530,6 +531,7 @@ class GeoscriptService implements InitializingBean
         } else {
           options.filter = filter
         }
+        options.geoBbox = geoBbox
       }
 
       if(layer)
