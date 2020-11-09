@@ -9,10 +9,12 @@ import spock.lang.Specification
  */
 @TestFor(FootprintInterceptor)
 class FootprintInterceptorSpec extends Specification {
-
+    
+    @Override
     def setup() {
     }
 
+    @Override
     def cleanup() {
 
     }

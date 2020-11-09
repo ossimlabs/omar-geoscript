@@ -8,10 +8,10 @@ import spock.lang.Specification
  */
 @TestFor(FootprintService)
 class FootprintServiceSpec extends Specification {
-
+    @Override
     def setup() {
     }
-
+    @Override
     def cleanup() {
     }
 

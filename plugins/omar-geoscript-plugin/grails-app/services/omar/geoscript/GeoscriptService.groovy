@@ -16,7 +16,6 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import groovy.transform.Memoized
 import groovy.xml.StreamingMarkupBuilder
-import groovy.util.logging.Log
 import omar.core.DateUtil
 import org.geotools.data.DataStoreFinder
 import org.geotools.factory.CommonFactoryFinder
@@ -524,6 +523,7 @@ class GeoscriptService implements InitializingBean
         def bbox = options.bbox
         def bounds = new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id)
         def geom = bounds.proj.transform(bounds.geometry, 'epsg:4326')
+        def geoBbox = bounds.proj.transform(bounds.geometry, 'epsg:4326')
         def filter = Filter.intersects('ground_geom', geom)
 
         if ( options.filter ) {
@@ -531,6 +531,7 @@ class GeoscriptService implements InitializingBean
         } else {
           options.filter = filter
         }
+        options.geoBbox = geoBbox
       }
 
       if(layer)
@@ -557,9 +558,9 @@ class GeoscriptService implements InitializingBean
                     options.max = defaultMaxFeatures
                   }
                   
-                  println '-' * 50
-                  println options
-                  println '-' * 50
+                  log.info '-' * 50
+                  log.info options as String
+                  log.info '-' * 50
 
                   features = layer?.collectFromFeature(options) { feature ->
                     ++count;

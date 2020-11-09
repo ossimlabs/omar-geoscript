@@ -19,7 +19,8 @@ class FootprintInterceptor
   }
 
   boolean after() { true }
-
+  
+  @Override
   void afterView()
   {
     // no-op
