@@ -358,7 +358,8 @@ class GeoscriptService implements InitializingBean
     def layerInfo = findLayerInfo( wfsParams )
     def result
 
-    def options = parseOptions( wfsParams )
+//  JMP 11/10/2020 - removed unused variable
+//    def options = parseOptions( wfsParams )
 
     def writer = new CsvWriter()
     Workspace.withWorkspace( getWorkspace( layerInfo.workspaceInfo.workspaceParams ) ) {
@@ -446,9 +447,14 @@ class GeoscriptService implements InitializingBean
         def layer = workspace[layerInfo.name]
         def count = layer.count( wfsParams.filter ?: Filter.PASS )
 
-        def features = ( wfsParams.resultType != 'hits' ) ? layer.collectFromFeature( options ) { feature ->
-          return new JsonSlurper().parseText( feature.geoJSON )
-        } : []
+//        def features = ( wfsParams.resultType != 'hits' ) ? layer.collectFromFeature( options ) { feature ->
+//          return new JsonSlurper().parseText( feature.geoJSON )
+//        } : []
+
+        // JMP 11/10/2020 - rewrote and changed condictions
+        def features = ( wfsParams.resultType == 'hits') ? [] : layer.collectFromFeature( options ) {
+          feature -> return new JsonSlurper().parseText( feature.geoJSON )
+        }
 
         results = [
             crs: [

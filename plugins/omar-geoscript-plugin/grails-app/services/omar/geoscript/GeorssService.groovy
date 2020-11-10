@@ -67,17 +67,17 @@ class GeorssService
               // Using point because polygon is not supported by ESRI ArcGIS Explorer or OpenLayers
               // The code below will support polygons when everyone else does
               // The polygons array is for adding Multi-polygons in the future.
-              if ( !enablePolygon )
-              {
-                def centroid = geom.centroid //entry.groundGeom.centroid
 
-                'georss:point'( "${centroid.y} ${centroid.x}" )
+              // JMP 11/10/2020 - removed the inverted if/else and swamped clauses
+              if ( enablePolygon )
+              {
+                def pts = geom.coordinates.collect { "${it.y} ${it.x}" }.join( ' ' )
+                'georss:polygon'( pts )
               }
               else
               {
-                def pts = geom.coordinates.collect { "${it.y} ${it.x}" }.join( ' ' )
-
-                'georss:polygon'( pts )
+                def centroid = geom.centroid //entry.groundGeom.centroid
+                'georss:point'( "${centroid.y} ${centroid.x}" )
               }
 
               def (minLonDMS, minLatDMS) = dd2dms(bounds.minX, bounds.minY)
