@@ -8,10 +8,10 @@ import spock.lang.Specification
  */
 @TestFor(NamespaceInfoController)
 class NamespaceInfoControllerSpec extends Specification {
-
+    @Override
     def setup() {
     }
-
+    @Override
     def cleanup() {
     }
 

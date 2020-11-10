@@ -8,10 +8,10 @@ import spock.lang.Specification
  */
 @TestFor(WorkspaceInfoController)
 class WorkspaceInfoControllerSpec extends Specification {
-
+    @Override
     def setup() {
     }
-
+    @Override
     def cleanup() {
     }
 

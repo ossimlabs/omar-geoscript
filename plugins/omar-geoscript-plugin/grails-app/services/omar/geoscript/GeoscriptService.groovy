@@ -28,6 +28,7 @@ import grails.gorm.transactions.Transactional
 
 import java.time.Instant
 
+
 // import org.springframework.beans.factory.annotation.Value
 
 @Transactional( readOnly = true )
@@ -522,6 +523,7 @@ class GeoscriptService implements InitializingBean
         def bbox = options.bbox
         def bounds = new Bounds(bbox.minX, bbox.minY, bbox.maxX, bbox.maxY, bbox.proj.id)
         def geom = bounds.proj.transform(bounds.geometry, 'epsg:4326')
+        def geoBbox = bounds.proj.transform(bounds.geometry, 'epsg:4326')
         def filter = Filter.intersects('ground_geom', geom)
 
         if ( options.filter ) {
@@ -529,6 +531,7 @@ class GeoscriptService implements InitializingBean
         } else {
           options.filter = filter
         }
+        options.geoBbox = geoBbox
       }
 
       if(layer)
@@ -554,10 +557,10 @@ class GeoscriptService implements InitializingBean
                   if ( ! options.max || options.max > defaultMaxFeatures ) {
                     options.max = defaultMaxFeatures
                   }
-
-                  println '-' * 50
-                  println options
-                  println '-' * 50
+                  
+                  log.info '-' * 50
+                  log.info options as String
+                  log.info '-' * 50
 
                   features = layer?.collectFromFeature(options) { feature ->
                     ++count;

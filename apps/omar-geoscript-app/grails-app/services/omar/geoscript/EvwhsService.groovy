@@ -4,7 +4,6 @@ import grails.gorm.transactions.Transactional
 import geoscript.geom.Bounds
 import geoscript.layer.WMS
 import geoscript.layer.WMSLayer
-import geoscript.proj.Projection
 import geoscript.render.Map as GeoScriptMap
 
 import java.awt.image.BufferedImage
@@ -69,7 +68,7 @@ class EvwhsService
 
             ostream = new ByteArrayOutputStream()
             ImageIO.write(image, 'png', ostream)
-            println e.message
+            log.info e.message
         }
 
         map.close()
@@ -104,7 +103,7 @@ class EvwhsService
 
             ostream = new ByteArrayOutputStream()
             ImageIO.write(image, 'png', ostream)
-            println e.message
+            log.info e.message
         }
 
         map.close()
