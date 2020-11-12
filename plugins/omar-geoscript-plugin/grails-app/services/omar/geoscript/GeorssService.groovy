@@ -68,7 +68,6 @@ class GeorssService
               // The code below will support polygons when everyone else does
               // The polygons array is for adding Multi-polygons in the future.
 
-              // JMP 11/10/2020 - removed the inverted if/else and swamped clauses
               if ( enablePolygon )
               {
                 def pts = geom.coordinates.collect { "${it.y} ${it.x}" }.join( ' ' )

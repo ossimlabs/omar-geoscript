@@ -162,31 +162,20 @@ class GeoscriptService implements InitializingBean
   {
     Layer layer
 
+    try
+    {
       if (layerInfo.query && layerInfo.geomName && layerInfo.geomType && layerInfo.geomSrs ) {
           Database database = new Database( workspace.ds )
           layer = database.createView(layerInfo.name, layerInfo.query,
             new Field( layerInfo.geomName, layerInfo.geomType, layerInfo.geomSrs ) )
         } else {
-        // Safe navigation with Elvis
-          layer = workspace[layerInfo?.name] ?: "Can't instantiate layer: ${layerInfo}"
+          layer = workspace[layerInfo?.name]
         }
-
-
-
-//    try
-//    {
-//      if (layerInfo.query && layerInfo.geomName && layerInfo.geomType && layerInfo.geomSrs ) {
-//          Database database = new Database( workspace.ds )
-//          layer = database.createView(layerInfo.name, layerInfo.query,
-//            new Field( layerInfo.geomName, layerInfo.geomType, layerInfo.geomSrs ) )
-//        } else {
-//          layer = workspace[layerInfo?.name]
-//        }
-//    }
-//    catch ( Exception e )
-//    {
-//      throw new Exception("Can't instantiate layer: ${layerInfo}")
-//    }
+    }
+    catch ( Exception e )
+    {
+      throw new Exception("Can't instantiate layer: ${layerInfo}")
+    }
     
     return layer  
   }
@@ -369,9 +358,6 @@ class GeoscriptService implements InitializingBean
     def layerInfo = findLayerInfo( wfsParams )
     def result
 
-//  JMP 11/10/2020 - removed unused variable
-//    def options = parseOptions( wfsParams )
-
     def writer = new CsvWriter()
     Workspace.withWorkspace( getWorkspace( layerInfo.workspaceInfo.workspaceParams ) ) {
       workspace ->
@@ -458,11 +444,6 @@ class GeoscriptService implements InitializingBean
         def layer = workspace[layerInfo.name]
         def count = layer.count( wfsParams.filter ?: Filter.PASS )
 
-//        def features = ( wfsParams.resultType != 'hits' ) ? layer.collectFromFeature( options ) { feature ->
-//          return new JsonSlurper().parseText( feature.geoJSON )
-//        } : []
-
-        // JMP 11/10/2020 - rewrote and changed condictions
         def features = ( wfsParams.resultType == 'hits') ? [] : layer.collectFromFeature( options ) {
           feature -> return new JsonSlurper().parseText( feature.geoJSON )
         }

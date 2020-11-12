@@ -46,8 +46,6 @@ class DataSourceService
 				NamespaceInfo.findOrSaveByPrefixAndUri( it.prefix, it.uri )
 			}
 
-			// JMP 11/10/2020 - env is not being referenced in this scope
-			// def env = System.env;
 			wfsConfig.datastores.each { datastore ->
 				def workspaceInfo = WorkspaceInfo.findOrCreateByName( datastore.datastoreId )
 
@@ -85,8 +83,7 @@ class DataSourceService
 
 						workspaceInfo.addToLayerInfoList( layerInfo )
 						workspaceInfo.save()
-
-						// JMP 11/10/2020 - Nested block depth is past 6, this actually looks fine to me
+						
 						if ( workspaceInfo.hasErrors() )
 						{
 							workspaceInfo.errors.allErrors.each { log.info messageSource.getMessage( it, null ) }

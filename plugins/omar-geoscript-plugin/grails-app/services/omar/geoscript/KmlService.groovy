@@ -66,9 +66,6 @@ class KmlService { //implements InitializingBean {
             "location=${location}&" +
             "filter=${filter}"
 
-//        JMP 11/10/2020 - imageUrl is not being used
-      //  def imageUrl = "${o2BaseUrl}/omar/#/mapOrtho?layers=${feature.get("id")}"
-
         def wfsUrl = "${grailsApplication.config.omar.wfs.baseUrl}/wfs/getFeature?" +
             "filter=in(${feature.get("id")})&" +
             "request=GetFeature&" +
@@ -245,8 +242,7 @@ class KmlService { //implements InitializingBean {
 
         return kmlWriter.buffer
     }
-    // Cleaned up signature to reflect that params is no longer being used.
-    // def getKmlWmsParams(params) {
+
      def getKmlWmsParams() {
         return [
             FORMAT: "image/png",
