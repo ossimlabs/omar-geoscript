@@ -162,20 +162,31 @@ class GeoscriptService implements InitializingBean
   {
     Layer layer
 
-    try 
-    {
       if (layerInfo.query && layerInfo.geomName && layerInfo.geomType && layerInfo.geomSrs ) {
           Database database = new Database( workspace.ds )
           layer = database.createView(layerInfo.name, layerInfo.query,
-            new Field( layerInfo.geomName, layerInfo.geomType, layerInfo.geomSrs ) ) 
+            new Field( layerInfo.geomName, layerInfo.geomType, layerInfo.geomSrs ) )
         } else {
-          layer = workspace[layerInfo?.name]
-        }  
-    }
-    catch ( Exception e )
-    {
-      throw new Exception("Can't instantiate layer: ${layerInfo}")
-    }
+        // Safe navigation with Elvis
+          layer = workspace[layerInfo?.name] ?: "Can't instantiate layer: ${layerInfo}"
+        }
+
+
+
+//    try
+//    {
+//      if (layerInfo.query && layerInfo.geomName && layerInfo.geomType && layerInfo.geomSrs ) {
+//          Database database = new Database( workspace.ds )
+//          layer = database.createView(layerInfo.name, layerInfo.query,
+//            new Field( layerInfo.geomName, layerInfo.geomType, layerInfo.geomSrs ) )
+//        } else {
+//          layer = workspace[layerInfo?.name]
+//        }
+//    }
+//    catch ( Exception e )
+//    {
+//      throw new Exception("Can't instantiate layer: ${layerInfo}")
+//    }
     
     return layer  
   }
