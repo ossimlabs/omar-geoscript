@@ -83,7 +83,7 @@ class DataSourceService
 
 						workspaceInfo.addToLayerInfoList( layerInfo )
 						workspaceInfo.save()
-						
+
 						if ( workspaceInfo.hasErrors() )
 						{
 							workspaceInfo.errors.allErrors.each { log.info messageSource.getMessage( it, null ) }
