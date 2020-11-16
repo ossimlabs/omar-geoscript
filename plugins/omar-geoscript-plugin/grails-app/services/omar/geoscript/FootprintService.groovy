@@ -76,7 +76,7 @@ class FootprintService
       def geomField = workspace[layerName].schema.geom
       def queryBbox
 
-      queryBbox = ( workspace[layerName]?.proj?.equals( viewBbox?.proj ) )? viewBox : viewBbox.reproject( workspace[layerName]?.proj )
+      queryBbox = ( workspace[layerName]?.proj?.equals( viewBbox?.proj ) )? viewBbox : viewBbox.reproject( workspace[layerName]?.proj )
 
       def filter = Filter.intersects( geomField.name, queryBbox.geometry )
 
