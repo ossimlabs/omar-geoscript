@@ -9,6 +9,7 @@ import geoscript.geom.GeometryCollection
 import geoscript.layer.Layer
 import geoscript.layer.io.CsvWriter
 import geoscript.workspace.Database
+import geoscript.workspace.Directory
 import geoscript.workspace.Memory
 import geoscript.workspace.Workspace
 import groovy.json.JsonBuilder
@@ -17,6 +18,7 @@ import groovy.json.JsonSlurper
 import groovy.transform.Memoized
 import groovy.xml.StreamingMarkupBuilder
 import omar.core.DateUtil
+import omar.geoscript.ZipService
 import org.geotools.data.DataStoreFinder
 import org.geotools.factory.CommonFactoryFinder
 import org.geotools.referencing.CRS
@@ -37,6 +39,7 @@ class GeoscriptService implements InitializingBean
   def grailsLinkGenerator
   def grailsApplication
   def jsonSlurper = new JsonSlurper()
+  ZipService zipService
 
   // @Value('${geoscript.defaultMaxFeatures}')
   Integer defaultMaxFeatures
@@ -355,6 +358,7 @@ class GeoscriptService implements InitializingBean
 
   def getFeatureCsv(def wfsParams)
   {
+    log.info "GET featuere CSV geoscript"
     def layerInfo = findLayerInfo( wfsParams )
     def result
 
@@ -436,6 +440,8 @@ class GeoscriptService implements InitializingBean
 
   def getFeatureJSON(def wfsParams)
   {
+    log.info "Getting feature JSON geoscript"
+    log.info "-" * 20
     def layerInfo = findLayerInfo( wfsParams )
     def results
 
@@ -471,6 +477,8 @@ class GeoscriptService implements InitializingBean
 
   def getFeatureKML(def wfsParams)
   {
+    log.info "Getting Featuer KML geoscript"
+    log.info "-" * 20
     def layerInfo = findLayerInfo( wfsParams )
     def result
 
@@ -491,6 +499,8 @@ class GeoscriptService implements InitializingBean
 
   def queryLayer(String typeName, Map<String,Object> options, String resultType='results', String featureFormat=null, Boolean includeNumberMatched=null)
   {
+    log.info "Getting querylayer GEOSCRIPT"
+    log.info "-" * 50
     def info = [
       name: 'queryLayer',
       typeName: typeName,
@@ -547,10 +557,20 @@ class GeoscriptService implements InitializingBean
             if ( resultType == 'results' )
             {
                 if ( featureFormat == 'CSV' ) {
+                  log.info "CSV Layer = ${layer}"
+                  log.info "CSV Options = ${options}"
                   def csvResult = exportCSV(layer, options)
                   features = csvResult?.data
                   count = csvResult.count
                 } else {
+                  // SHOULD WE MOVE TO POST CLEANUP??
+                  if (featureFormat == 'SHAPE-ZIP')
+                  {
+                    def shapeResult = exportShapefile(layer, options)
+                    features = shapeResult?.data
+                    log.info "Shape-zip features = ${features}"
+                    count = shapeResult.count
+                  }
                   // Clamp number of features returned to prevent
                   // memory/performance issues.  defaultMaxFeatures can be set
                   // via configuration paramters
@@ -604,6 +624,7 @@ class GeoscriptService implements InitializingBean
 
   def exportCSV(def inputLayer, def options)
   {
+    log.info "exporting csv Geoscript"
     HashMap result = [:]
     def memory = new Memory()
     def outputLayer = memory.create(inputLayer.schema)
@@ -616,6 +637,31 @@ class GeoscriptService implements InitializingBean
     def writer = new CsvWriter()
 
     result.data = writer.write(outputLayer)//?.readLines()
+
+    result;
+  }
+
+  def exportShapefile(def inputLayer, def options)
+  {
+    this.zipService = zipService
+    log.info "exporting shapefile Geoscript"
+    String scratchDir = '/Users/kaseykemmerer/Projects/geoscript-scratch'
+    String outZip = 'shapefile_export'
+    Directory shapeDir = new Directory( scratchDir )
+    HashMap result = [:]
+    def outputLayer = shapeDir.create(inputLayer.schema)
+    Integer count = 0;
+    inputLayer.collectFromFeature(options) { f ->
+      ++count
+      outputLayer.add(f)
+    }
+
+    log.info "Shape file outputLayer = ${outputLayer}"
+    result.count = count
+
+    //CREATE A ZIP OF SHAPEFILE
+    zipService.run(scratchDir, 'shapefile_export')
+    result.data = "${scratchDir}/${outZip}.zip"
 
     result;
   }
