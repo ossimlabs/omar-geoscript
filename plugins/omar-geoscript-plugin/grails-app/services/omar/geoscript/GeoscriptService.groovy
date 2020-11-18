@@ -29,6 +29,9 @@ import org.springframework.beans.factory.InitializingBean
 import grails.gorm.transactions.Transactional
 
 import java.time.Instant
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 
 // import org.springframework.beans.factory.annotation.Value
@@ -645,9 +648,12 @@ class GeoscriptService implements InitializingBean
   {
     this.zipService = zipService
     log.info "exporting shapefile Geoscript"
-    String scratchDir = '/Users/kaseykemmerer/Projects/geoscript-scratch'
+    Path scratchDir = Paths.get('/Users/keyanawright/Omar/temp')
+    def outputDirectory = Files.createTempDirectory( scratchDir, 'shape-')
+    String stringTempDir = outputDirectory.toString()
+
     String outZip = 'shapefile_export'
-    Directory shapeDir = new Directory( scratchDir )
+    Directory shapeDir = new Directory( stringTempDir )
     HashMap result = [:]
     def outputLayer = shapeDir.create(inputLayer.schema)
     Integer count = 0;
@@ -660,8 +666,8 @@ class GeoscriptService implements InitializingBean
     result.count = count
 
     //CREATE A ZIP OF SHAPEFILE
-    zipService.run(scratchDir, 'shapefile_export')
-    result.data = "${scratchDir}/${outZip}.zip"
+    zipService.run(stringTempDir, 'shapefile_export')
+    result.data = new File("${stringTempDir}/${outZip}.zip").bytes
 
     result;
   }
