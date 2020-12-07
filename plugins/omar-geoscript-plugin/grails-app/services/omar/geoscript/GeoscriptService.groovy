@@ -43,12 +43,14 @@ class GeoscriptService implements InitializingBean
   def grailsApplication
   def jsonSlurper = new JsonSlurper()
   ZipService zipService
+  def exportService
 
   // @Value('${geoscript.defaultMaxFeatures}')
   Integer defaultMaxFeatures
 
   def parseOptions(def wfsParams)
   {
+    log.info "geoscript service wfsParams = ${wfsParams}"
     def wfsParamNames = [
         'maxFeatures', 'startIndex', 'propertyName', 'sortBy', 'filter'
     ]
@@ -504,6 +506,7 @@ class GeoscriptService implements InitializingBean
   {
     log.info "Getting querylayer GEOSCRIPT"
     log.info "-" * 50
+    log.info "queryLayer options= ${options}"
     def info = [
       name: 'queryLayer',
       typeName: typeName,
@@ -557,6 +560,7 @@ class GeoscriptService implements InitializingBean
             }
             def features = []
             Long count = 0;
+            def bytes
             if ( resultType == 'results' )
             {
                 if ( featureFormat == 'CSV' ) {
@@ -567,13 +571,16 @@ class GeoscriptService implements InitializingBean
                   count = csvResult.count
                 } else {
                   // SHOULD WE MOVE TO POST CLEANUP??
-                  if (featureFormat == 'SHAPE-ZIP')
-                  {
-                    def shapeResult = exportShapefile(layer, options)
-                    features = shapeResult?.data
-                    log.info "Shape-zip features = ${features}"
-                    count = shapeResult.count
-                  }
+                  // if (featureFormat == 'SHAPE-ZIP')
+                  // {
+                  //   // exportService.exportShapeZip(layer, options)
+                 
+                  //   def shapeResult = exportService.exportShape(layer, options)
+                  //   // features = shapeResult?.bytes
+                  //   // log.info "Shape-zip result = ${features}"
+                  //   // count = shapeResult.count
+                  //   bytes = shapeResult?.bytes
+                  // }
                   // Clamp number of features returned to prevent
                   // memory/performance issues.  defaultMaxFeatures can be set
                   // via configuration paramters
@@ -599,6 +606,7 @@ class GeoscriptService implements InitializingBean
             results = [
               namespace: [prefix: prefix, uri: layer?.schema?.uri],
               numberOfFeatures: count,
+              bytes: bytes,
               //numberMatched: matched,
               timeStamp: Instant.now() as String,
               features: features
@@ -621,7 +629,10 @@ class GeoscriptService implements InitializingBean
               responseSize: results.toString().bytes.length, typeName: typeName, options: options?.toString())
 
       log.info requestInfoLog.toString()
-
+      log.info '-' * 25
+      results.each { key, val ->
+        log.info "\n \n Result key: $key = $val"
+      }
       results
   }
 
@@ -644,33 +655,33 @@ class GeoscriptService implements InitializingBean
     result;
   }
 
-  def exportShapefile(def inputLayer, def options)
-  {
-    this.zipService = zipService
-    log.info "exporting shapefile Geoscript"
-    Path scratchDir = Paths.get('/Users/keyanawright/Omar/temp')
-    def outputDirectory = Files.createTempDirectory( scratchDir, 'shape-')
-    String stringTempDir = outputDirectory.toString()
+  // def exportShapefile(def inputLayer, def options)
+  // {
+  //   this.zipService = zipService
+  //   log.info "exporting shapefile Geoscript"
+  //   Path scratchDir = Paths.get('/Users/kaseykemmerer/Projects/geoscript-scratch')
+  //   def outputDirectory = Files.createTempDirectory( scratchDir, 'shape-')
+  //   String stringTempDir = outputDirectory.toString()
 
-    String outZip = 'shapefile_export'
-    Directory shapeDir = new Directory( stringTempDir )
-    HashMap result = [:]
-    def outputLayer = shapeDir.create(inputLayer.schema)
-    Integer count = 0;
-    inputLayer.collectFromFeature(options) { f ->
-      ++count
-      outputLayer.add(f)
-    }
+  //   String outZip = 'shapefile_export'
+  //   Directory shapeDir = new Directory( stringTempDir )
+  //   HashMap result = [:]
+  //   def outputLayer = shapeDir.create(inputLayer.schema)
+  //   Integer count = 0;
+  //   inputLayer.collectFromFeature(options) { f ->
+  //     ++count
+  //     outputLayer.add(f)
+  //   }
 
-    log.info "Shape file outputLayer = ${outputLayer}"
-    result.count = count
+  //   log.info "Shape file outputLayer = ${outputLayer}"
+  //   result.count = count
 
-    //CREATE A ZIP OF SHAPEFILE
-    zipService.run(stringTempDir, 'shapefile_export')
-    result.data = new File("${stringTempDir}/${outZip}.zip").bytes
+  //   //CREATE A ZIP OF SHAPEFILE
+  //   zipService.run(stringTempDir, 'shapefile_export')
+  //   result.data = new File("${stringTempDir}/${outZip}.zip").bytes
 
-    result;
-  }
+  //   result;
+  // }
 
   def findLayer(String prefix, String layerName)
   {
