@@ -13,7 +13,7 @@ class ExportController {
     ExportService exportService
 
     @ApiOperation(value = "Export shapefile from the server",
-                produces='application/xml',
+                produces='application/zip',
                 httpMethod="GET",
                 nickname = "exportShapefile")
     @ApiImplicitParams([
@@ -25,7 +25,7 @@ class ExportController {
     ])
     def exportShapefile(/*String typeName, String filter, Integer maxFeatures, Integer startIndex*/) {       
         // println "controller params = ${params}"
-        def results = exportService.exportShapeZip( /*typeName,  filter,  maxFeatures,  startIndex*/)
+        def results = exportService.exportShapeZip( params /*typeName,  filter,  maxFeatures,  startIndex*/)
         response.setContentType("application/zip")
         response.setHeader("Content-disposition", "filename=${results.name}")
         response.outputStream << results.bytes
