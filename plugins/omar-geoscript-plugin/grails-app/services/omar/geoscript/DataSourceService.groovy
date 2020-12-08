@@ -46,7 +46,6 @@ class DataSourceService
 				NamespaceInfo.findOrSaveByPrefixAndUri( it.prefix, it.uri )
 			}
 
-			def env = System.env;
 			wfsConfig.datastores.each { datastore ->
 				def workspaceInfo = WorkspaceInfo.findOrCreateByName( datastore.datastoreId )
 
