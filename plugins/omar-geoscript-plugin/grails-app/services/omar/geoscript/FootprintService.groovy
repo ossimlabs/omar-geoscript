@@ -50,6 +50,8 @@ class FootprintService
         ( stroke( color: new Color( v.color ) ) + fill( opacity: 0.0 ) ).where( v.filter )
       }
 
+      def x = outlineLookupTable.keySet().collect { "'${it}'" }.join( ',' )
+
       // Add the negation of all filters so that things that don't match still show up
       def allFilters = outlineLookupTable.values().collect { it.filter }?.join(' or ')
 
@@ -76,7 +78,14 @@ class FootprintService
       def geomField = workspace[layerName].schema.geom
       def queryBbox
 
-      queryBbox = ( workspace[layerName]?.proj?.equals( viewBbox?.proj ) )? viewBbox : viewBbox.reproject( workspace[layerName]?.proj )
+      if ( !workspace[layerName]?.proj?.equals( viewBbox?.proj ) )
+      {
+        queryBbox = viewBbox.reproject( workspace[layerName]?.proj )
+      }
+      else
+      {
+        queryBbox = viewBbox
+      }
 
       def filter = Filter.intersects( geomField.name, queryBbox.geometry )
 

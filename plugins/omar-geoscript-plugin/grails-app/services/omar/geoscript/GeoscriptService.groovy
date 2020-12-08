@@ -170,15 +170,15 @@ class GeoscriptService implements InitializingBean
   {
     Layer layer
 
-    try
+    try 
     {
       if (layerInfo.query && layerInfo.geomName && layerInfo.geomType && layerInfo.geomSrs ) {
           Database database = new Database( workspace.ds )
           layer = database.createView(layerInfo.name, layerInfo.query,
-            new Field( layerInfo.geomName, layerInfo.geomType, layerInfo.geomSrs ) )
+            new Field( layerInfo.geomName, layerInfo.geomType, layerInfo.geomSrs ) ) 
         } else {
           layer = workspace[layerInfo?.name]
-        }
+        }  
     }
     catch ( Exception e )
     {
@@ -367,6 +367,8 @@ class GeoscriptService implements InitializingBean
     def layerInfo = findLayerInfo( wfsParams )
     def result
 
+    def options = parseOptions( wfsParams )
+
     def writer = new CsvWriter()
     Workspace.withWorkspace( getWorkspace( layerInfo.workspaceInfo.workspaceParams ) ) {
       workspace ->
@@ -455,9 +457,9 @@ class GeoscriptService implements InitializingBean
         def layer = workspace[layerInfo.name]
         def count = layer.count( wfsParams.filter ?: Filter.PASS )
 
-        def features = ( wfsParams.resultType == 'hits') ? [] : layer.collectFromFeature( options ) {
-          feature -> return new JsonSlurper().parseText( feature.geoJSON )
-        }
+        def features = ( wfsParams.resultType != 'hits' ) ? layer.collectFromFeature( options ) { feature ->
+          return new JsonSlurper().parseText( feature.geoJSON )
+        } : []
 
         results = [
             crs: [
