@@ -19,7 +19,9 @@ class KmlService { //implements InitializingBean {
 
                     mkp.yieldUnescaped( getKmlStyles() )
 
-                    def wmsParams = getKmlWmsParams(params)
+                    //JMP 11/10/2020 - the params is never used inside the method, there for it has been removed.
+                    // def wmsParams = getKmlWmsParams(params)
+                    def wmsParams = getKmlWmsParams()
                     Folder() {
                         name( "Images" )
                         features.eachWithIndex() { value, index ->
@@ -63,8 +65,6 @@ class KmlService { //implements InitializingBean {
         def tlvUrl = "${grailsApplication.config.omar.tlv.baseUrl}?" +
             "location=${location}&" +
             "filter=${filter}"
-
-        def imageUrl = "${o2BaseUrl}/omar/#/mapOrtho?layers=${feature.get("id")}"
 
         def wfsUrl = "${grailsApplication.config.omar.wfs.baseUrl}/wfs/getFeature?" +
             "filter=in(${feature.get("id")})&" +
@@ -243,7 +243,7 @@ class KmlService { //implements InitializingBean {
         return kmlWriter.buffer
     }
 
-    def getKmlWmsParams(params) {
+     def getKmlWmsParams() {
         return [
             FORMAT: "image/png",
             LAYERS: "omar:raster_entry",
