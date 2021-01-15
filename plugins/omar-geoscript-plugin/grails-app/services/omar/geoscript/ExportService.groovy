@@ -1,5 +1,7 @@
 package omar.geoscript
 
+import geoscript.feature.Field
+import geoscript.feature.Schema
 import geoscript.filter.Filter
 import geoscript.layer.Layer
 import geoscript.workspace.Directory
@@ -9,22 +11,32 @@ import java.nio.file.Files
 import geoscript.GeoScript
 
 class ExportService {
-  
+
     def exportShapeZip(String typeName, String filter, Integer maxFeatures, Integer startIndex) {
 
         File directory = Files.createTempDirectory("shape-").toFile()
         Directory shapeDir = new Directory(directory)
 
         def (prefix, layerName) = typeName?typeName.split(':'):[null,null]
+
         Layer srcLayer  = findLayer(prefix, layerName)
-        Layer destLayer = shapeDir.create(srcLayer.schema)
+
+        // TODO: create application.yml config item for this list:
+        def fieldsList = ['country_code_tag_id', 'file_type_tag_id', 'mission_id_tag_id', 'product_id_tag_id', 'sensor_id_tag_id', 'target_id_tag_id']
+        List<Field> fields = fieldsList.collect { srcLayer.schema.field(it) }
+        println fields
+
+        def srcSchemaUpdated = srcLayer.schema.removeFields(fields, "raster_entry")
+        println srcSchemaUpdated.fields.name.sort()
+
+        Layer destLayer = shapeDir.create(srcSchemaUpdated)
 
         srcLayer.eachFeature(
-            filter: filter ?: Filter.PASS,
-            max: maxFeatures.toInteger(),
-            start: startIndex?.toInteger() ?: 0
+                filter: filter ?: Filter.PASS,
+                max: maxFeatures.toInteger(),
+                start: startIndex?.toInteger() ?: 0,
         ) { f ->
-           destLayer.add( f )
+            destLayer.add( f )
         }
 
         shapeDir?.close()
@@ -41,26 +53,27 @@ class ExportService {
     }
 
 
-  Workspace getWorkspace(Map params) {
-    def dataStore = DataStoreFinder.getDataStore( params )
+    Workspace getWorkspace(Map params) {
+        def dataStore = DataStoreFinder.getDataStore( params )
 
-    ( dataStore ) ? GeoScript.wrap( dataStore ) : null
-  }
-
-  def findLayer(String prefix, String layerName) {
-
-    if(!prefix&!layerName)
-    {
-      return null
+        ( dataStore ) ? GeoScript.wrap( dataStore ) : null
     }
 
-    def layerInfo = LayerInfo.where {
-        name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
-    }.get()
+    def findLayer(String prefix, String layerName) {
 
-    def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
-    def workspace = getWorkspace(workspaceParams)
+        if(!prefix&!layerName)
+        {
+            return null
+        }
 
-    workspace[layerName]
-  }
+        def layerInfo = LayerInfo.where {
+            name == layerName && workspaceInfo.namespaceInfo.prefix == prefix
+        }.get()
+
+        def workspaceParams = layerInfo?.workspaceInfo?.workspaceParams
+        def workspace = getWorkspace(workspaceParams)
+
+        workspace[layerName]
+    }
+
 }
