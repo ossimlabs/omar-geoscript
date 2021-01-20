@@ -1,35 +1,43 @@
 package omar.geoscript
 
 import geoscript.feature.Field
-import geoscript.feature.Schema
 import geoscript.filter.Filter
 import geoscript.layer.Layer
 import geoscript.workspace.Directory
 import geoscript.workspace.Workspace
+import grails.core.GrailsApplication
 import org.geotools.data.DataStoreFinder
+
 import java.nio.file.Files
 import geoscript.GeoScript
 
 class ExportService {
 
+    GrailsApplication grailsApplication
+
     def exportShapeZip(String typeName, String filter, Integer maxFeatures, Integer startIndex) {
 
         File directory = Files.createTempDirectory("shape-").toFile()
         Directory shapeDir = new Directory(directory)
+        Layer destLayer
 
         def (prefix, layerName) = typeName?typeName.split(':'):[null,null]
 
         Layer srcLayer  = findLayer(prefix, layerName)
 
-        // TODO: create application.yml config item for this list:
-        def fieldsList = ['country_code_tag_id', 'file_type_tag_id', 'mission_id_tag_id', 'product_id_tag_id', 'sensor_id_tag_id', 'target_id_tag_id']
-        List<Field> fields = fieldsList.collect { srcLayer.schema.field(it) }
-        println fields
+        List<Field> excludeFields =  grailsApplication.config.getProperty('geoscript.export.excludes', List).collect { srcLayer.schema.field(it) }
 
-        def srcSchemaUpdated = srcLayer.schema.removeFields(fields, "raster_entry")
-        println srcSchemaUpdated.fields.name.sort()
+        if(excludeFields) {
+            def srcSchemaUpdated = srcLayer.schema.removeFields(excludeFields, "raster_entry")
+            println srcSchemaUpdated.fields.name.sort()
 
-        Layer destLayer = shapeDir.create(srcSchemaUpdated)
+            destLayer = shapeDir.create(srcSchemaUpdated)
+
+        } else {
+            println srcLayer.schema.fields.name.sort()
+            destLayer = shapeDir.create(srcLayer.schema)
+
+        }
 
         srcLayer.eachFeature(
                 filter: filter ?: Filter.PASS,
