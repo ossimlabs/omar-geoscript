@@ -217,7 +217,7 @@ wms:
     styles:
         byFileType:
             cadrg:
-                filter: file_type='cadrg222222222222'
+                filter: file_type='cadrg'
                 color:
                     r: 0
                     g: 255
