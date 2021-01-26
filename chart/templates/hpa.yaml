@@ -2,6 +2,8 @@
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
+    annotations: 
+        field.cattle.io/displayName: {{ .Values.appName }}
     name: {{ .Values.appName }}
 spec:
     maxReplicas: {{ .Values.maxReplicas }}
