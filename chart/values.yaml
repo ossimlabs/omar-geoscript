@@ -2,8 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicas: 1
-
 appName: omar-geoscript
 
 global:
@@ -44,8 +42,6 @@ resources:
     cpu: 500m
     memory: 500Mi
 
-minReplicas: 8
-maxReplicas: 20
 targetCpu: 75
 
 image:
