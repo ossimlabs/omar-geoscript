@@ -256,6 +256,19 @@ wms:
                     g: 0
                     b: 0
                     a: 255
+
+geoscript:
+    export:
+        # List of fields to exclude (from raster_entry table) during the shapefile export.
+        # This is needed because of the limitation of the column sizes in the outpuft .dbf
+        # file.  They only support 10 character column names.
+        excludes:
+          - 'country_code_tag_id'
+          - 'file_type_tag_id'
+          - 'mission_id_tag_id'
+          - 'product_id_tag_id'
+          - 'sensor_id_tag_id'
+          - 'target_id_tag_id'
 ---
 grails:
     cors:
