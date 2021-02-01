@@ -98,13 +98,15 @@ podTemplate(
         }
       }
 
-    stage("Load Variables"){
-      step([$class     : "CopyArtifact",
-            projectName: "gegd-dgcs-jenkins-artifacts",
-            filter     : "common-variables.groovy",
-            flatten    : true])
-      }
-      load "common-variables.groovy"
+      stage("Load Variables")
+      {
+        withCredentials([string(credentialsId: 'o2-artifact-project', variable: 'o2ArtifactProject')]) {
+          step ([$class: "CopyArtifact",
+            projectName: o2ArtifactProject,
+            filter: "common-variables.groovy",
+            flatten: true])
+          }
+          load "common-variables.groovy"
 
 //         switch (BRANCH_NAME) {
 //         case "${MASTER}":
@@ -122,7 +124,8 @@ podTemplate(
 
     DOCKER_IMAGE_PATH = "${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}/${APP_NAME}"
 
-//     }
+    }
+
 //     CYPRESS TESTS SHOULD BE COMING SOON
 //     stage ("Run Cypress Test") {
 //         container('cypress') {
