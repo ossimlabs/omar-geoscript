@@ -1,86 +1,82 @@
 // THIS IS A DRAFT FOR CONSISTENT JENKINSFILES
 
 properties([
-    parameters ([
+    parameters([
         string(name: 'BUILD_NODE', defaultValue: 'POD_LABEL', description: 'The build node to run on'),
         booleanParam(name: 'CLEAN_WORKSPACE', defaultValue: true, description: 'Clean the workspace at the end of the run'),
         string(name: 'DOCKER_REGISTRY_DOWNLOAD_URL', defaultValue: 'nexus-docker-private-group.ossim.io', description: 'Repository of docker images')
     ]),
     pipelineTriggers([
-            [$class: "GitHubPushTrigger"]
+        [$class: "GitHubPushTrigger"]
     ]),
     [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/Maxar-Corp/omar-geoscript'],
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '20')),
     disableConcurrentBuilds()
-])
+    ])
 
 podTemplate(
-  containers: [
-    containerTemplate(
-      name: 'docker',
-      image: 'docker:19.03.11',
-      ttyEnabled: true,
-      command: 'cat',
-      privileged: true
-    ),
-    containerTemplate(
-      image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/omar-builder:jdk11",
-      name: 'builder',
-      command: 'cat',
-      ttyEnabled: true
-    ),
-    containerTemplate(
-      image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/alpine/helm:3.2.3",
-      name: 'helm',
-      command: 'cat',
-      ttyEnabled: true
-    ),
-    containerTemplate(
-        name: 'git',
-        image: 'alpine/git:latest',
-        ttyEnabled: true,
-        command: 'cat',
-        envVars: [
-            envVar(key: 'HOME', value: '/root')
-        ]
-    ),
-    containerTemplate(
-      image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/kubectl-aws-helm:latest",
-      name: 'kubectl-aws-helm',
-      command: 'cat',
-      ttyEnabled: true,
-      alwaysPullImage: true
-    ),
-    containerTemplate(
-        name: 'cypress',
-        image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/cypress/included:4.9.0",
-        ttyEnabled: true,
-        command: 'cat',
-        privileged: true
-    )
-  ],
-  volumes: [
-    hostPathVolume(
-      hostPath: '/var/run/docker.sock',
-      mountPath: '/var/run/docker.sock'
-    ),
-  ]
+    containers: [
+        containerTemplate(
+            name: 'docker',
+            image: 'docker:19.03.11',
+            ttyEnabled: true,
+            command: 'cat',
+            privileged: true
+        ),
+        containerTemplate(
+            image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/omar-builder:jdk11",
+            name: 'builder',
+            command: 'cat',
+            ttyEnabled: true
+        ),
+        containerTemplate(
+            image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/alpine/helm:3.2.3",
+            name: 'helm',
+            command: 'cat',
+            ttyEnabled: true
+        ),
+        containerTemplate(
+            name: 'git',
+            image: 'alpine/git:latest',
+            ttyEnabled: true,
+            command: 'cat',
+            envVars: [
+                envVar(key: 'HOME', value: '/root')
+                ]
+        ),
+        containerTemplate(
+            image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/kubectl-aws-helm:latest",
+            name: 'kubectl-aws-helm',
+            command: 'cat',
+            ttyEnabled: true,
+            alwaysPullImage: true
+        ),
+        containerTemplate(
+            name: 'cypress',
+            image: "${DOCKER_REGISTRY_DOWNLOAD_URL}/cypress/included:4.9.0",
+            ttyEnabled: true,
+            command: 'cat',
+            privileged: true
+        )
+      ],
+    volumes: [
+        hostPathVolume(
+            hostPath: '/var/run/docker.sock',
+            mountPath: '/var/run/docker.sock'
+        ),
+    ]
 )
 
 {
-  node(POD_LABEL){
+node(POD_LABEL){
 
-      stage("Checkout branch")
-      {
-          scmVars = checkout(scm)
-
+    stage("Checkout branch") {
+        scmVars = checkout(scm)
+        Date date = new Date()
+        String newDate = date.format("YYYY-MM-dd-HH-mm-ss") //FIXME
         APP_NAME = "omar-geoscript"
         MASTER = "master"
         DEV = "dev"
-//         TimeZone.getTimeZone('UTC')
-        Date date = new Date()
-        String newDate = date.format("YYYY-MM-dd-HH-mm-ss")
-
         GIT_BRANCH_NAME = scmVars.GIT_BRANCH
         BRANCH_NAME = """${sh(returnStdout: true, script: "echo ${GIT_BRANCH_NAME} | awk -F'/' '{print \$2}'").trim()}"""
         VERSION = """${sh(returnStdout: true, script: "cat chart/Chart.yaml | grep version: | awk -F'version:' '{print \$2}'").trim()}"""
@@ -88,41 +84,27 @@ podTemplate(
         ARTIFACT_NAME = "ArtifactName"
 
         script {
-          if (BRANCH_NAME == "${MASTER}") {
-            buildName "${CHART_APP_VERSION}"
-            TAG_NAME = CHART_APP_VERSION
-          } else {
-            buildName "${BRANCH_NAME}-${newDate}" // FIXME
-            TAG_NAME = "${BRANCH_NAME}-${newDate}"
-          }
+            if (BRANCH_NAME == "${MASTER}") {
+                buildName "${CHART_APP_VERSION}"
+                TAG_NAME = "${CHART_APP_VERSION}"
+            }
+            else {
+                buildName "${BRANCH_NAME}-${newDate}"
+                TAG_NAME = "${BRANCH_NAME}-${newDate}"
+            }
         }
-      }
+    }
 
-      stage("Load Variables")
-      {
+    stage("Load Variables") {
         withCredentials([string(credentialsId: 'o2-artifact-project', variable: 'o2ArtifactProject')]) {
-          step ([$class: "CopyArtifact",
-            projectName: o2ArtifactProject,
-            filter: "common-variables.groovy",
-            flatten: true])
-          }
-          load "common-variables.groovy"
+            step ([$class: "CopyArtifact",
+                projectName: o2ArtifactProject,
+                filter: "common-variables.groovy",
+                flatten: true])
+        }
 
-//         switch (BRANCH_NAME) {
-//         case "${MASTER}":
-//           TAG_NAME = VERSION
-//           break
-//
-//         case "${DEV}":
-//           TAG_NAME = "latest"
-//           break
-//
-//         default:
-//           TAG_NAME = BRANCH_NAME
-//           break
-//       }
-
-    DOCKER_IMAGE_PATH = "${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}/${APP_NAME}"
+        load "common-variables.groovy"
+        DOCKER_IMAGE_PATH = "${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}/${APP_NAME}"
 
     }
 
@@ -189,10 +171,10 @@ podTemplate(
 
     stage('Docker push') {
       container('docker') {
-        withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}") {
+        withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
           sh """
-            docker tag ${DOCKER_IMAGE_PATH}:${TAG_NAME} ${DOCKER_IMAGE_PATH}:${TAG_NAME}
-            docker push ${DOCKER_IMAGE_PATH}:${TAG_NAME}
+            docker tag "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/${APP_NAME}:${TAG_NAME}" "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/${APP_NAME}:${TAG_NAME}"
+            docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/${APP_NAME}:${TAG_NAME}"
           """
         }
       }
