@@ -79,7 +79,7 @@ podTemplate(
         DEV = "dev"
 //         TimeZone.getTimeZone('UTC')
         Date date = new Date()
-        String newDate = date.format("YYYY-MM-dd-HH;mm;ss")
+        String newDate = date.format("YYYY-MM-dd-HH-mm-ss")
 
         GIT_BRANCH_NAME = scmVars.GIT_BRANCH
         BRANCH_NAME = """${sh(returnStdout: true, script: "echo ${GIT_BRANCH_NAME} | awk -F'/' '{print \$2}'").trim()}"""
@@ -181,7 +181,7 @@ podTemplate(
       container('docker') {
         withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {
           sh """
-            docker build --network=host -t "${DOCKER_IMAGE_PATH}:${TAG_NAME}" ./docker
+            docker build --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/${APP_NAME}:${TAG_NAME}" ./docker
           """
         }
       }
@@ -189,10 +189,10 @@ podTemplate(
 
     stage('Docker push') {
       container('docker') {
-        withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
+        withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}") {
           sh """
-            docker tag ${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/${APP_NAME}:${TAG_NAME}"
-            docker push "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/${APP_NAME}:${TAG_NAME}"
+            docker tag ${DOCKER_IMAGE_PATH} ${DOCKER_IMAGE_PATH}:${TAG_NAME}
+            docker push ${DOCKER_IMAGE_PATH}:${TAG_NAME}
           """
         }
       }
