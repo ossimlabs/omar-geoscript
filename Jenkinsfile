@@ -191,7 +191,7 @@ podTemplate(
       container('docker') {
         withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}") {
           sh """
-            docker tag ${DOCKER_IMAGE_PATH} ${DOCKER_IMAGE_PATH}:${TAG_NAME}
+            docker tag ${DOCKER_IMAGE_PATH}:${TAG_NAME} ${DOCKER_IMAGE_PATH}:${TAG_NAME}
             docker push ${DOCKER_IMAGE_PATH}:${TAG_NAME}
           """
         }
