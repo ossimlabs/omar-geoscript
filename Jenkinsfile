@@ -1,4 +1,3 @@
-// THIS IS A DRAFT FOR CONSISTENT JENKINSFILES
 
 properties([
     parameters([
@@ -9,7 +8,7 @@ properties([
     pipelineTriggers([
         [$class: "GitHubPushTrigger"]
     ]),
-    [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/Maxar-Corp/omar-geoscript'],
+    [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/ossimlabs/omar-geoscript'],
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '20')),
     disableConcurrentBuilds()
     ])
@@ -69,9 +68,7 @@ podTemplate(
 
 {
 node(POD_LABEL){
-
     stage("Checkout branch") {
-
         APP_NAME = "omar-geoscript"
         scmVars = checkout(scm)
         Date date = new Date()
@@ -105,7 +102,7 @@ node(POD_LABEL){
         DOCKER_IMAGE_PATH = "${DOCKER_REGISTRY_PRIVATE_UPLOAD_URL}/${APP_NAME}"
     }
 
-//     CYPRESS TESTS SHOULD BE COMING SOON
+//     CYPRESS TESTS COMING SOON
 //     stage ("Run Cypress Test") {
 //         container('cypress') {
 //             try {
@@ -141,8 +138,7 @@ node(POD_LABEL){
                         -Dsonar.projectKey=${APP_NAME} \
                         -Dsonar.login=${SONARQUBE_TOKEN}
                     """
-                }
-
+            }
         }
     }
 
