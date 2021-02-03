@@ -71,14 +71,11 @@ podTemplate(
 node(POD_LABEL){
 
     stage("Checkout branch") {
+
+        APP_NAME = "omar-geoscript"
         scmVars = checkout(scm)
         Date date = new Date()
-        String newDate = date.format("YYYY-MM-dd-HH-mm-ss") //FIXME
-        APP_NAME = "omar-geoscript"
-//         def APP_NAME = words.tokenize('/').last()
-//         sh """
-//         echo ${APP_NAME}
-//         """
+        String currentDate = date.format("YYYY-MM-dd-HH-mm-ss")
         MASTER = "master"
         DEV = "dev"
         GIT_BRANCH_NAME = scmVars.GIT_BRANCH
@@ -87,15 +84,13 @@ node(POD_LABEL){
         GIT_TAG_NAME = APP_NAME + "-" + VERSION
         ARTIFACT_NAME = "ArtifactName"
 
-        script {
             if (BRANCH_NAME == "${MASTER}") {
                 buildName "${CHART_APP_VERSION}"
                 TAG_NAME = "${CHART_APP_VERSION}"
             }
             else {
-                buildName "${BRANCH_NAME}-${newDate}"
-                TAG_NAME = "${BRANCH_NAME}-${newDate}"
-            }
+                buildName "${BRANCH_NAME}-${currentDate}"
+                TAG_NAME = "${BRANCH_NAME}-${currentDate}"
         }
     }
 
@@ -123,7 +118,7 @@ node(POD_LABEL){
 //             }
 //                 sh """
 //                     npm i -g xunit-viewer
-//                     xunit-viewer -r results -o results/APP_NAME-test-results.html
+//                     xunit-viewer -r results -o results/${APP_NAME}-test-results.html
 //                     """
 //                     junit 'results/*.xml'
 //                     archiveArtifacts "results/*.xml"
@@ -154,10 +149,8 @@ node(POD_LABEL){
     stage('Build') {
         container('builder') {
             sh """
-                ./gradlew assemble \
-                -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-                ./gradlew copyJarToDockerDir \
-                -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
+                ./gradlew assemble -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
+                ./gradlew copyJarToDockerDir -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
             """
         archiveArtifacts "plugins/*/build/libs/*.jar"
         archiveArtifacts "apps/*/build/libs/*.jar"
@@ -165,7 +158,7 @@ node(POD_LABEL){
     }
 
 
-    stage('Docker build') {
+    stage('Docker Build') {
         container('docker') {
             withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {
                 sh """
@@ -175,7 +168,7 @@ node(POD_LABEL){
         }
     }
 
-    stage('Docker push') {
+    stage('Docker Push') {
         container('docker') {
             withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}") {
             sh """
@@ -186,7 +179,7 @@ node(POD_LABEL){
         }
     }
 
-    stage('Package and Upload chart'){
+    stage('Package & Upload Chart'){
         container('helm') {
             sh """
                 mkdir packaged-chart
