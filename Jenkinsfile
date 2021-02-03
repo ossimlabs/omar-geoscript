@@ -9,7 +9,7 @@ properties([
     pipelineTriggers([
         [$class: "GitHubPushTrigger"]
     ]),
-    [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: 'https://github.com/ossimlabs/omar-geoscript'],
+    [$class: 'GithubProjectProperty', displayName: '', projectUrlStr: '${PROJECT_URL}'],
     buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '3', daysToKeepStr: '', numToKeepStr: '20')),
     disableConcurrentBuilds()
     ])
@@ -70,7 +70,7 @@ podTemplate(
 {
 node(POD_LABEL){
     stage("Checkout branch") {
-        APP_NAME = "omar-geoscript"
+        APP_NAME = PROJECT_URL.tokenize('/').last()
         scmVars = checkout(scm)
         Date date = new Date()
         String currentDate = date.format("YYYY-MM-dd-HH-mm-ss")
