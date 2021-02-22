@@ -18,6 +18,7 @@ import geoscript.filter.Function
 class OmarGeoScriptBootStrap
 {
   def dataSourceService
+  def geoscriptService
 
   def init = { servletContext ->
     Hints.putSystemDefault( Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER, Boolean.TRUE )
@@ -40,7 +41,7 @@ class OmarGeoScriptBootStrap
     }
 
     Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
-      def (workspace, layer) = getWorkspaceAndLayer( layerName )
+      def (workspace, layer) = geoscriptService?.getWorkspaceAndLayer( layerName )
       def results = layer?.collectFromFeature( filter ) { it[attributeName] }
       workspace?.close()
       results
