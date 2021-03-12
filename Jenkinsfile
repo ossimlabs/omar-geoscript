@@ -70,7 +70,7 @@ node(POD_LABEL){
         BRANCH_NAME = """${sh(returnStdout: true, script: "echo ${GIT_BRANCH_NAME} | awk -F'/' '{print \$2}'").trim()}"""
         APP_BUILD_VERSION = """${sh(returnStdout: true, script: "grep buildVersion gradle.properties | cut -d'=' -f2").trim()}"""
         HELM_VERSION = """${sh(returnStdout: true, script: "grep 'version:' chart/Chart.yaml | cut -d':' -f2").trim()}"""
-        GIT_TAG_NAME = APP_NAME + "-" + BUILD_VERSION
+        GIT_TAG_NAME = APP_NAME + "-" + APP_BUILD_VERSION
         ARTIFACT_NAME = "ArtifactName"
 
             if (BRANCH_NAME == "${MASTER}") {
