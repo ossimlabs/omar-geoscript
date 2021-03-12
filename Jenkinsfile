@@ -169,7 +169,7 @@ node(POD_LABEL){
         container('helm') {
             sh """
                 mkdir packaged-chart
-                helm package --app-version ${TAG_NAME} --version \"${HELM_VERSION}-{TAG_NAME}\" -d packaged-chart chart
+                helm package --app-version ${TAG_NAME} --version \"${HELM_VERSION}-${TAG_NAME}\" -d packaged-chart chart
             """
         withCredentials([usernameColonPassword(credentialsId: 'helmCredentials', variable: 'HELM_CREDENTIALS')]) {
             sh """
