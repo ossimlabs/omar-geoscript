@@ -81,7 +81,7 @@ subprojects { project ->
                             username mavenRepoUsername
                             password mavenRepoPassword
                             }
-                            url = mavenPublishUrl.toLowerCase()
+                            url = mavenPublishUrl?.toLowerCase()
                         }
                     }                
                     jar.onlyIf {
@@ -168,7 +168,6 @@ subprojects { project ->
             else if ( isGrailsPlugin ) 
             {
                 profile "org.grails.profiles:web-plugin"
-                testCompile "org.grails:grails-plugin-testing"
             }
         }
 

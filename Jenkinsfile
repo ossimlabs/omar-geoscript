@@ -68,13 +68,14 @@ node(POD_LABEL){
         DEV = "dev"
         GIT_BRANCH_NAME = scmVars.GIT_BRANCH
         BRANCH_NAME = """${sh(returnStdout: true, script: "echo ${GIT_BRANCH_NAME} | awk -F'/' '{print \$2}'").trim()}"""
-        VERSION = """${sh(returnStdout: true, script: "cat chart/Chart.yaml | grep version: | awk -F'version:' '{print \$2}'").trim()}"""
-        GIT_TAG_NAME = APP_NAME + "-" + VERSION
+        APP_BUILD_VERSION = """${sh(returnStdout: true, script: "grep buildVersion gradle.properties | cut -d'=' -f2}'").trim()}"""
+        HELM_VERSION = """${sh(returnStdout: true, script: "grep 'version:' chart/Chart.yaml | cut -d':' -f2}'").trim()}"""
+        GIT_TAG_NAME = APP_NAME + "-" + BUILD_VERSION
         ARTIFACT_NAME = "ArtifactName"
 
             if (BRANCH_NAME == "${MASTER}") {
-                buildName "${VERSION}"
-                TAG_NAME = "${VERSION}"
+                buildName "${APP_BUILD_VERSION}"
+                TAG_NAME = "${APP_BUILD_VERSION}"
             }
             else {
                 buildName "${BRANCH_NAME}-${currentDate}"
@@ -168,7 +169,7 @@ node(POD_LABEL){
         container('helm') {
             sh """
                 mkdir packaged-chart
-                helm package -d packaged-chart chart
+                helm package --app-version ${TAG_NAME} --version \"${HELM_VERSION}-{TAG_NAME}\" -d packaged-chart chart
             """
         withCredentials([usernameColonPassword(credentialsId: 'helmCredentials', variable: 'HELM_CREDENTIALS')]) {
             sh """
