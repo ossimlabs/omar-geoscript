@@ -1,0 +1,262 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Values.appName }}"
+  labels:
+    app: "{{ .Values.appName }}"
+data:
+  application.yaml: |-
+    about:
+      contactEmail: Kevin.Naquin@maxar.com
+      releaseName: HystericalHyena
+      releaseNumber: 1.0.0
+    
+    geoscript:
+      evwhs:
+        url: 'https://evwhs.digitalglobe.com/mapservice/wmsaccess?connectid=a59618a4-3656-4b09-ba85-934f162bd9d6&version=1.3.0&request=GetCapabilities'
+        username: ''
+        password: ''
+      elasticsearch:
+        url: "https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/_search?pretty"
+
+    wfs:
+      featureTypeNamespaces:
+          - prefix: omar
+            uri: http://omar.ossim.org
+
+      datastores:
+          - namespaceId: omar
+            datastoreId: omar_prod
+            datastoreParams:
+              dbtype: postgis
+              host: ${omarDb.host}
+              port: ${omarDb.port}
+              database: ${omarDb.name}
+              user: ${omarDb.username}
+              passwd: ${omarDb.password}
+              'Expose primary keys': 'true'
+              namespace: http://omar.ossim.org
+
+      featureTypes:
+          - name: raster_entry
+            title: raster_entry
+            description: ''
+            keywords:
+              - omar
+              - raster_entry
+              - features
+            datastoreId: omar_prod
+
+          - name: video_data_set
+            title: video_data_set
+            description: ''
+            keywords:
+              - omar
+              - video_data_set
+              - features
+            datastoreId: omar_prod
+
+    wms:
+      styles:
+          byFileType:
+              adrg:
+                filter: file_type='adrg'
+                color:
+                  r: 50
+                  g: 111
+                  b: 111
+                  a: 255
+              aaigrid:
+                filter: file_type='aaigrid'
+                color: pink
+              cadrg:
+                filter: file_type='cadrg'
+                color:
+                  r: 0
+                  g: 255
+                  b: 255
+                  a: 255
+              ccf:
+                filter: file_type='ccf'
+                color:
+                  r: 128
+                  g: 100
+                  b: 255
+                  a: 255
+              cib:
+                filter: file_type='cib'
+                color:
+                  r: 0
+                  g: 128
+                  b: 128
+                  a: 255
+              doqq:
+                filter: file_type='doqq'
+                color: purple
+              dted:
+                filter: file_type='dted'
+                color:
+                  r: 0
+                  g: 255
+                  b: 0
+                  a: 255
+              imagine_hfa:
+                filter: file_type='imagine_hfa'
+                color:
+                  r: 211
+                  g: 211
+                  b: 211
+                  a: 255
+              jpeg:
+                filter: file_type='jpeg'
+                color:
+                  r: 255
+                  g: 255
+                  b: 0
+                  a: 255
+              jpeg2000:
+                filter: file_type='jpeg2000'
+                color:
+                  r: 255
+                  g: 200
+                  b: 0
+                  a: 255
+              landsat7:
+                filter: file_type='landsat7'
+                color:
+                  r: 255
+                  g: 0
+                  b: 255
+                  a: 255
+              mrsid:
+                filter: file_type='mrsid'
+                color:
+                  r: 0
+                  g: 188
+                  b: 0
+                  a: 255
+              nitf:
+                filter: file_type='nitf'
+                color:
+                  r: 0
+                  g: 0
+                  b: 255
+                  a: 255
+              tiff:
+                filter: file_type='tiff'
+                color:
+                  r: 255
+                  g: 0
+                  b: 0
+                  a: 255
+              mpeg:
+                filter: file_type='mpeg'
+                color:
+                  r: 164
+                  g: 254
+                  b: 255
+                  a: 255
+              unspecified:
+                filter: file_type='unspecified'
+                color: white
+          bySensorType:
+              'ACES_YOGI-HRI1':
+                filter: sensor_id in ('ACES_YOGI-HRI1', 'ACES_YOGI-HRI2', 'ACES_YOGI-HRI3')
+                # red
+                color:
+                  r: 255
+                  g: 0
+                  b: 0
+                  a: 255
+              'ACES_YOGI-HSI':
+                filter: sensor_id='ACES_YOGI-HSI'
+                # yellow
+                color:
+                  r: 255
+                  g: 255
+                  b: 0
+                  a: 255
+              ALPHA:
+                filter: sensor_id='ALPHA'
+                # orange
+                color:
+                  r: 255
+                  g: 165
+                  b: 0
+                  a: 255
+              BRAVO:
+                filter: sensor_id='BRAVO'
+                # green
+                color:
+                  r: 0
+                  g: 255
+                  b: 0
+                  a: 255
+              CHARLIE:
+                filter: sensor_id='CHARLIE'
+                # cyan
+                color:
+                  r: 0
+                  g: 255
+                  b: 255
+                  a: 255
+              DELTA:
+                filter: sensor_id='DELTA'
+                # blue
+                color:
+                  r: 0
+                  g: 0
+                  b: 255
+                  a: 255
+              'HYCAS-HRI2':
+                filter: sensor_id='HYCAS-HRI2'
+                # magenta
+                color:
+                  r: 255
+                  g: 0
+                  b: 255
+                  a: 255
+              'HYCAS2011-HSI':
+                filter: sensor_id='HYCAS2011-HSI'
+                # pink
+                color:
+                  r: 255
+                  g: 192
+                  b: 203
+                  a: 255
+              unspecified:
+                filter: sensor_id='unspecified'
+                color:
+                  r: 255
+                  g: 255
+                  b: 255
+                  a: 255
+          byVideoType:
+              mpeg:
+                filter: filename like '%mpg'
+                color:
+                  r: 255
+                  g: 0
+                  b: 0
+                  a: 255        
+
+    omarDb:
+      host: {{ .Values.global.omarDb.host }}
+      username: {{ .Values.global.omarDb.user }}
+      password: {{ .Values.global.omarDb.password }}
+      name: {{ .Values.global.omarDb.name }}
+      port: {{ .Values.global.omarDb.port }}
+      driver: org.postgresql.Driver
+      dialect: 'org.hibernate.spatial.dialect.postgis.PostgisDialect'
+      url: jdbc:postgresql://${omarDb.host}:${omarDb.port}/${omarDb.name}
+
+    environments:
+      production:
+        dataSource:
+          pooled: true
+          jmxExport: true
+          driverClassName: ${omarDb.driver}
+          dialect:   ${omarDb.dialect}
+          url:      ${omarDb.url}
+          username: ${omarDb.username}
+          password: ${omarDb.password}
