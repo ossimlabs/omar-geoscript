@@ -1,6 +1,6 @@
 # omar-geoscript
 
-This plugin is used in the following services:
+This plugin is used by the following services:
 
 * omar-superoverlay
 * omar-wcs
