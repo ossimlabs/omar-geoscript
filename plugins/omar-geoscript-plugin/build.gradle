@@ -21,8 +21,10 @@ dependencies {
     }
     //compile project( ":${ rootProject.name }-lib" )
     if ( ! System.getenv('O2_INLINE_BUILD') ) {
-        compile "io.ossim.omar.plugins:omar-core-plugin:latest.release"
-        compile "io.ossim.omar.plugins:omar-hibernate-spatial-plugin:latest.release"
+//        compile "io.ossim.omar.plugins:omar-core-plugin:latest.release"
+//        compile "io.ossim.omar.plugins:omar-hibernate-spatial-plugin:latest.release"
+        compile "io.ossim.omar.plugins:omar-core-plugin:+"
+        compile "io.ossim.omar.plugins:omar-hibernate-spatial-plugin:+"
     }
 
 //   compile "commons-beanutils:commons-beanutils:1.9.3"
