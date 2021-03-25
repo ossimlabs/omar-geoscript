@@ -72,7 +72,6 @@ subprojects { project ->
                             group "${groupName}-${buildVersionTag}"
                             groupId = "${groupName}-${buildVersionTag}"
                             version project.version
-			    updateReleaseInfo = true
                             from components.java
                         }
                     }
