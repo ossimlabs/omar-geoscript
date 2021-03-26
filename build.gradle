@@ -69,8 +69,8 @@ subprojects { project ->
               publishing {
                     publications {
                         "${project.name}" (MavenPublication) {
-                            group groupName
-                            groupId = groupName
+                            group "${groupName}-${buildVersionTag}"
+                            groupId = "${groupName}-${buildVersionTag}"
                             version project.version
                             from components.java
                         }
@@ -81,7 +81,7 @@ subprojects { project ->
                             username mavenRepoUsername
                             password mavenRepoPassword
                             }
-                            url = mavenPublishUrl.toLowerCase()
+                            url = mavenPublishUrl?.toLowerCase()
                         }
                     }                
                     jar.onlyIf {
@@ -168,7 +168,6 @@ subprojects { project ->
             else if ( isGrailsPlugin ) 
             {
                 profile "org.grails.profiles:web-plugin"
-                testCompile "org.grails:grails-plugin-testing"
             }
         }
 
