@@ -140,9 +140,9 @@ node(POD_LABEL){
                           passwordVariable: 'MAVEN_REPO_PASSWORD']])
             {
                 sh """
-                    ./gradlew assemble -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-                    ./gradlew copyJarToDockerDir -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-                    ./gradlew publish -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
+                    ./gradlew assemble -PossimMavenProxy=${MAVEN_DOWNLOAD_URL} -PbranchName=${BRANCH_NAME}
+                    ./gradlew copyJarToDockerDir -PossimMavenProxy=${MAVEN_DOWNLOAD_URL} -PbranchName=${BRANCH_NAME}
+                    ./gradlew publish -PossimMavenProxy=${MAVEN_DOWNLOAD_URL} -PbranchName=${BRANCH_NAME}
                 """
                 archiveArtifacts "plugins/*/build/libs/*.jar"
                 archiveArtifacts "apps/*/build/libs/*.jar"
