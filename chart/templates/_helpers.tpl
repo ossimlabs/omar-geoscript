@@ -10,6 +10,11 @@
   {{- end }}
 {{- end -}}
 
+{{/* Templates for the container command */}}
+{{- define "omar-geoscript.command" -}}
+{{- range $configmap := .Values.configmaps}}"application-yaml", "{{ $configmap.mountPath }}/{{ $configmap.file }}"
+{{- end -}}
+{{- end -}}
 
 
 
