@@ -28,11 +28,11 @@ data:
             datastoreId: omar_prod
             datastoreParams:
               dbtype: postgis
-              host: ${omarDb.host}
-              port: ${omarDb.port}
-              database: ${omarDb.name}
-              user: ${omarDb.username}
-              passwd: ${omarDb.password}
+              host: {{ .Values.global.omarDb.host }}
+              port: {{ .Values.global.omarDb.port }}
+              database: {{ .Values.global.omarDb.name }}
+              user: {{ .Values.global.omarDb.user }}
+              passwd: {{ .Values.global.omarDb.password }}
               'Expose primary keys': 'true'
               namespace: http://omar.ossim.org
 
