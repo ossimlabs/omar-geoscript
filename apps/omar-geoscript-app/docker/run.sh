@@ -13,7 +13,7 @@
 #fi
 
 if [ "${JAVA_ARGS}" == "" ] ; then
-   export JAVA_ARGS="-server -Xms256m -Xmx1024m -XX:+CMSClassUnloadingEnabled -XX:+UseGCOverheadLimit -XX:+UnlockExperimentalVMOptions  -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=1 -Djava.security.egd=file:/dev/./urandom"
+   export JAVA_ARGS="-server -Xms256m -Xmx1024m -XX:+CMSClassUnloadingEnabled -XX:+UseGCOverheadLimit -XX:+UnlockExperimentalVMOptions -XX:MaxRAMFraction=1 -Djava.security.egd=file:/dev/./urandom"
 fi
 
 if [ "${KEY_STORE}" != "" ] ; then
