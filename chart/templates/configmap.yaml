@@ -29,7 +29,7 @@ data:
             datastoreParams:
               dbtype: postgis
               host: {{ .Values.global.omarDb.host }}
-              port: {{ .Values.global.omarDb.port }}
+              port: "{{ .Values.global.omarDb.port }}"
               database: {{ .Values.global.omarDb.name }}
               user: {{ .Values.global.omarDb.user }}
               passwd: {{ .Values.global.omarDb.password }}
