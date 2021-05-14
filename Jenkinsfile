@@ -154,7 +154,7 @@ node(POD_LABEL){
         container('docker') {
             withDockerRegistry(credentialsId: 'dockerCredentials', url: "https://${DOCKER_REGISTRY_DOWNLOAD_URL}") {
                 sh """
-                    docker build --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/${APP_NAME}:${TAG_NAME}" ./docker
+                    docker build --build-arg BASE_IMAGE=${JDK11_BASE_IMAGE} --network=host -t "${DOCKER_REGISTRY_PUBLIC_UPLOAD_URL}/${APP_NAME}:${TAG_NAME}" ./docker
                 """
             }
         }
