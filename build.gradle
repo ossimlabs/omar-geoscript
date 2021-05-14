@@ -23,8 +23,9 @@ subprojects { project ->
 	boolean isGrailsProject = isGrailsApp || isGrailsPlugin
 
    project.ext {
-     gitBranch = getCurrentGitBranch(project)
-     buildVersionTag = gitBranch == "master" ? "RELEASE" : "SNAPSHOT"
+        gitBranch = getCurrentGitBranch(project)
+        gitBranch = gitBranch == "HEAD" ? branchName : gitBranch
+        buildVersionTag = gitBranch == "master" ? "RELEASE" : "SNAPSHOT"
     }
 
     project.version "${project.buildVersion}-${buildVersionTag}"
@@ -69,8 +70,8 @@ subprojects { project ->
               publishing {
                     publications {
                         "${project.name}" (MavenPublication) {
-                            group groupName
-                            groupId = groupName
+                            group "${groupName}-${buildVersionTag}"
+                            groupId = "${groupName}-${buildVersionTag}"
                             version project.version
                             from components.java
                         }
@@ -81,7 +82,7 @@ subprojects { project ->
                             username mavenRepoUsername
                             password mavenRepoPassword
                             }
-                            url = mavenPublishUrl.toLowerCase()
+                            url = mavenPublishUrl?.toLowerCase()
                         }
                     }                
                     jar.onlyIf {
@@ -168,7 +169,6 @@ subprojects { project ->
             else if ( isGrailsPlugin ) 
             {
                 profile "org.grails.profiles:web-plugin"
-                testCompile "org.grails:grails-plugin-testing"
             }
         }
 

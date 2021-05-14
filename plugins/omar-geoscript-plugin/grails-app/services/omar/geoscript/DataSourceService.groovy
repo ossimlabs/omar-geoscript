@@ -52,7 +52,10 @@ class DataSourceService
 				workspaceInfo.with {
 					namespaceInfo = NamespaceInfo.findByPrefix( datastore.namespaceId )
 					workspaceParams = [:]//datastore.datastoreParams
-					datastore.datastoreParams.each{k,v->
+					datastore.datastoreParams.each{ k,v ->
+						if (k.equals("Exposeprimarykeys")) {
+							k = "Expose primary keys"
+						}
 						workspaceParams."${k}" = expandEnvVars(v);
 					}
 					save()

@@ -134,12 +134,19 @@ node(POD_LABEL){
 
     stage('Build') {
         container('builder') {
-            sh """
-                ./gradlew assemble -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-                ./gradlew copyJarToDockerDir -PossimMavenProxy=${MAVEN_DOWNLOAD_URL}
-            """
-        archiveArtifacts "plugins/*/build/libs/*.jar"
-        archiveArtifacts "apps/*/build/libs/*.jar"
+             withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                          credentialsId: 'nexusCredentials',
+                          usernameVariable: 'MAVEN_REPO_USERNAME',
+                          passwordVariable: 'MAVEN_REPO_PASSWORD']])
+            {
+                sh """
+                    ./gradlew assemble -PossimMavenProxy=${MAVEN_DOWNLOAD_URL} -PbranchName=${BRANCH_NAME}
+                    ./gradlew copyJarToDockerDir -PossimMavenProxy=${MAVEN_DOWNLOAD_URL} -PbranchName=${BRANCH_NAME}
+                    ./gradlew publish -PossimMavenProxy=${MAVEN_DOWNLOAD_URL} -PbranchName=${BRANCH_NAME}
+                """
+                archiveArtifacts "plugins/*/build/libs/*.jar"
+                archiveArtifacts "apps/*/build/libs/*.jar"
+            }
         }
     }
 
