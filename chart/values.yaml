@@ -46,10 +46,10 @@ targetCpu: 75
 
 image:
   name: omar-geoscript
-  tag: dev
+  tag: 2021.Q1.R1.2724.sgm
   pullPolicy: Always
 
-ingressPath: /omar-geoscript
+path: /omar-geoscript
 internalPort: 8080
 externalPort: 8080
 
