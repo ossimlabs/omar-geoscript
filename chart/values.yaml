@@ -12,6 +12,13 @@ global:
     password: null
   hostname: omar-dev.ossim.io
 
+  # omarDb:
+  #   name: null
+  #   host: null
+  #   user: null
+  #   password: null
+  #   port: null
+
   createIngress: true
   useTls: false
   useTLSClientAuth: false
@@ -46,7 +53,7 @@ targetCpu: 75
 
 image:
   name: omar-geoscript
-  tag: 2021.Q1.R1.2724.sgm
+  tag: 2.15
   pullPolicy: Always
 
 path: /omar-geoscript
