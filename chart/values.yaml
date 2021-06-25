@@ -12,12 +12,12 @@ global:
     password: null
   hostname: omar-dev.ossim.io
 
-  # omarDb:
-  #   name: null
-  #   host: null
-  #   user: null
-  #   password: null
-  #   port: null
+  omarDb:
+    name: null
+    host: null
+    user: null
+    password: null
+    port: null
 
   createIngress: true
   useTls: false
