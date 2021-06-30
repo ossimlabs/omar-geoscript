@@ -12,6 +12,13 @@ global:
     password: null
   hostname: omar-dev.ossim.io
 
+  omarDb:
+    name: null
+    host: null
+    user: null
+    password: null
+    port: null
+
   createIngress: true
   useTls: false
   useTLSClientAuth: false
@@ -46,10 +53,10 @@ targetCpu: 75
 
 image:
   name: omar-geoscript
-  tag: dev
+  tag: 2.15
   pullPolicy: Always
 
-ingressPath: /omar-geoscript
+path: /omar-geoscript
 internalPort: 8080
 externalPort: 8080
 
