@@ -40,12 +40,6 @@
 {{- define "omar-geoscript.volumeMounts" -}}
 {{- include "omar-geoscript.volumeMounts.configmaps" . -}}
 {{- include "omar-geoscript.volumeMounts.pvcs" . -}}
-{{- if .Values.global.extraVolumeMounts }}
-{{ toYaml .Values.global.extraVolumeMounts }}
-{{- end }}
-{{- if .Values.extraVolumeMounts }}
-{{ toYaml .Values.extraVolumeMounts }}
-{{- end }}
 {{- end -}}
 
 

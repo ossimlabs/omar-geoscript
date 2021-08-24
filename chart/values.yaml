@@ -27,7 +27,7 @@ global:
 
   createImagePullSecret: true
   useImagePullSecret: true
-  
+
   createHpa: true
 
   useSpringConfigServer: false
@@ -86,10 +86,6 @@ envVars:
   REMOTE_DEBUG:
 
 configmaps: {}
-
-extraVolumes: []
-
-extraVolumeMounts: []
 
 extraInitContainers: []
 
