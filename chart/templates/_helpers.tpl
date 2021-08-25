@@ -68,10 +68,4 @@
 {{- define "omar-geoscript.volumes" -}}
 {{- include "omar-geoscript.volumes.configmaps" . -}}
 {{- include "omar-geoscript.volumes.pvcs" . -}}
-{{- if .Values.global.extraVolumes }}
-{{ toYaml .Values.global.extraVolumes }}
-{{- end }}
-{{- if .Values.extraVolumes }}
-{{ toYaml .Values.extraVolumes }}
-{{- end }}
 {{- end -}}
