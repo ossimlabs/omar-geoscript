@@ -20,7 +20,8 @@ omarDb:
   port: '5432'
   username: 'postgres'
   password: 'postgres'
-  name: 'omardb-1.9.0-prod'
+  name: 'omardb-prod'
+  url: jdbc:postgresql:${omarDb.name}
 
 wfs:
   featureTypeNamespaces:
