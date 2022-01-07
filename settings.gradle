@@ -31,6 +31,6 @@ if ( System.getenv( 'O2_INLINE_BUILD' ) )
 	modules.each { module ->
 		include "${ module }-plugin"
 
-		project( ":${ module }-plugin" ).projectDir = "${ rootProject.projectDir }/../${ module }/plugins/${ module }-plugin" as File
+		project( ":${ module }-plugin" ).projectDir = "${ rootProject.projectDir }/../${ module }/plugins-RELEASE/${ module }-plugin" as File
 	}
 }
