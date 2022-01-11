@@ -119,6 +119,7 @@ node(POD_LABEL){
 //         COMING SOON
 //     }
 
+/*
     stage('SonarQube Analysis') {
         nodejs(nodeJSInstallationName: "${NODEJS_VERSION}") {
             def scannerHome = tool "${SONARQUBE_SCANNER_VERSION}"
@@ -131,6 +132,7 @@ node(POD_LABEL){
             }
         }
     }
+*/
 
     stage('Build') {
         container('builder') {
