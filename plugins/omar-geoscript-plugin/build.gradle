@@ -17,7 +17,7 @@ dependencies {
 
 //   compile "commons-beanutils:commons-beanutils:1.9.3"
 //   compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
-    compile 'systems.uom:systems-common:0.7.2'
+    // compile 'systems.uom:systems-common:0.7.2'
 
 //   compile( "org.geoscript:geoscript-groovy:1.10.0" ) {
   compile( "org.geoscript:geoscript-groovy:1.14.0" ) {
@@ -28,6 +28,6 @@ dependencies {
     exclude module: "commons-beanutils"
     exclude module: "gt-jdbc-spatialite"
     exclude module: 'gt-swing'    
-    exclude module: 'systems-common-java8'
+    // exclude module: 'systems-common-java8'
   }
 }
