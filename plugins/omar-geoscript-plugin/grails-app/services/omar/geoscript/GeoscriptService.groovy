@@ -8,6 +8,7 @@ import geoscript.geom.Bounds
 import geoscript.geom.GeometryCollection
 import geoscript.layer.Layer
 import geoscript.layer.io.CsvWriter
+import geoscript.proj.Projection
 import geoscript.workspace.Database
 import geoscript.workspace.Memory
 import geoscript.workspace.Workspace
@@ -560,8 +561,19 @@ class GeoscriptService implements InitializingBean
                   log.info options as String
                   log.info '-' * 50
 
+                  Projection srcProj
+                  Projection destProj
+
+                  if ( options?.srsName ) {
+                    srcProj = new Projection( "epsg:4326" )
+                    destProj = new Projection( options?.srsName )
+                  }
+
                   features = layer?.collectFromFeature(options) { feature ->
-                    ++count;
+                    ++count;                    
+                    if ( options?.srsName ) {
+                      feature.geom = Projection.transform(feature.geom, srcProj, destProj)
+                    }
                     formatFeature(feature, featureFormat, [prefix: prefix])
                   }
                 }
