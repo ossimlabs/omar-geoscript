@@ -584,7 +584,7 @@ class GeoscriptService implements InitializingBean
                       File imageFile = feature?.filename as File
                       
 //                      String downloadLink = "${downloadURL}/${imageFile?.parent - downloadRootDir}"
-                      String downloadLink = "<a href='${downloadURL}/${imageFile?.parent - downloadRootDir}'  target='_blank'>Click to download</a>"
+                      String downloadLink = "<a href='${downloadURL}/${imageFile?.parent - downloadRootDir}/index.html'  target='_blank'>Click to download</a>"
 
                       Field imageIdField = feature?.schema?.fields?.find { it.name?.toLowerCase() == 'image_id' }
 
