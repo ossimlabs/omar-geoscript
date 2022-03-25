@@ -582,10 +582,17 @@ class GeoscriptService implements InitializingBean
                     /* DOWNLOAD HACK - START */
                     if ( downloadURL && downloadRootDir ) {
                       File imageFile = feature?.filename as File
+                      
 //                      String downloadLink = "${downloadURL}/${imageFile?.parent - downloadRootDir}"
                       String downloadLink = "<a href='${downloadURL}/${imageFile?.parent - downloadRootDir}'  target='_blank'>Click to download</a>"
 
-                      feature?.set( 'image_id', downloadLink)
+                      Field imageIdField = feature?.schema?.fields?.find { it.name?.toLowerCase() == 'image_id' }
+
+                      if ( imageIdField ) {
+                        feature?.set( 'image_id', downloadLink)
+                      } else {
+                        log.error "No image Id present" 
+                      }
                     }
                     /* DOWNLOAD HACK - END */
 
