@@ -18,6 +18,8 @@ data:
         password: ''
       elasticsearch:
         url: "https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/_search?pretty"
+      downloadURL: {{ .Values.downloadURL }} 
+      downloadRootDir: {{ .Values.downloadRootDir }}
     wfs:
       featureTypeNamespaces:
           - prefix: omar
@@ -72,6 +74,9 @@ data:
               g: 0
               b: 255
               a: 255
+          comsar:
+            filter: mission_id='COMSAR'
+            color: orange            
         byFileType:
           adrg:
             filter: file_type='adrg'
@@ -196,7 +201,7 @@ data:
       url: jdbc:postgresql://${omarDb.host}:${omarDb.port}/${omarDb.name}
     
     serverDomain: ossim.io
-    serverName: omar.${serverDomain}
+    serverName: {{ .Values.global.hostname }}
     serverNamePki: pki-omar.${serverDomain}
 
     serverProtocol: https
