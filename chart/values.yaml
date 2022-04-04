@@ -19,7 +19,11 @@ global:
     password: null
     port: null
 
-  createIngress: true
+  ingress:
+    class: nginx
+    enabled: true
+    annotations: {}
+
   useTls: false
   useTLSClientAuth: false
   sslCertSecretName: null
@@ -28,7 +32,8 @@ global:
   createImagePullSecret: true
   useImagePullSecret: true
 
-  createHpa: true
+  autoscaling:
+    enabled: true
 
   useSpringConfigServer: false
 
@@ -49,12 +54,21 @@ resources:
     cpu: 500m
     memory: 500Mi
 
-targetCpu: 75
+autoscaling:
+  enabled:
+  targetCpu: 75
 
 image:
   name: omar-geoscript
   tag: 2.15.9
   pullPolicy: Always
+
+ingress:
+  enabled:
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  class: # defaults to nginx if not set
 
 path: /omar-geoscript
 internalPort: 8080
@@ -74,7 +88,6 @@ readinessProbe:
   successThreshold: 2
   timeoutSeconds: 3
   path: /omar-geoscript/actuator/health
-
 
 terminationGracePeriodSeconds: 30
 

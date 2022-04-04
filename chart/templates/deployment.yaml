@@ -4,7 +4,9 @@ metadata:
   labels: {}
   name: {{ .Values.appName }}
 spec:
+  {{- if eq (include "omar-geoscript.autoscaling.enabled" $) "false" }}
   replicas: {{ .Values.replicas }}
+  {{- end }}
   selector:
     matchLabels:
       app: {{ .Values.appName }}
