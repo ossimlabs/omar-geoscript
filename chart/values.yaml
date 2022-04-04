@@ -56,12 +56,14 @@ resources:
 
 autoscaling:
   enabled:
-  targetCpu: 75
+  # targetCpu: 75
+  minReplicas: 1
+  maxReplicas: 1
 
 image:
   name: omar-geoscript
   tag: 2.15.9
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 ingress:
   enabled:
