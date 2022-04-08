@@ -62,7 +62,7 @@ autoscaling:
 
 image:
   name: omar-geoscript
-  tag: 2.15.9
+  tag: null
   pullPolicy: IfNotPresent
 
 ingress:
@@ -107,5 +107,5 @@ extraInitContainers: []
 sideCars: []
 
 # Added for download support
-downloadURL: https://omar-3pa-sar-download.ossim.io  
-downloadRootDir: /3pa-comsar/ 
+downloadURL: https://omar-3pa-sar-download.ossim.io
+downloadRootDir: /3pa-comsar/
