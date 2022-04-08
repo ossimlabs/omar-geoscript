@@ -10,7 +10,7 @@ data:
       contactEmail: Kevin.Naquin@maxar.com
       releaseName: HystericalHyena
       releaseNumber: 1.0.0
-    
+
     geoscript:
       evwhs:
         url: 'https://evwhs.digitalglobe.com/mapservice/wmsaccess?connectid=a59618a4-3656-4b09-ba85-934f162bd9d6&version=1.3.0&request=GetCapabilities'
@@ -18,7 +18,7 @@ data:
         password: ''
       elasticsearch:
         url: "https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/_search?pretty"
-      downloadURL: {{ .Values.downloadURL }} 
+      downloadURL: {{ .Values.downloadURL }}
       downloadRootDir: {{ .Values.downloadRootDir }}
     wfs:
       featureTypeNamespaces:
@@ -76,7 +76,7 @@ data:
               a: 255
           comsar:
             filter: mission_id='COMSAR'
-            color: orange            
+            color: orange
         byFileType:
           adrg:
             filter: file_type='adrg'
@@ -199,7 +199,7 @@ data:
       driver: org.postgresql.Driver
       dialect: 'org.hibernate.spatial.dialect.postgis.PostgisDialect'
       url: jdbc:postgresql://${omarDb.host}:${omarDb.port}/${omarDb.name}
-    
+
     serverDomain: ossim.io
     serverName: {{ .Values.global.hostname }}
     serverNamePki: pki-omar.${serverDomain}
