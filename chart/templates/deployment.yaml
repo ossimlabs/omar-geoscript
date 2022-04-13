@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels: {}
-  name: {{ .Values.appName }}
+  name: {{ .Values.fullnameOverride }}
   annotations:
   {{- range $key, $value := $annotations }}
     {{- $key | nindent 4 }}: {{ tpl $value $ | quote }}
@@ -14,11 +14,11 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      app: {{ .Values.appName }}
+      app: {{ .Values.fullnameOverride }}
   template:
     metadata:
       labels:
-        app: {{ .Values.appName }}
+        app: {{ .Values.fullnameOverride }}
     spec:
       initContainers:
       {{- if .Values.extraInitContainers }}
@@ -28,7 +28,7 @@ spec:
       {{- if .Values.sideCars }}
       {{- toYaml .Values.sideCars | nindent 6 }}
       {{- end }}
-      - name:  {{ .Values.appName }}
+      - name:  {{ .Values.fullnameOverride }}
         env:
         {{- include "omar-geoscript.envVars" . | nindent 8 }}
         image: {{ include "omar-geoscript.image" . | quote }}
@@ -69,7 +69,7 @@ spec:
       dnsPolicy: ClusterFirst
       {{- if .Values.global.useImagePullSecret }}
       imagePullSecrets:
-        - name: {{ .Values.appName }}-pull-secret
+        - name: {{ .Values.fullnameOverride }}-pull-secret
       {{- end }}
       restartPolicy: Always
       securityContext: {}

@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-appName: omar-geoscript
+fullnameOverride: omar-geoscript
 
 global:
   dockerRepository: nexus-docker-private-group.ossim.io
