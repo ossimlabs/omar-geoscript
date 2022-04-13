@@ -580,7 +580,7 @@ class GeoscriptService implements InitializingBean
                     }
 
                     /* DOWNLOAD HACK - START */
-                    if ( downloadURL && downloadRootDir ) {
+                    if ( downloadURL && downloadRootDir &&  feature?.mission_id == 'COMSAR' ) {
                       File imageFile = feature?.filename as File
                       
 //                      String downloadLink = "${downloadURL}/${imageFile?.parent - downloadRootDir}"
