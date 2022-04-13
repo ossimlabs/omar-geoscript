@@ -13,7 +13,7 @@
 {{/*
 Return the proper image name
 */}}
-{{- define "helm-base.image" -}}
+{{- define "omar-geoscript.image" -}}
 {{- $registryName := .Values.image.registry -}}
 {{- $imageName := .Values.image.name -}}
 {{- $tag := .Values.image.tag | default .Chart.AppVersion | toString -}}
