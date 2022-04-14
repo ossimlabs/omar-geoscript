@@ -45,6 +45,8 @@ global:
     annotations: {}
     # name:
 
+  envVars: {}
+
 # These variables can be overridden because of the use of the 'pluck' function:
 # - createIngress
 # - useTls
