@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-appName: omar-geoscript
+fullnameOverride: omar-geoscript
 
 global:
   dockerRepository: nexus-docker-private-group.ossim.io
@@ -19,7 +19,11 @@ global:
     password: null
     port: null
 
-  createIngress: true
+  ingress:
+    class: nginx
+    enabled: true
+    annotations: {}
+
   useTls: false
   useTLSClientAuth: false
   sslCertSecretName: null
@@ -28,9 +32,20 @@ global:
   createImagePullSecret: true
   useImagePullSecret: true
 
-  createHpa: true
+  autoscaling:
+    enabled: true
 
   useSpringConfigServer: false
+
+  deployment:
+    annotations: {}
+
+  serviceAccount:
+    enabled: false
+    annotations: {}
+    # name:
+
+  envVars: {}
 
 # These variables can be overridden because of the use of the 'pluck' function:
 # - createIngress
@@ -49,12 +64,23 @@ resources:
     cpu: 500m
     memory: 500Mi
 
-targetCpu: 75
+autoscaling:
+  enabled:
+  # targetCpu: 75
+  minReplicas: 1
+  maxReplicas: 1
 
 image:
   name: omar-geoscript
-  tag: 2.15.9
-  pullPolicy: Always
+  tag: null
+  pullPolicy: IfNotPresent
+
+ingress:
+  enabled:
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  class: # defaults to nginx if not set
 
 path: /omar-geoscript
 internalPort: 8080
@@ -75,7 +101,6 @@ readinessProbe:
   timeoutSeconds: 3
   path: /omar-geoscript/actuator/health
 
-
 terminationGracePeriodSeconds: 30
 
 envVars:
@@ -92,5 +117,17 @@ extraInitContainers: []
 sideCars: []
 
 # Added for download support
-downloadURL: https://omar-3pa-sar-download.ossim.io  
-downloadRootDir: /3pa-comsar/ 
+downloadURL: https://omar-3pa-sar-download.ossim.io
+downloadRootDir: /3pa-comsar/
+
+deployment:
+  annotations: {}
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  enabled: null
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and enabled is true, a name is generated using the fullname template
+  # name:

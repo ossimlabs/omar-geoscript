@@ -4,15 +4,81 @@
 
 {{/* Template for env vars */}}
 {{- define "omar-geoscript.envVars" -}}
-  {{- range $key, $value := .Values.envVars }}
-  - name: {{ $key | quote }}
-    value: {{ $value | quote }}
+  {{- range $key, $value := merge .Values.envVars .Values.global.envVars }}
+  - name: {{ tpl (toString $key) $ | quote }}
+    value: {{ tpl (toString $value) $ | quote }}
   {{- end }}
 {{- end -}}
 
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "omar-geoscript.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "omar-geoscript.fullname" -}}
+{{-   if .Values.fullnameOverride }}
+{{-     .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
+{{-   else }}
+{{-     $name := default .Chart.Name .Values.nameOverride }}
+{{-     if contains $name .Release.Name }}
+{{-       .Release.Name | trunc 63 | trimSuffix "-" }}
+{{-     else }}
+{{-       printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" }}
+{{-     end }}
+{{-   end }}
+{{- end }}
 
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "omar-geoscript.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
+{{/*
+Common labels
+*/}}
+{{- define "omar-geoscript.labels" -}}
+omar-geoscript.sh/chart: {{ include "omar-geoscript.chart" . }}
+{{ include "omar-geoscript.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "omar-geoscript.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "omar-geoscript.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Return the proper image name
+*/}}
+{{- define "omar-geoscript.image" -}}
+{{- $registryName := .Values.image.registry -}}
+{{- $imageName := .Values.image.name -}}
+{{- $tag := .Values.image.tag | default .Chart.AppVersion | toString -}}
+{{- if .Values.global }}
+    {{- if .Values.global.dockerRepository }}
+        {{- printf "%s/%s:%s" .Values.global.dockerRepository $imageName $tag -}}
+    {{- else -}}
+        {{- printf "%s/%s:%s" $registryName $imageName $tag -}}
+    {{- end -}}
+{{- else -}}
+    {{- printf "%s/%s:%s" $registryName $imageName $tag -}}
+{{- end -}}
+{{- end -}}
 
 {{/* Templates for the volumeMounts section */}}
 
@@ -61,7 +127,7 @@
 {{- $volumeDict := index $.Values.global.volumes $volumeName }}
 - name: {{ $volumeName }}
   persistentVolumeClaim:
-    claimName: "{{ $.Values.appName }}-{{ $volumeName }}-pvc"
+    claimName: "{{ $.Values.fullnameOverride }}-{{ $volumeName }}-pvc"
 {{- end -}}
 {{- end -}}
 
