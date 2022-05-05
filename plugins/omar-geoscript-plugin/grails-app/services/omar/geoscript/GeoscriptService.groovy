@@ -228,7 +228,7 @@ class GeoscriptService implements InitializingBean
     defaultMaxFeatures = grailsApplication.config.geoscript.defaultMaxFeatures as Integer
     downloadURL = grailsApplication.config.geoscript.downloadURL
     downloadRootDir = grailsApplication.config.geoscript.downloadRootDir
-    downloadMissions = grailsApplication.config.geoscript.downloadMissions
+    downloadMissions = grailsApplication.config.geoscript.downloadMissions.split(' ')
   }
 
   Workspace getWorkspace(Map params)
