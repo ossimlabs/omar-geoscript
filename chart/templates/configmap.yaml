@@ -20,6 +20,7 @@ data:
         url: "https://logging-es.logging.svc.cluster.local:9200/project.omar-dev*/_search?pretty"
       downloadURL: {{ .Values.downloadURL }}
       downloadRootDir: {{ .Values.downloadRootDir }}
+      downloadMissions: {{- range $job, $val := .Values.downloadMissions }}
     wfs:
       featureTypeNamespaces:
           - prefix: omar
