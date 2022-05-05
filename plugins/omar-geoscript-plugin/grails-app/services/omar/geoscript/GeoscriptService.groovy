@@ -582,7 +582,8 @@ class GeoscriptService implements InitializingBean
                     }
 
                     ArrayList mission_ids = downloadMissions?.split()
-                    log.info("dloanload missions is ${mission_ids}")
+                    log.info("download missions is ${downloadMissions}")
+                    log.info("Mission_ids is ${mission_ids}")
                     /* DOWNLOAD HACK - START */
                     if ( downloadURL && downloadRootDir &&  mission_ids?.contains(feature?.mission_id) ) {
                       File imageFile = feature?.filename as File
