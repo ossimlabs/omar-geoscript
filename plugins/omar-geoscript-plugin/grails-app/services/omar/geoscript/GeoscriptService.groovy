@@ -583,7 +583,7 @@ class GeoscriptService implements InitializingBean
 
                     log.info("dloanload missions is ${downloadMissions}")
                     /* DOWNLOAD HACK - START */
-                    if ( downloadURL && downloadRootDir &&  downloadMissions?.contains(feature?.mission_id)) ) {
+                    if ( downloadURL && downloadRootDir &&  downloadMissions?.contains(feature?.mission_id) ) {
                       File imageFile = feature?.filename as File
                       log.info("download link is ${downloadURL}/${imageFile?.parent - downloadRootDir}")
 //                      String downloadLink = "${downloadURL}/${imageFile?.parent - downloadRootDir}"
