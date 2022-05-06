@@ -22,7 +22,7 @@ data:
       downloadRootDir: {{ .Values.downloadRootDir }}
       downloadMissions:
       {{- range .Values.downloadMissions }}
-        - {{ . }}
+        - {{ . | quote }}
       {{- end }}
     wfs:
       featureTypeNamespaces:

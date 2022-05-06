@@ -43,7 +43,8 @@ class GeoscriptService implements InitializingBean
   Integer defaultMaxFeatures
   String downloadURL
   String downloadRootDir
-  String downloadMissions
+  @Value('geoscript.downloadMissions')
+  List<String> downloadMissions
 
   def parseOptions(def wfsParams)
   {
@@ -228,7 +229,6 @@ class GeoscriptService implements InitializingBean
     defaultMaxFeatures = grailsApplication.config.geoscript.defaultMaxFeatures as Integer
     downloadURL = grailsApplication.config.geoscript.downloadURL
     downloadRootDir = grailsApplication.config.geoscript.downloadRootDir
-    downloadMissions = grailsApplication.config.geoscript.downloadMissions
   }
 
   Workspace getWorkspace(Map params)
@@ -581,8 +581,9 @@ class GeoscriptService implements InitializingBean
                       feature.geom = Projection.transform(feature.geom, srcProj, destProj)
                     }
 
+                    log.info("Download missions is ${downloadMissions}")
                     /* DOWNLOAD HACK - START */
-                    if ( downloadURL && downloadRootDir &&  downloadMissions?.contains(feature?.mission_id) ) {
+                    if ( downloadURL && downloadRootDir && feature?.mission_id in downloadMissions ) {
                       File imageFile = feature?.filename as File
 //                      String downloadLink = "${downloadURL}/${imageFile?.parent - downloadRootDir}"
                       String downloadLink = "<a href='${downloadURL}/${imageFile?.parent - downloadRootDir}/index.html'  target='_blank'>Click to download</a>"
