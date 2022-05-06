@@ -116,13 +116,6 @@ extraInitContainers: []
 
 sideCars: []
 
-# Added for download support
-downloadURL: https://omar-3pa-sar-download.ossim.io
-downloadRootDir: /3pa-comsar/
-downloadMissions:
-  - Capella
-  - ICEYE
-
 deployment:
   annotations: {}
 
