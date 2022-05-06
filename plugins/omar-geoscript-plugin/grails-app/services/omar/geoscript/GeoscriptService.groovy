@@ -24,14 +24,14 @@ import org.geotools.referencing.CRS
 import org.opengis.filter.capability.FunctionName
 
 import org.springframework.beans.factory.InitializingBean
-import org.springframework.core.annotation
+
 
 import grails.gorm.transactions.Transactional
 
 import java.time.Instant
 
 
-// import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.annotation.Value
 
 @Transactional( readOnly = true )
 class GeoscriptService implements InitializingBean
