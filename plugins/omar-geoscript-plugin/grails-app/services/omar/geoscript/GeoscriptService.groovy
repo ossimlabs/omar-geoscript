@@ -209,10 +209,11 @@ class GeoscriptService implements InitializingBean
 
     names.sort { a, b -> a.name.compareToIgnoreCase b.name }
   }
-/*
+
   @Override
   void afterPropertiesSet() throws Exception
   {
+    /*
 
 //    Thread.start {
       Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
@@ -232,8 +233,9 @@ class GeoscriptService implements InitializingBean
     defaultMaxFeatures = grailsApplication.config.geoscript.defaultMaxFeatures as Integer
     downloadURL = grailsApplication.config.geoscript.downloadURL
     downloadRootDir = grailsApplication.config.geoscript.downloadRootDir
+      */
   }
-  */
+
 
   Workspace getWorkspace(Map params)
   {
