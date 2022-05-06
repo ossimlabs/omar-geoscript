@@ -581,11 +581,9 @@ class GeoscriptService implements InitializingBean
                       feature.geom = Projection.transform(feature.geom, srcProj, destProj)
                     }
 
-                    ArrayList mission_ids = downloadMissions?.split()
                     log.info("download missions is ${downloadMissions}")
-                    log.info("Mission_ids is ${mission_ids}")
                     /* DOWNLOAD HACK - START */
-                    if ( downloadURL && downloadRootDir &&  mission_ids?.contains(feature?.mission_id) ) {
+                    if ( downloadURL && downloadRootDir &&  downloadMissions?.contains(feature?.mission_id) ) {
                       File imageFile = feature?.filename as File
                       log.info("download link is ${downloadURL}/${imageFile?.parent - downloadRootDir}")
 //                      String downloadLink = "${downloadURL}/${imageFile?.parent - downloadRootDir}"
