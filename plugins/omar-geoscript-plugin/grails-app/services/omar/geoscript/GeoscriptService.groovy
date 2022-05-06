@@ -44,7 +44,7 @@ class GeoscriptService implements InitializingBean
   Integer defaultMaxFeatures
   String downloadURL
   String downloadRootDir
-  @Value('geoscript.downloadMissions')
+  @Value('${geoscript.downloadMissions}')
   List<String> downloadMissions
 
   def parseOptions(def wfsParams)
