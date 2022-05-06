@@ -24,6 +24,7 @@ import org.geotools.referencing.CRS
 import org.opengis.filter.capability.FunctionName
 
 import org.springframework.beans.factory.InitializingBean
+import org.springframework.core.annotation
 
 import grails.gorm.transactions.Transactional
 
