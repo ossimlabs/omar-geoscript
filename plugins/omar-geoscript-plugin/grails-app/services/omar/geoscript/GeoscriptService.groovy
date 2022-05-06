@@ -25,12 +25,13 @@ import org.opengis.filter.capability.FunctionName
 
 import org.springframework.beans.factory.InitializingBean
 
+
 import grails.gorm.transactions.Transactional
 
 import java.time.Instant
 
 
-// import org.springframework.beans.factory.annotation.Value
+import org.springframework.beans.factory.annotation.Value
 
 @Transactional( readOnly = true )
 class GeoscriptService implements InitializingBean
@@ -39,10 +40,14 @@ class GeoscriptService implements InitializingBean
   def grailsApplication
   def jsonSlurper = new JsonSlurper()
 
-  // @Value('${geoscript.defaultMaxFeatures}')
+  @Value('${geoscript.defaultMaxFeatures}')
   Integer defaultMaxFeatures
+  @Value('${geoscript.downloadURL}')
   String downloadURL
+  @Value('${geoscript.downloadRootDir}')
   String downloadRootDir
+  @Value('${geoscript.downloadMissions}')
+  List<String> downloadMissions
 
   def parseOptions(def wfsParams)
   {
@@ -179,8 +184,8 @@ class GeoscriptService implements InitializingBean
     {
       throw new Exception("Can't instantiate layer: ${layerInfo}")
     }
-    
-    return layer  
+
+    return layer
   }
 
   @Memoized
@@ -208,8 +213,9 @@ class GeoscriptService implements InitializingBean
   @Override
   void afterPropertiesSet() throws Exception
   {
-/*    
-//    Thread.start {      
+    /*
+
+//    Thread.start {
       Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
         def (workspace, layer) = getWorkspaceAndLayer( layerName )
         def results = layer?.collectFromFeature( filter ) { it[attributeName] }
@@ -223,11 +229,13 @@ class GeoscriptService implements InitializingBean
         Class.forName( multiType ).newInstance( geometries )
       }
 //    }
-*/
+
     defaultMaxFeatures = grailsApplication.config.geoscript.defaultMaxFeatures as Integer
     downloadURL = grailsApplication.config.geoscript.downloadURL
     downloadRootDir = grailsApplication.config.geoscript.downloadRootDir
+      */
   }
+
 
   Workspace getWorkspace(Map params)
   {
@@ -560,7 +568,7 @@ class GeoscriptService implements InitializingBean
                   if ( ! options.max || options.max > defaultMaxFeatures ) {
                     options.max = defaultMaxFeatures
                   }
-                  
+
                   log.info '-' * 50
                   log.info options as String
                   log.info '-' * 50
@@ -574,15 +582,15 @@ class GeoscriptService implements InitializingBean
                   }
 
                   features = layer?.collectFromFeature(options) { feature ->
-                    ++count;                    
+                    ++count;
                     if ( options?.srsName ) {
                       feature.geom = Projection.transform(feature.geom, srcProj, destProj)
                     }
 
+                    //log.info("Download missions is ${downloadMissions}")
                     /* DOWNLOAD HACK - START */
-                    if ( downloadURL && downloadRootDir &&  feature?.mission_id == 'COMSAR' ) {
+                    if ( downloadURL && downloadRootDir && feature?.mission_id in downloadMissions ) {
                       File imageFile = feature?.filename as File
-                      
 //                      String downloadLink = "${downloadURL}/${imageFile?.parent - downloadRootDir}"
                       String downloadLink = "<a href='${downloadURL}/${imageFile?.parent - downloadRootDir}/index.html'  target='_blank'>Click to download</a>"
 
@@ -591,7 +599,7 @@ class GeoscriptService implements InitializingBean
                       if ( imageIdField ) {
                         feature?.set( 'image_id', downloadLink)
                       } else {
-                        log.error "No image Id present" 
+                        log.error "No image Id present"
                       }
                     }
                     /* DOWNLOAD HACK - END */
@@ -735,7 +743,7 @@ class GeoscriptService implements InitializingBean
     }?.flatten()
 */
 
-    def projs = ProjectionCache.list 
+    def projs = ProjectionCache.list
 
     Date endTime = new Date()
     responseTime = Math.abs(startTime.getTime() - endTime.getTime())
