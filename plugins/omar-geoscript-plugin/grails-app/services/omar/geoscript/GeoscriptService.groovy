@@ -40,9 +40,11 @@ class GeoscriptService implements InitializingBean
   def grailsApplication
   def jsonSlurper = new JsonSlurper()
 
-  // @Value('${geoscript.defaultMaxFeatures}')
+  @Value('${geoscript.defaultMaxFeatures}')
   Integer defaultMaxFeatures
+  @Value('${geoscript.downloadURL}')
   String downloadURL
+  @Value('${geoscript.downloadRootDir}')
   String downloadRootDir
   @Value('${geoscript.downloadMissions}')
   List<String> downloadMissions
@@ -207,11 +209,11 @@ class GeoscriptService implements InitializingBean
 
     names.sort { a, b -> a.name.compareToIgnoreCase b.name }
   }
-
+/*
   @Override
   void afterPropertiesSet() throws Exception
   {
-/*
+
 //    Thread.start {
       Function.registerFunction( "queryCollection" ) { String layerName, String attributeName, String filter ->
         def (workspace, layer) = getWorkspaceAndLayer( layerName )
@@ -226,11 +228,12 @@ class GeoscriptService implements InitializingBean
         Class.forName( multiType ).newInstance( geometries )
       }
 //    }
-*/
+
     defaultMaxFeatures = grailsApplication.config.geoscript.defaultMaxFeatures as Integer
     downloadURL = grailsApplication.config.geoscript.downloadURL
     downloadRootDir = grailsApplication.config.geoscript.downloadRootDir
   }
+  */
 
   Workspace getWorkspace(Map params)
   {
