@@ -78,8 +78,8 @@ data:
               g: 0
               b: 255
               a: 255
-          comsar:
-            filter: mission_id='COMSAR'
+          capella:
+            filter: mission_id='Capella'
             color: orange
         byFileType:
           adrg:
