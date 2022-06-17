@@ -10,6 +10,3 @@ out/
 .project
 .settings
 .classpath
-prodDb.mv.db
-apps/omar-geoscript-app/bin
-plugins/omar-geoscript-plugin/bin
