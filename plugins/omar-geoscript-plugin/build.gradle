@@ -6,7 +6,7 @@ dependencies {
     api "io.ossim.omar.plugins:omar-core-plugin:+"
     implementation "io.ossim.omar.plugins:omar-hibernate-spatial-plugin:+"
 
-    api( "org.geoscript:geoscript-groovy:1.18.0" ) {
+    api( "org.geoscript:geoscript-groovy:1.19.0" ) {
         exclude module: "ehcache"
         exclude module: "groovy-all"
         exclude module: "slf4j-log4j12"
