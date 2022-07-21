@@ -81,6 +81,9 @@ data:
           capella:
             filter: mission_id='Capella'
             color: orange
+          iceye:
+            filter: mission_id='ICEYE'
+            color: magenta
         byFileType:
           adrg:
             filter: file_type='adrg'
