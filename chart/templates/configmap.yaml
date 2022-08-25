@@ -86,7 +86,7 @@ data:
             color: magenta
           umbra:
             filter: mission_id='UMBRA'
-            color: '#BADA55'
+            color: '#39FF14'
         byFileType:
           adrg:
             filter: file_type='adrg'
