@@ -84,6 +84,9 @@ data:
           iceye:
             filter: mission_id='ICEYE'
             color: magenta
+          umbra:
+            filter: mission_id='UMBRA'
+            color: '#39FF14'
         byFileType:
           adrg:
             filter: file_type='adrg'
