@@ -65,15 +65,12 @@ spec:
             memory: {{ .Values.resources.requests.memory }}
         terminationMessagePath: /dev/termination-log
         volumeMounts:
-        {{- include "omar-geoscript.volumeMounts" . | indent 8 }}
+          {{- include "omar-geoscript.volumeMounts" . | nindent 12 }}
       dnsPolicy: ClusterFirst
-      {{- if .Values.global.useImagePullSecret }}
-      imagePullSecrets:
-        - name: {{ .Values.fullnameOverride }}-pull-secret
-      {{- end }}
+      {{- include "omar-geoscript.imagePullSecrets" . | indent 6 }}
       restartPolicy: Always
       securityContext: {}
       serviceAccountName: {{ include "omar-geoscript.serviceAccount.name" . }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       volumes:
-      {{- include "omar-geoscript.volumes" . | indent 6 }}
+        {{- include "omar-geoscript.volumes" . | nindent 8 }}
