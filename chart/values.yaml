@@ -29,7 +29,7 @@ global:
   sslCertSecretName: null
   authSslCertSecretName: null
 
-  useImagePullSecret: true
+  
 
   autoscaling:
     enabled: true
