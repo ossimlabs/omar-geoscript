@@ -32,6 +32,10 @@ spec:
       - name: {{ .Chart.Name }}
         env:
         {{- include "omar-geoscript.envVars" . | nindent 8 }}
+        envFrom:
+          {{- with (concat .Values.envFrom .Values.global.envFrom) }}
+          {{- tpl (toYaml .) $ | nindent 10 }}
+          {{- end }}
         image: {{ include "omar-geoscript.image" . | quote }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         livenessProbe:
