@@ -1,6 +1,12 @@
 buildscript {
     repositories {
-        maven { url ossimMavenProxy }
+        maven {
+            url ossimMavenProxy
+            credentials {
+                username ossimMavenProxyUsername
+                password ossimMavenProxyPassword
+            }
+        }
         maven { url "https://repo.grails.org/grails/core" }
     }
     dependencies {
@@ -34,7 +40,7 @@ subprojects { project ->
     apply plugin:"eclipse"
     apply plugin:"idea"
 
-    if ( isGrailsProject )    
+    if ( isGrailsProject )
     {
         if ( isGrailsApp )
         {
@@ -55,7 +61,7 @@ subprojects { project ->
             apply plugin:"org.grails.grails-web"
             apply plugin:"com.github.erdi.webdriver-binaries"
         }
-        else if ( isGrailsPlugin ) 
+        else if ( isGrailsPlugin )
         {
             apply plugin:"org.grails.grails-plugin"
             apply plugin:"org.grails.grails-plugin-publish"
@@ -84,7 +90,7 @@ subprojects { project ->
                             }
                             url = mavenPublishUrl?.toLowerCase()
                         }
-                    }                
+                    }
                     jar.onlyIf {
                         !file(jarDestination).exists()
                     }
@@ -104,7 +110,7 @@ subprojects { project ->
         configurations {
            implementation {
                 exclude group: 'hsqldb', module: 'hsqldb'
-            }            
+            }
             developmentOnly
             runtimeClasspath {
                 extendsFrom developmentOnly
@@ -171,7 +177,7 @@ subprojects { project ->
                 compile 'org.springframework.cloud:spring-cloud-starter-config'
                 compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
             }
-            else if ( isGrailsPlugin ) 
+            else if ( isGrailsPlugin )
             {
                 profile "org.grails.profiles:web-plugin"
             }
@@ -179,8 +185,8 @@ subprojects { project ->
 
         bootRun {
             jvmArgs(
-                '-Dspring.output.ansi.enabled=always', 
-                '-noverify', 
+                '-Dspring.output.ansi.enabled=always',
+                '-noverify',
                 '-XX:TieredStopAtLevel=1',
                 '-Xmx1024m')
             sourceResources sourceSets.main
@@ -231,7 +237,7 @@ subprojects { project ->
                 packagePlugin = true
             }
         }
-    }    
+    }
 }
 
 String getConfigurationProperty( String envVar, String sysProp )
