@@ -37,7 +37,7 @@ spec:
           {{- tpl (toYaml .) $ | nindent 10 }}
           {{- end }}
         image: {{ include "omar-geoscript.image" . | quote }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        imagePullPolicy: {{ include "omar-geoscript.pullPolicy" . }}
         livenessProbe:
           failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
           initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}

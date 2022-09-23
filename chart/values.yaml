@@ -79,7 +79,7 @@ autoscaling:
 image:
   name: omar-geoscript
   tag: null
-  pullPolicy: IfNotPresent
+  pullPolicy: ""
 
 ingress:
   enabled:
