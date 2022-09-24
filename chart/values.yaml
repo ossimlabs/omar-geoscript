@@ -5,12 +5,17 @@
 fullnameOverride: omar-geoscript
 
 global:
-  dockerRepository: nexus-docker-private-group.ossim.io
+
   imagePullSecret:
     registry: null
     username: null
     password: null
   hostname: omar-dev.ossim.io
+
+  image:
+    registry: ""
+    pullPolicy: ""
+    pullSecrets: []
 
   omarDb:
     name: null
@@ -29,9 +34,6 @@ global:
   sslCertSecretName: null
   authSslCertSecretName: null
 
-  createImagePullSecret: true
-  useImagePullSecret: true
-
   autoscaling:
     enabled: true
 
@@ -46,6 +48,10 @@ global:
     # name:
 
   envVars: {}
+  envFrom: []
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
 
 # These variables can be overridden because of the use of the 'pluck' function:
 # - createIngress
@@ -73,7 +79,7 @@ autoscaling:
 image:
   name: omar-geoscript
   tag: null
-  pullPolicy: IfNotPresent
+  pullPolicy: ""
 
 ingress:
   enabled:
@@ -118,6 +124,11 @@ sideCars: []
 
 deployment:
   annotations: {}
+
+envFrom: []
+nodeSelector: {}
+affinity: {}
+tolerations: []
 
 serviceAccount:
   # Specifies whether a service account should be created

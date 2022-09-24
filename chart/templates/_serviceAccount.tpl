@@ -19,7 +19,7 @@ Determine the serviceAccount class name
 */}}
 {{- define "omar-geoscript.serviceAccount.name" -}}
 {{-   if eq (include "omar-geoscript.serviceAccount.enabled" $) "true" }}
-{{-     pluck "name" .Values.serviceAccount .Values.global.serviceAccount | first | default $.Values.fullnameOverride -}}
+{{-     pluck "name" .Values.serviceAccount .Values.global.serviceAccount | first | default (include "omar-geoscript.fullname" $) -}}
 {{-   else }}
 {{-     pluck "name" .Values.serviceAccount .Values.global.serviceAccount | first | default "default" -}}
 {{-   end }}
