@@ -1,0 +1,23 @@
+apiVersion: skaffold/v2beta7
+kind: Config
+metadata:
+  name: omar-geoscript
+build:
+  artifacts:
+    - image: registry.iap.maxar.com/gegd/omar/omar-geoscript
+      jib: 
+        project: omar-geoscript-app
+      context: ./apps/omar-geoscript-app
+  tagPolicy:
+    sha256: {}
+deploy:
+  helm:
+    releases:
+      - name: omar-geoscript # this is the helm release name                
+        chartPath: ./apps/omar-geoscript-app/chart
+        valuesFiles:
+          - ./apps/omar-geoscript-app/values-dev.yaml # provides values to override defaults in chart
+        namespace: omar-3pa-dev
+        setValueTemplates:
+          image.tag: latest
+          image.name: omar-geoscript

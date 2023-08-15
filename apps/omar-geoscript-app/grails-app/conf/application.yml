@@ -1,184 +1,149 @@
----
-grails:
-    profile: web
-    codegen:
-        defaultPackage: omar.geoscript.app
-    gorm:
-        reactor:
-            # Whether to translate GORM events into Reactor events
-            # Disabled by default for performance reasons
-            events: false
 info:
-    app:
-        name: '@info.app.name@'
-        version: '@info.app.version@'
-        grailsVersion: '@info.app.grailsVersion@'
-spring:
-    jmx:
-        unique-names: true
-    main:
-        banner-mode: "off"
-    groovy:
-        template:
-            check-template-location: false
-    devtools:
-        restart:
-            additional-exclude:
-                - '*.gsp'
-                - '**/*.gsp'
-                - '*.gson'
-                - '**/*.gson'
-                - 'logback.xml'
-                - '*.properties'
-management:
-    endpoints:
-        enabled-by-default: false
-
----
-grails:
-    mime:
-        disable:
-            accept:
-                header:
-                    userAgents:
-                        - Gecko
-                        - WebKit
-                        - Presto
-                        - Trident
-        types:
-            all: '*/*'
-            atom: application/atom+xml
-            css: text/css
-            csv: text/csv
-            form: application/x-www-form-urlencoded
-            html:
-              - text/html
-              - application/xhtml+xml
-            js: text/javascript
-            json:
-              - application/json
-              - text/json
-            multipartForm: multipart/form-data
-            pdf: application/pdf
-            rss: application/rss+xml
-            text: text/plain
-            hal:
-              - application/hal+json
-              - application/hal+xml
-            xml:
-              - text/xml
-              - application/xml
-    urlmapping:
-        cache:
-            maxsize: 1000
-    controllers:
-        defaultScope: singleton
-    converters:
-        encoding: UTF-8
-    views:
-        default:
-            codec: html
-        gsp:
-            encoding: UTF-8
-            htmlcodec: xml
-            codecs:
-                expression: html
-                scriptlet: html
-                taglib: none
-                staticparts: none
-management:
-    endpoints:
-        jmx:
-            unique-names: true
-
----
-hibernate:
-    cache:
-        queries: false
-        use_second_level_cache: false
-        use_query_cache: false
-    dialect: 'org.hibernate.spatial.dialect.postgis.PostgisDialect'
+  app:
+    name: '@info.app.name@'
+    version: '@info.app.version@'
+    grailsVersion: '@info.app.grailsVersion@'
 
 dataSource:
-    pooled: true
-    jmxExport: true
-    driverClassName: org.postgresql.Driver
-    username: postgres
-    password: ${omarDb.password}
-    
-environments:
-    development:
-        dataSource:
-            dbCreate: update
-            url: jdbc:postgresql:omardb-dev
-    test:
-        dataSource:
-            dbCreate: update
-            url: jdbc:postgresql:omardb-test
-    production:
-        dataSource:
-            dbCreate: update
-            url: ${omarDb.url}
-            properties:
-                jmxEnabled: true
-                initialSize: 5
-                maxActive: 50
-                minIdle: 5
-                maxIdle: 25
-                maxWait: 10000
-                maxAge: 600000
-                timeBetweenEvictionRunsMillis: 5000
-                minEvictableIdleTimeMillis: 60000
-                validationQuery: SELECT 1
-                validationQueryTimeout: 3
-                validationInterval: 15000
-                testOnBorrow: true
-                testWhileIdle: true
-                testOnReturn: false
-                jdbcInterceptors: ConnectionState
-                defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
----
-server:
-    servlet:
-        context-path: /omar-geoscript
-    contextPath: ${server.servlet.context-path}
+  driverClassName: org.postgresql.Driver
+  username: ${omarDb.username}
+  password: ${omarDb.password}
+  pooled: true
+  jmxExport: true
 
+environments:
+  development:
+    dataSource:
+      dbCreate: create-drop
+      url: jdbc:postgresql://${omarDb.host}:${omarDb.port}/${omarDb.name}
+  test:
+    dataSource:
+      dbCreate: update
+      url: jdbc:postgresql://${omarDb.host}:${omarDb.port}/${omarDb.name}
+  production:
+    dataSource:
+      dbCreate: none
+      url: jdbc:postgresql://${omarDb.host}:${omarDb.port}/${omarDb.name}
+      properties:
+        jmxEnabled: true
+        initialSize: 5
+        maxActive: 50
+        minIdle: 5
+        maxIdle: 25
+        maxWait: 10000
+        maxAge: 600000
+        timeBetweenEvictionRunsMillis: 5000
+        minEvictableIdleTimeMillis: 60000
+        validationQuery: SELECT 1
+        validationQueryTimeout: 3
+        validationInterval: 15000
+        testOnBorrow: true
+        testWhileIdle: true
+        testOnReturn: false
+        jdbcInterceptors: ConnectionState
+        defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
+
+grails:
+  gorm:
+    reactor:
+      events: false
+  mime:
+    disable:
+      accept:
+        header:
+          userAgents:
+            - Gecko
+            - WebKit
+            - Presto
+            - Trident
+    types:
+      all: '*/*'
+      atom: application/atom+xml
+      css: text/css
+      csv: text/csv
+      form: application/x-www-form-urlencoded
+      html:
+        - text/html
+        - application/xhtml+xml
+      js: text/javascript
+      json:
+        - application/json
+        - text/json
+      multipartForm: multipart/form-data
+      pdf: application/pdf
+      rss: application/rss+xml
+      text: text/plain
+      hal:
+        - application/hal+json
+        - application/hal+xml
+      xml:
+        - text/xml
+        - application/xml
+  views:
+    gsp:
+      encoding: UTF-8
+      htmlcodec: xml
+      codecs:
+        expression: html
+        scriptlet: html
+        taglib: none
+        staticparts: none
+    default:
+      codec: html
+hibernate:
+  hbm2ddl:
+    auto: update
+  cache:
+    queries: false
+    use_second_level_cache: false
+    use_query_cache: false
+  dialect: 'org.hibernate.spatial.dialect.postgis.PostgisDialect'
+---
+grails:
+  cors:
+    enabled: true
+  resources:
+    pattern: '/**'
+  plugin:
+    console:
+      enabled: true
+      csrfProtection:
+        enabled: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /omar-geoscript
 management:
   endpoints:
+    enabled-by-default: true
     web:
+      base-path: '/actuator'
       exposure:
-        include: "*"
-  endpoint:
-    env:
-      enabled: true
-      sensitive: false
-    health:
-      enabled: true
-    
-grails:
-    cors:
-        enabled: true
-    resources:
-        pattern: '/**'
-    servlet:
-        version: 3.0
----
-spring:
-  application:
-    name: omar-geoscript
-  cloud:
-    discovery:
-      enabled: ${SPRING_CLOUD_DISCOVERY_ENABLED:false}
-    service-registry:
-      auto-registration:
-        enabled: ${spring.cloud.discovery.enabled}
+        include: '*'
+environments:
+  production:
+    spring:
+      h2:
+        console:
+          enabled: true
+          settings:
+            web-allow-others: true
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URI:http://omar-eureka-server:8761/omar-eureka-server/eureka}
-  instance:
-    preferIpAddress: true
+---
+omarDb:
+  host: localhost
+  port: 5432
+  username: postgres  
+  password: postgres
+
+environments:
+  development:
+    omarDb:
+      name: omardb-dev
+  production:
+    omarDb:
+      name: omardb-prod
 ---
 wfs:
     datastores:
@@ -213,7 +178,6 @@ wfs:
               - video_data_set
               - features
           datastoreId: omar_prod
-
 wms:
     styles:
         byFileType:
@@ -270,24 +234,6 @@ geoscript:
           - 'product_id_tag_id'
           - 'sensor_id_tag_id'
           - 'target_id_tag_id'
----
-grails:
-    cors:
-      enabled: true
-    resources:
-        pattern: '/**'
-    plugin:
-      console:
-        enabled: true
-        csrfProtection:
-            enabled: false
-
-environments:
-    production:
-        grails:
-          dbconsole:
-            enabled: true            
-
 # Define the http protocols that swagger will use
 swagger:
   schemes:
