@@ -1,33 +1,14 @@
-if ( System.getenv('O2_INLINE_BUILD') ) {
-    grails {
-        plugins {
-            if ( System.getenv('O2_INLINE_BUILD') ) {
-                compile project(":omar-core-plugin")
-                compile project(":omar-hibernate-spatial-plugin")
-            }
-        }
-    }
+plugins {
+  id 'java-library'
 }
+
 dependencies {
-    //compile project( ":${ rootProject.name }-lib" )
-    if ( ! System.getenv('O2_INLINE_BUILD') ) {
-        compile "io.ossim.omar.plugins-RELEASE:omar-core-plugin:+"
-        compile "io.ossim.omar.plugins-RELEASE:omar-hibernate-spatial-plugin:+"
-    }
+   api 'io.ossim.omar.plugins:omar-core-plugin:+'
+   api 'io.ossim.omar.plugins:omar-hibernate-spatial-plugin:+'
+   api "org.geoscript:geoscript-groovy:${geoscriptVersion}"
+   api "io.swagger:swagger-annotations:${swaggerVersion}"
+}
 
-//   compile "commons-beanutils:commons-beanutils:1.9.3"
-//   compile group: 'com.vividsolutions', name: 'jts', version: '1.13'
-    // compile 'systems.uom:systems-common:0.7.2'
-
-//   compile( "org.geoscript:geoscript-groovy:1.10.0" ) {
-  compile( "org.geoscript:geoscript-groovy:1.14.0" ) {
-    exclude module: "ehcache"
-    exclude module: "groovy-all"
-    exclude module: "slf4j-log4j12"
-    exclude module: "xml-apis"
-    exclude module: "commons-beanutils"
-    exclude module: "gt-jdbc-spatialite"
-    exclude module: 'gt-swing'    
-    // exclude module: 'systems-common-java8'
-  }
+assets {
+    packagePlugin = true
 }
