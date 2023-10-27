@@ -48,6 +48,12 @@ class GeoscriptService implements InitializingBean
   String downloadRootDir
   @Value('${geoscript.downloadMissions}')
   List<String> downloadMissions
+  @Value('${geoscript.downloadURL3D}')
+  String downloadURL3D
+  @Value('${geoscript.downloadRootDir3D}')
+  String downloadRootDir3D
+  @Value('${geoscript.downloadMissions3D}')
+  List<String> downloadMissions3D
 
   def parseOptions(def wfsParams)
   {
@@ -587,21 +593,44 @@ class GeoscriptService implements InitializingBean
                       feature.geom = Projection.transform(feature.geom, srcProj, destProj)
                     }
 
-                    //log.info("Download missions is ${downloadMissions}")
                     /* DOWNLOAD HACK - START */
+
+                    // Download for SAR imagery
                     if ( downloadURL && downloadRootDir && feature?.mission_id in downloadMissions ) {
+
                       File imageFile = feature?.filename as File
-//                      String downloadLink = "${downloadURL}/${imageFile?.parent - downloadRootDir}"
                       String downloadLink = "<a href='${downloadURL}/${imageFile?.parent - downloadRootDir}/index.html'  target='_blank'>Click to download</a>"
+                      log.info "[SAR] Link = ${downloadLink}"
 
                       Field imageIdField = feature?.schema?.fields?.find { it.name?.toLowerCase() == 'image_id' }
-
                       if ( imageIdField ) {
                         feature?.set( 'image_id', downloadLink)
                       } else {
-                        log.error "No image Id present"
+                        log.error "[SAR] No image Id present"
                       }
                     }
+
+                    // Download for P3DR imagery
+                    if (downloadURL3D && downloadRootDir3D && feature?.mission_id in downloadMissions3D) {
+
+                      def (minX, minY, maxX, maxY) = [
+                              feature?.ground_geom?.bounds?.minX,
+                              feature?.ground_geom?.bounds?.minY,
+                              feature?.ground_geom?.bounds?.maxX,
+                              feature?.ground_geom?.bounds?.maxY]
+
+                      String downloadLink3D = "<a href='${downloadURL3D}${downloadRootDir3D}queryBucket?bbox=${minX},${minY},${maxX},${maxY}'  target='_blank'>Click to download</a>"
+                      log.info "[3D] Link = ${downloadLink3D}"
+
+                      Field imageIdField = feature?.schema?.fields?.find {it.name?.toLowerCase() == 'image_id'}
+                      if (imageIdField) {
+                        feature?.set( 'image_id', downloadLink3D)
+                      } else {
+                        log.error "[3D] No image Id present"
+                      }
+
+                    }
+
                     /* DOWNLOAD HACK - END */
 
                     formatFeature(feature, featureFormat, [prefix: prefix])
